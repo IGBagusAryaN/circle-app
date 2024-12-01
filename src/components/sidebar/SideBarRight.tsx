@@ -1,4 +1,6 @@
-import { Box, Button, Flex, Image, Text } from '@chakra-ui/react'
+import { Box, Flex, Image, Text } from '@chakra-ui/react'
+import PopoverEditProfile from 'components/button/PopOverEditProfile'
+import React from 'react'
 
 const user = [
     {
@@ -22,17 +24,21 @@ const user = [
 
 ]
 
-function SideBarRight() {
+interface DisplaySideBar {
+    display: string
+}
+
+const SideBarRight: React.FC<DisplaySideBar> =({display}) => {
   return (
     <div>
       <Box>
             <Box p="20px">
-                <Box backgroundColor="#262626" borderRadius="5px">
+                <Box backgroundColor="#262626" borderRadius="5px" display={display}>
                     <Box p="5">
                         <Text textAlign="left">My Profile</Text>
                         <Box position="relative" mt="3">
                         <Image
-                            height="80px" w="full" borderRadius="7px"
+                            height="100px" w="full" borderRadius="7px"
                             src="https://www.superherotoystore.com/cdn/shop/articles/Whitebeard.Pirates.full.1766119_1280x.jpg?v=1712676177"
                             />
                         <Image
@@ -42,12 +48,14 @@ function SideBarRight() {
                             fit="cover"
                             alt=""
                             position="absolute"
-                            top="37px"
+                            top="57px"
                             left="10px"
                             border="4px solid"
                             borderColor="whiteAlpha.900"
                         />
-                        <Button ml="155px" mt="3" border="1px solid" borderColor="#FFFF" background="none" color="#FFFF" borderRadius="20px" _hover={{background:"#FFFF", color:"black"}}>Edit Profile</Button>
+                        <Box textAlign="right">
+                            <PopoverEditProfile transform="translate(-115%, -41%)"/>
+                        </Box>
                         </Box>
                         <Box>
                             <Text textAlign="left" mt="2" fontSize="20px" fontWeight="bold">Bagus Arya</Text>
@@ -63,9 +71,9 @@ function SideBarRight() {
                 <Box backgroundColor="#262626" borderRadius="5px" mt="2">
                     <Box p="5">
                     <Text textAlign="left">Suggested For you</Text>
-                    {user.map((user)=>{
+                    {user.map((user, i)=>{
                         return(
-                        <Flex mt="3" justify="space-between">
+                        <Flex mt="3" justify="space-between" key={i}>
                         <Flex>
                                 <Image
                                     src={user.profile}
