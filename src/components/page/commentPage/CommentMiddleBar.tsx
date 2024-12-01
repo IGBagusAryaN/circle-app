@@ -49,42 +49,40 @@ const user = [
 function CommentMiddleBar() {
     const { id } = useParams<{ id: string }>();
     const comment = user.find((item) => item.id === parseInt(id || "", 10));
-
-  return (
-    <div>
-        <Box borderBottom="1px solid" borderColor="gray.400">
-            <Box px="20px">
-                <Flex gap="3" align="center">
-                <Link to="/">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
-                    </svg>
-                </Link>
-                
-                <Text fontSize="18px" fontWeight="semibold">Comments</Text>  
-                </Flex>
-                {comment && (
+    return (
+        <div>
+            <Box borderBottom="1px solid" borderColor="gray.400">
+                <Box px="20px">
+                    <Flex gap="3" align="center">
+                    <Link to="/">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
+                        </svg>
+                    </Link>
+                    <Text fontSize="18px" fontWeight="semibold">Comments</Text>  
+                    </Flex>
+                    {comment && (
                     <Flex py="20px">
-                    <Image
-                        src={comment.profile}
-                        boxSize="40px"
-                        borderRadius="full"
-                        fit="cover"
-                        alt="Naruto Uzumaki"
-                    />
-                    <Box ml="2">
-                        <Text textAlign="left" fontSize="14px" fontWeight="semibold">{comment.name}</Text>
-                        <Text textAlign="left" fontSize="12px" color="gray.400">{comment.account}</Text>
-                        <Box>
-                            <Text fontSize="14px" marginTop="2">
-                                {comment.comment}
-                            </Text>
-                            {comment.picture &&  <img src={comment.picture} alt="" className="rounded-lg w-6/12 my-2"/>}
-                            <Text fontSize="12px" marginTop="2" color="gray.400" >
-                                11:32 PM • Jul 24, 2023
-                            </Text>
-                        </Box>
-                        <Box marginTop="2" display="flex" alignItems="center" gap="3">
+                        <Image
+                            src={comment.profile}
+                            boxSize="40px"
+                            borderRadius="full"
+                            fit="cover"
+                            alt="Naruto Uzumaki"
+                        />
+                        <Box ml="2">
+                            <Text textAlign="left" fontSize="14px" fontWeight="semibold">{comment.name}</Text>
+                            <Text textAlign="left" fontSize="12px" color="gray.400">{comment.account}</Text>
+                            <Box>
+                                <Text fontSize="14px" marginTop="2">
+                                    {comment.comment}
+                                </Text>
+                                {comment.picture &&  <img src={comment.picture} alt="" className="rounded-lg w-6/12 my-2"/>}
+                                <Text fontSize="12px" marginTop="2" color="gray.400" >
+                                    11:32 PM • Jul 24, 2023
+                                </Text>
+                            </Box>
+                            <Box marginTop="2" display="flex" alignItems="center" gap="3">
                                 <Text display="flex" alignItems="center" gap="1">
                                 <HeartIcon hover="text-[#ff4040] hover:"/>
                                 <span className="text-[12px]">36 Likes</span>
@@ -93,14 +91,13 @@ function CommentMiddleBar() {
                                     <CommentIcon/>
                                     <span className="text-[12px] ">10 Replies</span>
                                 </Link>
+                            </Box>
                         </Box>
-                    </Box>
-                </Flex>
-                )}
-                        
+                    </Flex>
+                    )}   
+                </Box>
             </Box>
-        </Box>
-        <Box p="20px" display="flex" alignItems="center" borderBottom="1px solid" borderColor="gray.400">
+            <Box p="20px" display="flex" alignItems="center" borderBottom="1px solid" borderColor="gray.400">
                 <Image
                     src="https://images8.alphacoders.com/129/1290002.png"
                     boxSize="40px"
@@ -115,45 +112,45 @@ function CommentMiddleBar() {
                     </Box>                 
                     <ButtonPrimary text="Reply" />
                 </Box>
-        </Box>
-        <Box borderBottom="1px solid" borderColor="#Ffff">
-            <Box p="20px">
-                <Box display="flex" alignItems="start" gap="3">
-                    <Image
-                        src="https://assets.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/p1/09/2023/09/15/IMG_20230915_112059-3974255865.jpg"
-                        boxSize="40px"
-                        borderRadius="full"
-                        fit="cover"
-                        alt=""
-                    />
-                    <Box display="flex" flexDirection="column">
-                        <Box display="flex" gap="2">
-                            <Text fontWeight="semibold">Ace</Text>
-                            <Text color="gray.400">@portgasdace<span> • 17d</span></Text>
-                        </Box>
-                        <Box>
-                            <Text fontSize="14px" marginTop="2">
-                            Why do I look like I'm about to solve a big problem, when we were probably just fighting over Luffy's leftovers? 😂
-                            </Text>
-                        </Box>
-                        <Box>
-                            <Box marginTop="2" display="flex" alignItems="center" gap="3">
-                                <Text display="flex" alignItems="center" gap="1">
-                                <HeartIcon hover="text-[#ff4040] hover:"/>
-                                <span className="text-[12px]">36 Likes</span>
+            </Box>
+            <Box borderBottom="1px solid" borderColor="#Ffff">
+                <Box p="20px">
+                    <Box display="flex" alignItems="start" gap="3">
+                        <Image
+                            src="https://assets.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/p1/09/2023/09/15/IMG_20230915_112059-3974255865.jpg"
+                            boxSize="40px"
+                            borderRadius="full"
+                            fit="cover"
+                            alt=""
+                        />
+                        <Box display="flex" flexDirection="column">
+                            <Box display="flex" gap="2">
+                                <Text fontWeight="semibold">Ace</Text>
+                                <Text color="gray.400">@portgasdace<span> • 17d</span></Text>
+                            </Box>
+                            <Box>
+                                <Text fontSize="14px" marginTop="2">
+                                Why do I look like I'm about to solve a big problem, when we were probably just fighting over Luffy's leftovers? 😂
                                 </Text>
-                                <Link to="/comment" className="flex items-center gap-1 hover:text-[#817b7b]">
-                                    <CommentIcon/>
-                                    <span className="text-[12px] ">10 Replies</span>
-                                </Link>
+                            </Box>
+                            <Box>
+                                <Box marginTop="2" display="flex" alignItems="center" gap="3">
+                                    <Text display="flex" alignItems="center" gap="1">
+                                    <HeartIcon hover="text-[#ff4040] hover:"/>
+                                    <span className="text-[12px]">36 Likes</span>
+                                    </Text>
+                                    <Link to="/comment" className="flex items-center gap-1 hover:text-[#817b7b]">
+                                        <CommentIcon/>
+                                        <span className="text-[12px] ">10 Replies</span>
+                                    </Link>
+                                </Box>
                             </Box>
                         </Box>
                     </Box>
                 </Box>
             </Box>
-        </Box>
-    </div>
-  )
+        </div>
+    )
 }
 
 export default CommentMiddleBar

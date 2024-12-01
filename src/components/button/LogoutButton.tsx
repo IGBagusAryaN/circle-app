@@ -4,7 +4,7 @@ import { Button } from '@chakra-ui/react';
 import LogoutIcon from 'components/icons/LogoutIcon';
 
 interface LogoutButtonProps {
-  onClick?: () => void; // Tambahkan props onClick untuk fleksibilitas
+  onClick?: () => void;
 }
 
 const LogoutButton: React.FC<LogoutButtonProps> = ({ onClick }) => {
@@ -26,10 +26,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onClick }) => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        // Hapus localStorage saat logout dikonfirmasi
         localStorage.clear();
-
-        // Menampilkan SweetAlert sukses
         Swal.fire({
           title: 'Logged out!',
           text: 'You have been successfully logged out.',
@@ -44,7 +41,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onClick }) => {
           },
         }).then(() => {
           if (onClick) {
-            onClick(); // Panggil onClick jika diberikan
+            onClick();
           }
         });
       }
@@ -52,18 +49,18 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onClick }) => {
   };
 
   return (
-    <Button
-      background="none"
-      px="0"
-      bottom="5"
-      color="#FFFF"
-      _hover={{ color: '#e6434e' }}
-      onClick={handleLogout} // Gunakan handleLogout saat tombol diklik
-    >
-      <LogoutIcon/>
-      <span>Logout</span>
-    </Button>
-  );
-};
+      <Button
+        background="none"
+        px="0"
+        bottom="5"
+        color="#FFFF"
+        _hover={{ color: '#e6434e' }}
+        onClick={handleLogout} // Gunakan handleLogout saat tombol diklik
+      >
+        <LogoutIcon/>
+        <span>Logout</span>
+      </Button>
+    );
+  };
 
 export default LogoutButton;

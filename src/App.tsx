@@ -4,19 +4,17 @@
 // import { useState } from 'react'
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './components/authComponent/Login';
-import Register from './components/authComponent/Register';
-import ForgotPassword from './components/authComponent/ForgotPassword';
-import ResetPassword from './components/authComponent/ResetPassword';
+import Login from './components/authPage/Login';
+import Register from './components/authPage/Register';
+import ForgotPassword from './components/authPage/ForgotPassword';
+import ResetPassword from './components/authPage/ResetPassword';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import PrivateRoute from './auth/PrivateRoute';
-import Home from 'components/page/homePage/index';
+import Home from 'components/page/homePage/HomePage';
 import CommentPage from 'components/page/commentPage/CommentPage';
-// import PopOver from 'components/button/PopOverEditProfile';
 import ProfilePage from 'components/page/profilePage/ProfilePage';
 import SearchPage from 'components/page/searchPage/SearchPage';
 import ProfileUserPage from 'components/page/profilePage/ProfileUserPage';
-// import PopoverCreatePost from 'components/button/PopOverCreatePost';
 
 
 function App() {
@@ -26,7 +24,6 @@ function App() {
       <BrowserRouter>
          <Routes>
             <Route path="/login" element={< Login/>}/>
-            {/* <Route path="/pop" element={< PopoverCreatePost/>}/> */}
             <Route path="/register" element={< Register/>}/>
             <Route path="/forgotpassword" element={< ForgotPassword/>}/>
             <Route path="/resetpassword" element={< ResetPassword/>}/>

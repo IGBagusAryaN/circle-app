@@ -28,20 +28,19 @@ const Login = () => {
 
     console.log("Email:", email);
     console.log("Password:", password);
-
-    // Tampilkan SweetAlert sukses
+    
     Swal.fire({
-  title: "Success!",
-  text: "You have successfully logged in.",
-  icon: "success",
-  confirmButtonColor: "#04A51E",
-  background: "#1D1D1D",
-  color: "#fff",
-  allowOutsideClick: false,
-}).then(() => {
-  localStorage.setItem("isAuthenticated", "true");
-  navigate("/");
-});
+      title: "Success!",
+      text: "You have successfully logged in.",
+      icon: "success",
+      confirmButtonColor: "#04A51E",
+      background: "#1D1D1D",
+      color: "#fff",
+      allowOutsideClick: false,
+    }).then(() => {
+      localStorage.setItem("isAuthenticated", "true");
+      navigate("/");
+    });
   };
 
   return (
