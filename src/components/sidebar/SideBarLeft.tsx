@@ -56,7 +56,7 @@ const SideBarLeft: React.FC<logOutProps> = ({ onClick }) => {
                   isActive('/follows') ? 'text-[#60d774]' : 'hover:text-[#60d774]'
                 }`}
               >
-                <HeartIcon hover="" />
+                <HeartIcon/>
                 <span>Follows</span>
               </Link>
             </li>

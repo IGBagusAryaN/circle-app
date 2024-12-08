@@ -2,6 +2,7 @@ import { Box, Flex, Grid, Image, Tabs, Text} from '@chakra-ui/react'
 import PopoverEditProfile from 'components/button/PopOverEditProfile'
 import CommentIcon from 'components/icons/CommentIcon'
 import HeartIcon from 'components/icons/HeartIcon'
+import UseAccountStore from 'components/store/UseAccountStore'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -51,6 +52,7 @@ const imageDummy =[
 ]
 function ProfileMiddleBar() {
     const [value, setValue] = useState<string | null>("first")
+    const { account } = UseAccountStore();
     return (
         <div>
         <Box py="2" px="5">
@@ -60,16 +62,16 @@ function ProfileMiddleBar() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
                     </svg>
                 </Link>
-                <Text fontSize="18px" fontWeight="semibold">Bagus Arya</Text>  
+                <Text fontSize="18px" fontWeight="semibold">{account?.fullName}</Text>  
             </Flex>
             <Box position="relative" mt="3">
                 <Box position="relative">
                 <Image
                     height="120px" w="full" borderRadius="7px"
-                    src="https://www.superherotoystore.com/cdn/shop/articles/Whitebeard.Pirates.full.1766119_1280x.jpg?v=1712676177"
+                    src={account?.bannerImage || "https://cdn-green.katadata.co.id/media/images/2023/ilustrasi_aurora_2024_05_16_01_32_36.jpg"} // Gunakan bannerImage dari store jika ada
                     />
                 <Image
-                    src="https://images8.alphacoders.com/129/1290002.png"
+                    src={account?.profileImage || "https://static.vecteezy.com/system/resources/previews/027/448/973/non_2x/avatar-account-icon-default-social-media-profile-photo-vector.jpg"} // Gunakan profileImage dari store jika ada
                     boxSize="80px"
                     borderRadius="full"
                     fit="cover"
@@ -86,9 +88,9 @@ function ProfileMiddleBar() {
                 </Box>
             </Box>
             <Box>
-                <Text textAlign="left" mt="2" fontSize="20px" fontWeight="bold">Bagus Arya</Text>
-                <Text textAlign="left" fontSize="14px" color="gray.400">@bagusarya87</Text>
-                <Text textAlign="left" fontSize="14px">Lorem ipsum dolor sit amet consec </Text>
+                <Text textAlign="left" mt="2" fontSize="20px" fontWeight="bold">{account?.fullName || "Your Name"}</Text>
+                <Text textAlign="left" fontSize="14px" color="gray.400"> @{account?.username || "username"}</Text>
+                <Text textAlign="left" fontSize="14px">{account?.bio || "Your bio here..."}</Text>
                 <Flex mt="2" gap="3">
                     <Text fontWeight="bold" fontSize="14px">291<span className="font-normal text-gray-400 ms-1">Following</span></Text>
                     <Text fontWeight="bold" fontSize="14px">29<span className="font-normal text-gray-400 ms-1">Followers</span></Text>
@@ -138,7 +140,7 @@ function ProfileMiddleBar() {
                 <Box p="20px">
                     <Box display="flex" alignItems="start" gap="3" >
                         <Image
-                            src={user.profile}
+                            src={account?.profileImage || "https://static.vecteezy.com/system/resources/previews/027/448/973/non_2x/avatar-account-icon-default-social-media-profile-photo-vector.jpg"} // Gunakan profileImage dari store jika ada
                             boxSize="40px"
                             borderRadius="full"
                             fit="cover"
@@ -146,8 +148,8 @@ function ProfileMiddleBar() {
                         />
                         <Box display="flex" flexDirection="column">
                             <Box display="flex" gap="2">
-                                <Text fontWeight="semibold">{user.name}</Text>
-                                <Text color="gray.400">{user.account}<span> • 17d</span></Text>
+                                <Text fontWeight="semibold">{account?.fullName || "Your Name"}</Text>
+                                <Text color="gray.400"> @{account?.username || "username"} <span> • 17d</span></Text>
                             </Box>
                             <Link to={`/comment/${user.id}`}>
                                 <Text fontSize="14px" marginTop="2">
@@ -158,7 +160,7 @@ function ProfileMiddleBar() {
                             <Box>
                                 <Box marginTop="2" display="flex" alignItems="center" gap="3">
                                     <Text display="flex" alignItems="center" gap="1">
-                                    <HeartIcon hover="text-[#ff4040] hover:"/>
+                                    <HeartIcon />
                                     <span className="text-[12px]">36 Likes</span>
                                     </Text>
                                     <Link to={`/comment/${user.id}`} className="flex items-center gap-1 hover:text-[#817b7b]">

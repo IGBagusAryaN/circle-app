@@ -13,7 +13,7 @@ function SearchMiddleBar() {
             >
                 <Input placeholder="Search contacts" background="#3F3F3F"  borderRadius="20px"/>
             </InputGroup>
-            </HStack>
+        </HStack>
 
             <Flex mt="3" justify="space-between" px="5">
                         <Flex>
@@ -30,7 +30,7 @@ function SearchMiddleBar() {
                                 </Box>
                         </Flex>
                             <button className="border border-[#FFFF] px-3 rounded-[20px] cursor-pointer text-[#FFFF] bg-none text-[12px] font-semibold hover:bg-[#FFFF] hover:text-black ">Follow</button>
-                        </Flex>
+            </Flex>
     </div>
   )
 }

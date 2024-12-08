@@ -1,17 +1,16 @@
 import React from "react";
 
 type IconProps = React.SVGProps<SVGSVGElement> & {
-   hover: number | string;
    size?: number | string; 
 };
 
-const HeartIcon: React.FC<IconProps> = ({ hover, size = 24, ...props }) => {
+const HeartIcon: React.FC<IconProps> = ({ size = 24, ...props }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
-      className={`cursor-pointer hover:${hover}`}
+      className="cursor-pointer"
       width={size}
       height={size}
       {...props}

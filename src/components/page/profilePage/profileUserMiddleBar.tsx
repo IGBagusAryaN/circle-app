@@ -1,6 +1,7 @@
 import { Box, Button, Flex, Grid, Image, Tabs, Text } from '@chakra-ui/react'
 import CommentIcon from 'components/icons/CommentIcon'
 import HeartIcon from 'components/icons/HeartIcon'
+import { UseFollowStore } from 'components/store/UseFollowStore'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
@@ -152,10 +153,18 @@ const user = [
     },
 ]
 
-function ProfileUserMiddleBar() {
+interface FollowButtonProps {
+    userId: number;
+}
+
+function ProfileUserMiddleBar({userId}: FollowButtonProps) {
     const [value, setValue] = useState<string | null>("first")
     const { id } = useParams<{ id: string }>();
     const profile = user.find((item) => item.id === parseInt(id || "", 10));
+    const { following, toggleFollow } = UseFollowStore();
+
+    const isFollowing = Array.isArray(following) && following.includes(userId);
+
     return (
         <div>
             {profile && (
@@ -190,7 +199,18 @@ function ProfileUserMiddleBar() {
                             />
                         </Box>
                         <Box textAlign="right">
-                            <Button right="0" mt="3" border="1px solid" borderColor="#FFFF" background="none" color="#FFFF" borderRadius="20px" _hover={{background:"#FFFF", color:"black"}}>Follow</Button>
+                        <Button
+                    onClick={() => toggleFollow(userId)} // Toggle follow berdasarkan userId
+                    right="0"
+                    mt="3"
+                    border="1px solid"
+                    bg={'none'}
+                    borderColor="#FFFF"  color="#FFFF" 
+                    borderRadius="20px"
+                    colorScheme={isFollowing ? "red" : "blue"}
+                  >
+                    {isFollowing ? "Unfollow" : "Follow"}
+                  </Button>
                         </Box>
                     </Box>
                     <Box>
@@ -274,7 +294,7 @@ function ProfileUserMiddleBar() {
                                         )}
                                         <Flex mt="2" alignItems="center" gap="3">
                                         <Flex alignItems="center" gap="1">
-                                            <HeartIcon hover=""/>
+                                            <HeartIcon/>
                                             <Text fontSize="12px">36 Likes</Text>
                                         </Flex>
                                         <Link

@@ -3,6 +3,7 @@ import ButtonPrimary from "components/button/Button"
 import CommentIcon from "components/icons/CommentIcon"
 import FileAddIcon from "components/icons/FileAddIcon"
 import HeartIcon from "components/icons/HeartIcon"
+import UseAccountStore from "components/store/UseAccountStore"
 import { Link, useParams } from "react-router-dom"
 
 const user = [
@@ -49,6 +50,7 @@ const user = [
 function CommentMiddleBar() {
     const { id } = useParams<{ id: string }>();
     const comment = user.find((item) => item.id === parseInt(id || "", 10));
+    const { account } = UseAccountStore();
     return (
         <div>
             <Box borderBottom="1px solid" borderColor="gray.400">
@@ -77,14 +79,16 @@ function CommentMiddleBar() {
                                 <Text fontSize="14px" marginTop="2">
                                     {comment.comment}
                                 </Text>
+                                <Link to="/image">
                                 {comment.picture &&  <img src={comment.picture} alt="" className="rounded-lg w-6/12 my-2"/>}
+                                </Link>
                                 <Text fontSize="12px" marginTop="2" color="gray.400" >
                                     11:32 PM • Jul 24, 2023
                                 </Text>
                             </Box>
                             <Box marginTop="2" display="flex" alignItems="center" gap="3">
                                 <Text display="flex" alignItems="center" gap="1">
-                                <HeartIcon hover="text-[#ff4040] hover:"/>
+                                <HeartIcon />
                                 <span className="text-[12px]">36 Likes</span>
                                 </Text>
                                 <Link to="/" className="flex items-center gap-1 hover:text-[#817b7b]">
@@ -99,7 +103,7 @@ function CommentMiddleBar() {
             </Box>
             <Box p="20px" display="flex" alignItems="center" borderBottom="1px solid" borderColor="gray.400">
                 <Image
-                    src="https://images8.alphacoders.com/129/1290002.png"
+                     src={account?.profileImage || "https://static.vecteezy.com/system/resources/previews/027/448/973/non_2x/avatar-account-icon-default-social-media-profile-photo-vector.jpg"} // Gunakan profileImage dari store jika ada
                     boxSize="40px"
                     borderRadius="full"
                     fit="cover"
@@ -136,7 +140,7 @@ function CommentMiddleBar() {
                             <Box>
                                 <Box marginTop="2" display="flex" alignItems="center" gap="3">
                                     <Text display="flex" alignItems="center" gap="1">
-                                    <HeartIcon hover="text-[#ff4040] hover:"/>
+                                    <HeartIcon />
                                     <span className="text-[12px]">36 Likes</span>
                                     </Text>
                                     <Link to="/comment" className="flex items-center gap-1 hover:text-[#817b7b]">

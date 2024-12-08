@@ -1,5 +1,6 @@
 import { Box, Button, Flex, Image, Input} from "@chakra-ui/react"
 import FileAddIcon from "components/icons/FileAddIcon"
+import UseAccountStore from "components/store/UseAccountStore"
 import { PopoverBody, PopoverCloseTrigger, PopoverContent, PopoverRoot, PopoverTrigger } from "components/ui/popover"
 
 interface Transform {
@@ -7,6 +8,7 @@ interface Transform {
 }
 
 const PopoverCreateBtn: React.FC<Transform> = ({transform}) => {
+  const { account } = UseAccountStore();
   return (
     <PopoverRoot >
     <PopoverTrigger asChild>
@@ -31,7 +33,7 @@ const PopoverCreateBtn: React.FC<Transform> = ({transform}) => {
             <Box position="relative">
               <Flex borderBottom="1px solid" borderColor="gray.300" pb="50px">
               <Image
-                  src="https://images8.alphacoders.com/129/1290002.png"
+                  src={account?.profileImage || "https://static.vecteezy.com/system/resources/previews/027/448/973/non_2x/avatar-account-icon-default-social-media-profile-photo-vector.jpg"} // Gunakan profileImage dari store jika ada
                   boxSize="40px"
                   borderRadius="full"
                   fit="cover"

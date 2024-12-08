@@ -1,21 +1,100 @@
-import { Box, Button, Image, Input, Text, Textarea } from "@chakra-ui/react"
-import { Field } from "components/ui/field"
-import { PopoverBody, PopoverCloseTrigger, PopoverContent, PopoverRoot, PopoverTrigger } from "components/ui/popover"
+import React, { useState, useEffect } from "react";
+import { Box, Button, Image, Input, Text, Textarea } from "@chakra-ui/react";
+import Swal from "sweetalert2";
+import {
+  PopoverBody,
+  PopoverCloseTrigger,
+  PopoverContent,
+  PopoverRoot,
+  PopoverTrigger,
+} from "components/ui/popover";
+import UseAccountStore from "components/store/UseAccountStore";
 
 interface Transform {
-  transform:string
+  transform: string;
 }
 
-const PopoverEditProfile: React.FC<Transform> = ({transform}) => {
+const PopoverEditProfile: React.FC<Transform> = ({ transform }) => {
+  // Ambil data akun dan fungsi update dari store
+  const { account, updateAccountData, login } = UseAccountStore();
+
+  // State sementara untuk input
+  const [tempName, setTempName] = useState("");
+  const [tempProfileImage, setTempProfileImage] = useState("");
+  const [tempBannerImage, setTempBannerImage] = useState("");
+  const [tempBio, setTempBio] = useState("");
+  const [tempUsername, setTempUsername] = useState("");
+
+  // Sinkronisasi data awal saat account berubah
+  useEffect(() => {
+    if (account) {
+      setTempName(account.fullName || "");
+      setTempProfileImage(account.profileImage || "");
+      setTempBannerImage(account.bannerImage || "");
+      setTempBio(account.bio || "");
+      setTempUsername(account.username || "");
+    }
+  }, [account]);
+
+  const handleSave = () => {
+    if (!account) {
+      Swal.fire({
+        title: "Error",
+        text: "No account data found!",
+        icon: "error",
+        confirmButtonColor: "#E53E3E",
+        background: "#1D1D1D",
+        color: "#fff",
+      });
+      return;
+    }
+
+    const updatedData = {
+      fullName: tempName,
+      profileImage: tempProfileImage,
+      bannerImage: tempBannerImage,
+      bio: tempBio,
+      username: tempUsername,
+    };
+
+    // Update data di Zustand
+    updateAccountData(updatedData);
+
+    // Perbarui akun aktif
+    login({ ...account, ...updatedData });
+
+    Swal.fire({
+      title: "Profile Updated!",
+      text: "Your profile has been successfully updated.",
+      icon: "success",
+      confirmButtonColor: "#38a169",
+      background: "#1D1D1D",
+      color: "#fff",
+    }).then(() => {
+      document.body.click(); // Menutup Popover
+    });
+  };
+
   return (
-    <PopoverRoot >
+    <PopoverRoot>
       <PopoverTrigger asChild>
-        <Button right="0" mt="3" border="1px solid" borderColor="#FFFF" background="none" color="#FFFF" borderRadius="20px" _hover={{background:"#FFFF", color:"black"}}>Edit Profile</Button>
+        <Button
+          right="0"
+          mt="3"
+          border="1px solid"
+          borderColor="#FFFF"
+          background="none"
+          color="#FFFF"
+          borderRadius="20px"
+          _hover={{ background: "#FFFF", color: "black" }}
+        >
+          Edit Profile
+        </Button>
       </PopoverTrigger>
       <PopoverContent
         overflowY="auto"
         width="80vh"
-        maxHeight="90vh" 
+        maxHeight="90vh"
         position="fixed"
         top="50%"
         left="50%"
@@ -24,51 +103,78 @@ const PopoverEditProfile: React.FC<Transform> = ({transform}) => {
         borderRadius="10px"
         boxShadow="lg"
         background="#1D1D1D"
-        >
-          <PopoverBody>
-            <Text fontSize="18px">Edit Profile</Text>
-            <Box my="20px">
-              <Box position="relative">
-              <Image
-                height="120px"
-                w="full"
-                borderRadius="7px"
-                src="https://www.superherotoystore.com/cdn/shop/articles/Whitebeard.Pirates.full.1766119_1280x.jpg?v=1712676177"
+      >
+        <PopoverBody>
+          <Text fontSize="18px">Edit Profile</Text>
+          <Box my="20px">
+            {/* Form untuk edit profile */}
+            <Box mt="70px">
+              <Text fontSize="14px" mb="1">
+                Name
+              </Text>
+              <Input
+                value={tempName}
+                onChange={(e) => setTempName(e.target.value)}
+                placeholder="Change your name"
               />
-              <Image
-                src="https://images8.alphacoders.com/129/1290002.png"
-                boxSize="80px"
-                borderRadius="full"
-                fit="cover"
-                alt=""
-                position="absolute"
-                top="77px"
-                left="10px"
-                border="4px solid"
-                borderColor="whiteAlpha.900"
+            </Box>
+            <Box mt="10px">
+              <Text fontSize="14px" mb="1">
+                Username
+              </Text>
+              <Input
+                value={tempUsername}
+                onChange={(e) => setTempUsername(e.target.value)}
+                placeholder="Change your username"
               />
-              </Box>
-              <Box>
-                <Field label="Name" mt="70px">
-                  <Input placeholder="Change your name" />
-                </Field>
-                <Field label="Username" mt="10px">
-                  <Input placeholder="Change your username" />
-                </Field>
-                <Field label="Bio" mt="10px">
-                  <Textarea placeholder="Change your bio" />
-                </Field>
-              </Box>  
             </Box>
-            <Box textAlign="right">
-            <Button rounded="50px" backgroundColor="#04A51E" color="#FFFF" _hover={{backgroundColor: "#006811"}}>Save</Button>
+            <Box mt="10px">
+              <Text fontSize="14px" mb="1">
+                Bio
+              </Text>
+              <Textarea
+                value={tempBio}
+                onChange={(e) => setTempBio(e.target.value)}
+                placeholder="Change your bio"
+              />
             </Box>
-          </PopoverBody>
-          <PopoverCloseTrigger />
+            <Box mt="10px">
+              <Text fontSize="14px" mb="1">
+                Profile Image URL
+              </Text>
+              <Input
+                value={tempProfileImage}
+                onChange={(e) => setTempProfileImage(e.target.value)}
+                placeholder="Change your profile image URL"
+              />
+            </Box>
+            <Box mt="10px">
+              <Text fontSize="14px" mb="1">
+                Banner Image URL
+              </Text>
+              <Input
+                value={tempBannerImage}
+                onChange={(e) => setTempBannerImage(e.target.value)}
+                placeholder="Change your banner image URL"
+              />
+            </Box>
+          </Box>
+          <Box textAlign="right">
+            <Button
+              rounded="50px"
+              backgroundColor="#04A51E"
+              color="#FFFF"
+              _hover={{ backgroundColor: "#006811" }}
+              onClick={handleSave}
+            >
+              Save
+            </Button>
+          </Box>
+        </PopoverBody>
+        <PopoverCloseTrigger />
       </PopoverContent>
     </PopoverRoot>
-  )
-}
+  );
+};
 
-export default PopoverEditProfile
-
+export default PopoverEditProfile;
