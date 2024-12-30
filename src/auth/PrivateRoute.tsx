@@ -1,14 +1,21 @@
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+import PrivateLayout from 'components/layout/PrivateLayout';
 
-import PrivateLayout from "components/layout/PrivateLayout";
-import React from "react";
-import { Navigate } from "react-router-dom"
+type UserTypes = {
+  username: string;
+  email: string;
+} | null;
 
 interface PrivateRouteProps {
-    isAuthenticated: boolean
+  user: UserTypes;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({isAuthenticated}) => {
-    return isAuthenticated ? <PrivateLayout/> : <Navigate to="/login"/>;
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ user }) => {
+  if (!user || !user.username || !user.email) {
+    return <Navigate to="/login" />;
+  }
+  return <PrivateLayout />;
 };
 
-export default PrivateRoute
+export default PrivateRoute;

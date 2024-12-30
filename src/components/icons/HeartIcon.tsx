@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 type IconProps = React.SVGProps<SVGSVGElement> & {
-   size?: number | string; 
+  size?: number | string;
 };
 
 const HeartIcon: React.FC<IconProps> = ({ size = 24, ...props }) => {
@@ -11,6 +11,7 @@ const HeartIcon: React.FC<IconProps> = ({ size = 24, ...props }) => {
       viewBox="0 0 24 24"
       fill="currentColor"
       className="cursor-pointer"
+      color="white"
       width={size}
       height={size}
       {...props}

@@ -2,17 +2,15 @@ import React from 'react';
 import Swal from 'sweetalert2';
 import { Button } from '@chakra-ui/react';
 import LogoutIcon from 'components/icons/LogoutIcon';
-import UseAccountStore from 'components/store/UseAccountStore';
-
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 interface LogoutButtonProps {
   onClick?: () => void;
 }
 
 const LogoutButton: React.FC<LogoutButtonProps> = ({ onClick }) => {
-  // Ambil fungsi logout dari state management
-  const logout = UseAccountStore((state) => state.logout);
-
+  const navigate = useNavigate();
   const handleLogout = () => {
     Swal.fire({
       title: 'Are you sure?',
@@ -31,8 +29,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onClick }) => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        // Panggil fungsi logout dari state store
-        logout();
+        Cookies.remove('token');
 
         Swal.fire({
           title: 'Logged out!',
@@ -50,6 +47,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onClick }) => {
           if (onClick) {
             onClick();
           }
+          navigate('/login');
         });
       }
     });
@@ -62,7 +60,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onClick }) => {
       bottom="5"
       color="#FFFF"
       _hover={{ color: '#e6434e' }}
-      onClick={handleLogout} // Gunakan handleLogout saat tombol diklik
+      onClick={handleLogout}
     >
       <LogoutIcon />
       <span>Logout</span>

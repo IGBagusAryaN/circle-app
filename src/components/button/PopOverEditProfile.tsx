@@ -1,78 +1,120 @@
-import React, { useState, useEffect } from "react";
-import { Box, Button, Image, Input, Text, Textarea } from "@chakra-ui/react";
-import Swal from "sweetalert2";
+import React, { useState } from 'react';
+import { Box, Button, Image, Input, Text } from '@chakra-ui/react';
+import Swal from 'sweetalert2';
 import {
   PopoverBody,
   PopoverCloseTrigger,
   PopoverContent,
   PopoverRoot,
   PopoverTrigger,
-} from "components/ui/popover";
-import UseAccountStore from "components/store/UseAccountStore";
+} from 'components/ui/popover';
+import useAccountStore from 'store/use.account.store';
+import { updateProfile } from 'features/dashboard/services/profile.service';
+import ButtonPrimary from './Button';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { UserTypes } from 'types/users.types';
+import Cookies from 'js-cookie';
 
-interface Transform {
-  transform: string;
-}
+const profileSchema = z.object({
+  fullname: z.string().optional(),
+  bio: z.string().optional(),
+  username: z.string().optional(),
+});
 
-const PopoverEditProfile: React.FC<Transform> = ({ transform }) => {
-  // Ambil data akun dan fungsi update dari store
-  const { account, updateAccountData, login } = UseAccountStore();
+type ProfileFormInputs = z.infer<typeof profileSchema>;
 
-  // State sementara untuk input
-  const [tempName, setTempName] = useState("");
-  const [tempProfileImage, setTempProfileImage] = useState("");
-  const [tempBannerImage, setTempBannerImage] = useState("");
-  const [tempBio, setTempBio] = useState("");
-  const [tempUsername, setTempUsername] = useState("");
+const PopoverEditProfile: React.FC<{ transform: string }> = ({ transform }) => {
+  const { user, setUser } = useAccountStore();
+  const [bannerFile, setBannerFile] = useState<File | null>(null);
+  const [profileFile, setProfileFile] = useState<File | null>(null);
+  const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+  const [profilePreview, setProfilePreview] = useState<string | null>(null);
 
-  // Sinkronisasi data awal saat account berubah
-  useEffect(() => {
-    if (account) {
-      setTempName(account.fullName || "");
-      setTempProfileImage(account.profileImage || "");
-      setTempBannerImage(account.bannerImage || "");
-      setTempBio(account.bio || "");
-      setTempUsername(account.username || "");
+  const { register, handleSubmit } = useForm<ProfileFormInputs>({
+    resolver: zodResolver(profileSchema),
+  });
+
+  const handleBannerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setBannerFile(file);
+      setBannerPreview(URL.createObjectURL(file));
     }
-  }, [account]);
+  };
 
-  const handleSave = () => {
-    if (!account) {
+  const handleProfileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setProfileFile(file);
+      setProfilePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const onSubmit = async (data: ProfileFormInputs) => {
+    const token = Cookies.get('token');
+    if (!token) {
       Swal.fire({
-        title: "Error",
-        text: "No account data found!",
-        icon: "error",
-        confirmButtonColor: "#E53E3E",
-        background: "#1D1D1D",
-        color: "#fff",
+        title: 'Unauthorized',
+        text: 'User not logged in. Please login to continue.',
+        icon: 'error',
+        confirmButtonColor: '#E53E3E',
       });
       return;
     }
 
-    const updatedData = {
-      fullName: tempName,
-      profileImage: tempProfileImage,
-      bannerImage: tempBannerImage,
-      bio: tempBio,
-      username: tempUsername,
-    };
+    const formData = new FormData();
+    formData.append('fullname', data.fullname || '');
+    formData.append('bio', data.bio || '');
+    formData.append('username', data.username || '');
+    if (bannerFile) formData.append('bannerImage', bannerFile);
+    if (profileFile) formData.append('profileImage', profileFile);
 
-    // Update data di Zustand
-    updateAccountData(updatedData);
+    try {
+      const res = await updateProfile(formData);
+      if (res.status === 200) {
+        const updatedUser: UserTypes = {
+          id: user?.id || 0,
+          username: data.username || user?.username || '',
+          profile: [
+            {
+              fullname: data.fullname || user?.profile?.[0]?.fullname,
+              bio: data.bio || user?.profile?.[0]?.bio,
+              username: data.username || user?.profile?.[0]?.username,
+              bannerImage: bannerFile
+                ? res.data.bannerImage
+                : user?.profile?.[0]?.bannerImage,
+              profileImage: profileFile
+                ? res.data.profileImage
+                : user?.profile?.[0]?.profileImage,
+            },
+          ],
+        };
+        setUser(updatedUser);
 
-    // Perbarui akun aktif
-    login({ ...account, ...updatedData });
-
-    Swal.fire({
-      title: "Profile Updated!",
-      text: "Your profile has been successfully updated.",
-      icon: "success",
-      confirmButtonColor: "#38a169",
-      background: "#1D1D1D",
-      color: "#fff",
-    }).then(() => {
-      document.body.click(); // Menutup Popover
-    });
+        Swal.fire({
+          title: 'Success!',
+          text: res.data.message || 'Profile updated successfully.',
+          icon: 'success',
+          confirmButtonColor: '#04A51E',
+          background: '#1D1D1D',
+          color: '#fff',
+          allowOutsideClick: false,
+        });
+      }
+    } catch (error) {
+      console.error('Error during profile update:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to save profile. Please try again later.',
+        icon: 'error',
+        confirmButtonColor: '#E53E3E',
+        background: '#1D1D1D',
+        color: '#fff',
+        allowOutsideClick: false,
+      });
+    }
   };
 
   return (
@@ -86,14 +128,14 @@ const PopoverEditProfile: React.FC<Transform> = ({ transform }) => {
           background="none"
           color="#FFFF"
           borderRadius="20px"
-          _hover={{ background: "#FFFF", color: "black" }}
+          _hover={{ background: '#FFFF', color: 'black' }}
         >
           Edit Profile
         </Button>
       </PopoverTrigger>
       <PopoverContent
         overflowY="auto"
-        width="80vh"
+        width="70vh"
         maxHeight="90vh"
         position="fixed"
         top="50%"
@@ -106,70 +148,105 @@ const PopoverEditProfile: React.FC<Transform> = ({ transform }) => {
       >
         <PopoverBody>
           <Text fontSize="18px">Edit Profile</Text>
-          <Box my="20px">
-            {/* Form untuk edit profile */}
-            <Box mt="70px">
-              <Text fontSize="14px" mb="1">
-                Name
-              </Text>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Box my="20px">
+              {user ? (
+                <Box position="relative" textAlign="end" my={2}>
+                  <Image
+                    height="120px"
+                    mb={2}
+                    w="full"
+                    borderRadius="7px"
+                    src={
+                      bannerPreview ||
+                      user?.profile?.[0]?.bannerImage ||
+                      '/path/to/default-banner.jpg'
+                    }
+                    alt="Banner Image"
+                  />
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    display="none"
+                    id="banner-upload"
+                    onChange={handleBannerChange}
+                  />
+                  <label htmlFor="banner-upload">
+                    <Button
+                      as="span"
+                      size="sm"
+                      colorScheme="blue"
+                      fontSize={12}
+                    >
+                      Set Banner
+                    </Button>
+                  </label>
+                  <Image
+                    src={
+                      profilePreview ||
+                      user?.profile?.[0]?.profileImage ||
+                      '/path/to/default-banner.jpg'
+                    }
+                    boxSize="80px"
+                    borderRadius="full"
+                    fit="cover"
+                    alt="Profile Image"
+                    position="absolute"
+                    top="77px"
+                    left="10px"
+                    border="4px solid"
+                    borderColor="whiteAlpha.900"
+                  />
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    display="none"
+                    id="profile-upload"
+                    onChange={handleProfileChange}
+                  />
+                  <label htmlFor="profile-upload">
+                    <Button
+                      as="span"
+                      size="sm"
+                      colorScheme="blue"
+                      fontSize={12}
+                      ml={1}
+                    >
+                      Set Profile Pict
+                    </Button>
+                  </label>
+                </Box>
+              ) : (
+                <Text></Text>
+              )}
+
               <Input
-                value={tempName}
-                onChange={(e) => setTempName(e.target.value)}
-                placeholder="Change your name"
+                {...register('fullname')}
+                type="text"
+                placeholder="Full Name"
+                marginTop="4"
+                width="full"
               />
-            </Box>
-            <Box mt="10px">
-              <Text fontSize="14px" mb="1">
-                Username
-              </Text>
               <Input
-                value={tempUsername}
-                onChange={(e) => setTempUsername(e.target.value)}
-                placeholder="Change your username"
+                {...register('bio')}
+                type="text"
+                placeholder="Bio"
+                marginTop="4"
+                width="full"
               />
-            </Box>
-            <Box mt="10px">
-              <Text fontSize="14px" mb="1">
-                Bio
-              </Text>
-              <Textarea
-                value={tempBio}
-                onChange={(e) => setTempBio(e.target.value)}
-                placeholder="Change your bio"
-              />
-            </Box>
-            <Box mt="10px">
-              <Text fontSize="14px" mb="1">
-                Profile Image URL
-              </Text>
               <Input
-                value={tempProfileImage}
-                onChange={(e) => setTempProfileImage(e.target.value)}
-                placeholder="Change your profile image URL"
+                {...register('username')}
+                type="text"
+                placeholder="username"
+                marginTop="4"
+                width="full"
               />
             </Box>
-            <Box mt="10px">
-              <Text fontSize="14px" mb="1">
-                Banner Image URL
-              </Text>
-              <Input
-                value={tempBannerImage}
-                onChange={(e) => setTempBannerImage(e.target.value)}
-                placeholder="Change your banner image URL"
-              />
+
+            <Box marginTop={3}>
+              <ButtonPrimary text="Save Profile" />
             </Box>
-          </Box>
-          <Box textAlign="right">
-            <Button
-              rounded="50px"
-              backgroundColor="#04A51E"
-              color="#FFFF"
-              _hover={{ backgroundColor: "#006811" }}
-              onClick={handleSave}
-            >
-              Save
-            </Button>
-          </Box>
+          </form>
         </PopoverBody>
         <PopoverCloseTrigger />
       </PopoverContent>
