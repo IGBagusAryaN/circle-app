@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { apiURL } from 'utils/baseurl';
-import UserList from 'features/auth/tests/userlist';
-import Cookies from 'js-cookie';
-import { Box, Text } from '@chakra-ui/react';
-import { UserTypes } from 'types/users.types';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { apiURL } from "utils/baseurl";
+import UserList from "features/auth/tests/userlist";
+import Cookies from "js-cookie";
+import { Box, Text, Tabs,  } from "@chakra-ui/react";
+import { UserTypes } from "types/users.types";
 
 // Define API response types
 interface FollowerData {
@@ -55,27 +55,36 @@ const FollowsMiddleBar: React.FC<{ userId?: number }> = ({ userId }) => {
         <Text fontSize="18px" fontWeight="semibold">
           Follows
         </Text>
-        <div>
-          <div
-            style={{ display: 'flex', justifyContent: 'center', width: '100%' }}
-          >
-            <button onClick={() => setValue('first')}>Followers</button>
-            <button onClick={() => setValue('second')}>Following</button>
-          </div>
-          {value === 'first' && (
+        <Tabs.Root value={value} onValueChange={(e) => setValue(e.value)}>
+          <Box width="100%">
+            <Tabs.List display="flex" justifyContent="center" width="100%">
+              <Box width="full" textAlign="center">
+                <Tabs.Trigger value="first" style={{ display: "inline-flex", justifyContent: "center", alignItems: "center", width: "100%", height: "40px" }}>
+                  Followers
+                </Tabs.Trigger>
+              </Box>
+              <Box width="full" textAlign="center">
+                <Tabs.Trigger value="second" style={{ display: "inline-flex", justifyContent: "center", alignItems: "center", width: "100%", height: "40px" }}>
+                  Following
+                </Tabs.Trigger>
+              </Box>
+            </Tabs.List>
+          </Box>
+          <Tabs.Content value="first">
+            <Box>
+              <UserList  users={following} />
+            </Box>
+          </Tabs.Content>
+          <Tabs.Content value="second">
             <Box>
               <UserList users={followers} />
             </Box>
-          )}
-          {value === 'second' && (
-            <Box>
-              <UserList users={following} />
-            </Box>
-          )}
-        </div>
+          </Tabs.Content>
+        </Tabs.Root>
       </Box>
     </div>
   );
 };
+
 
 export default FollowsMiddleBar;

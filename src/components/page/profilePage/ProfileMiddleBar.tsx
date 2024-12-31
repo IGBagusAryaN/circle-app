@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { UserTypes } from 'types/users.types';
 import { ThreadTypes } from 'types/threads.types';
 import Cookies from 'js-cookie';
+import LikeButton from 'components/button/LikeButton';
 
 function ProfileMiddleBar() {
   const [value, setValue] = useState<string | null>('first');
@@ -206,22 +207,7 @@ function ProfileMiddleBar() {
                         )}
                       </Link>
                       <Box>
-                        <Box
-                          marginTop="2"
-                          display="flex"
-                          alignItems="center"
-                          gap="3"
-                        >
-                          <Text display="flex" alignItems="center" gap="1">
-                            <span className="text-[12px]">36 Likes</span>
-                          </Text>
-                          <Link
-                            to={`/comment/${thread.id}`}
-                            className="flex items-center gap-1 hover:text-[#817b7b]"
-                          >
-                            <span className="text-[12px] ">10 Replies</span>
-                          </Link>
-                        </Box>
+                        <LikeButton threadId={thread.id}/>
                       </Box>
                     </Box>
                   </Box>

@@ -97,9 +97,12 @@ function LikeButton({ threadId }: LikeButtonProps) {
             <span className="text-[12px] text-white">{likes} Likes</span>
           )}
         </Button>
-        <Link to="/" className="flex items-center gap-1 hover:text-[#817b7b]">
+        <Link
+          to={`/thread/${threadId}`}
+          className="flex items-center gap-1 hover:text-[#817b7b]"
+        >
           <CommentIcon />
-          <span className="text-[12px] ">10 Replies</span>
+          <span className="text-[12px] ">0 Replies</span>
         </Link>
       </Box>
     </Box>

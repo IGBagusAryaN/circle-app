@@ -33,3 +33,24 @@ export const getUserThread = async (token: string, userId: number) => {
     throw error;
   }
 };
+
+
+export const getThreadById = async (token: string, threadId: number) => {
+  try {
+    const response: AxiosResponse = await axios.get(`${apiURL}thread/${threadId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log('Thread Detail Response:', response.data);
+    return response.data.thread;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Axios Error:', error.response?.data || error.message);
+      throw new Error(error.response?.data?.message || 'Something went wrong');
+    }
+    console.error('Unexpected Error:', error);
+    throw error;
+  }
+};

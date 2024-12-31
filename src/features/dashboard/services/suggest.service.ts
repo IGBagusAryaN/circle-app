@@ -7,17 +7,18 @@ import { UserTypes } from 'types/users.types';
 const useSuggestedUsers = () => {
   const [suggestedUsers, setSuggestedUsers] = useState<UserTypes[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     const fetchSuggestedUsers = async () => {
       try {
         const token = Cookies.get('token');
         if (!token) throw new Error('Token not found');
-
+  
         const response = await axios.get(`${apiURL}suggest`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
+  
+        console.log('Suggested Users Response:', response.data);
+  
         if (Array.isArray(response.data)) {
           setSuggestedUsers(response.data);
         } else {
@@ -29,10 +30,10 @@ const useSuggestedUsers = () => {
         setIsLoading(false);
       }
     };
-
+  
     fetchSuggestedUsers();
   }, []);
-
+  
   return { suggestedUsers, isLoading };
 };
 

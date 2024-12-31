@@ -78,7 +78,7 @@ function SearchMiddleBar() {
           <Flex key={user.id} mt="3" mb="5" justify="space-between" px="5">
             <Flex>
               <Image
-                src={`${apiURL}uploads/${user.profile?.[0]?.profileImage}`}
+                src={user.profile?.[0]?.profileImage}
                 boxSize="40px"
                 borderRadius="full"
                 fit="cover"

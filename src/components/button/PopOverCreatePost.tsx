@@ -15,41 +15,53 @@ import { ThreadTypes } from 'types/threads.types';
 import { useProfileStore } from 'store/use.profile.store';
 import Swal from 'sweetalert2';
 
+
 interface PopoverCreatePostProps {
-  onNewThread?: (newThread: ThreadTypes) => void;
-  transform: string;
+  transform: string; // Properti untuk posisi transform
+  onNewThread?: (newThread: ThreadTypes) => void; // Callback saat thread baru dibuat
 }
 
-const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({
-  onNewThread,
-  transform,
-}) => {
-  const [content, setContent] = useState('');
-  const [file, setFile] = useState<File | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const { profile, retrieveUserProfile } = useProfileStore();
+const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({ transform, onNewThread }) => {
+  const [content, setContent] = useState(''); // State untuk konten postingan
+  const [file, setFile] = useState<File | null>(null); // State untuk file yang diunggah
+  const [isLoading, setIsLoading] = useState(false); // State untuk indikator loading
+  const { profile, retrieveUserProfile } = useProfileStore(); // Ambil data profil pengguna
 
   useEffect(() => {
-    retrieveUserProfile();
-  }, []);
+    retrieveUserProfile(); // Ambil profil pengguna saat komponen dimuat
+  }, [retrieveUserProfile]);
 
   const handlePost = async () => {
     if (!content.trim()) {
-      alert('Content is required');
+      Swal.fire({
+        title: 'Error',
+        text: 'Konten tidak boleh kosong.',
+        icon: 'error',
+        confirmButtonColor: '#E53E3E',
+        background: '#1D1D1D',
+        color: '#fff',
+      });
       return;
     }
 
-    setIsLoading(true);
+    setIsLoading(true); // Tampilkan loading
 
     const formData = new FormData();
-    formData.append('content', content);
+    formData.append('content', content); // Tambahkan konten ke form data
     if (file) {
-      formData.append('image', file);
+      formData.append('image', file); // Tambahkan file jika ada
     }
 
-    const token = Cookies.get('token');
+    const token = Cookies.get('token'); // Ambil token pengguna
     if (!token) {
-      alert('User is not authenticated');
+      Swal.fire({
+        title: 'Error',
+        text: 'Pengguna tidak terautentikasi.',
+        icon: 'error',
+        confirmButtonColor: '#E53E3E',
+        background: '#1D1D1D',
+        color: '#fff',
+      });
       setIsLoading(false);
       return;
     }
@@ -62,21 +74,19 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({
         },
       });
 
-      console.log('API Response (Create Thread):', response.data);
-
       const newThread: ThreadTypes = {
-        id: response.data.id,
-        content: response.data.content,
-        createdAt: new Date(response.data.createdAt),
-        updateAt: new Date(response.data.updatedAt),
-        userId: response.data.userId,
-        authorId: response.data.authorId,
-        image: response.data.image,
+        id: response.data.thread.id,
+        content: response.data.thread.content,
+        createdAt: new Date(response.data.thread.createdAt),
+        updateAt: new Date(response.data.thread.updatedAt),
+        userId: response.data.thread.userId || 0,
+        authorId: response.data.thread.authorId || 0,
+        image: response.data.thread.image || '',
         profile: {
-          id: response.data.profile?.id || 0,
-          fullname: response.data.profile?.fullname || 'Unknown User',
+          id: response.data.thread.profile?.[0]?.id || 0,
+          fullname: response.data.thread.profile?.[0]?.fullname || 'Pengguna Tidak Diketahui',
           profileImage:
-            response.data.profile?.profileImage || 'default-profile.jpg',
+            response.data.profile?.profileImage || '/default-profile.jpg',
         },
         author: {
           id: response.data.author?.id || 0,
@@ -85,16 +95,15 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({
       };
 
       if (onNewThread) {
-        console.log('New Thread Data:', newThread);
-        onNewThread(newThread);
+        onNewThread(newThread); // Panggil callback jika ada
       }
 
-      setContent('');
+      setContent(''); // Reset input
       setFile(null);
 
       Swal.fire({
-        title: 'Success!',
-        text: 'Your thread has been posted.',
+        title: 'Berhasil!',
+        text: 'Thread Anda telah diposting.',
         icon: 'success',
         confirmButtonColor: '#04A51E',
         background: '#1D1D1D',
@@ -103,13 +112,28 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({
       });
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        console.error('Error creating thread:', error.response?.data?.message);
-        alert(error.response?.data?.message || 'Failed to create thread');
+        console.error('Gagal membuat thread:', error.response?.data?.message);
+        Swal.fire({
+          title: 'Error',
+          text: error.response?.data?.message || 'Gagal membuat thread.',
+          icon: 'error',
+          confirmButtonColor: '#E53E3E',
+          background: '#1D1D1D',
+          color: '#fff',
+        });
       } else if (error instanceof Error) {
-        console.error('Error creating thread:', error.message);
-        alert(error.message || 'Failed to create thread');
+        console.error('Gagal membuat thread:', error.message);
+        Swal.fire({
+          title: 'Error',
+          text: error.message || 'Gagal membuat thread.',
+          icon: 'error',
+          confirmButtonColor: '#E53E3E',
+          background: '#1D1D1D',
+          color: '#fff',
+        });
       }
-      setIsLoading(false);
+    } finally {
+      setIsLoading(false); // Sembunyikan loading
     }
   };
 
@@ -126,8 +150,10 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({
             fontWeight="normal"
             fontSize="18px"
             justifyContent="flex-start"
+            width={'full'}
+            px={0}
           >
-            What is happening?
+            Apa yang sedang terjadi?
           </Button>
         </Box>
       </PopoverTrigger>
@@ -149,32 +175,28 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({
             <Flex borderBottom="1px solid" borderColor="gray.300" pb="50px">
               {profile ? (
                 <Image
-                  src={`${apiURL}/uploads/${profile.profile?.[0]?.profileImage}`}
+                  src={profile.profile?.[0]?.profileImage || '/default-profile.jpg'}
                   boxSize="40px"
                   borderRadius="full"
                   fit="cover"
-                  alt="Profile Image"
+                  alt={profile.profile?.[0]?.fullname || 'Foto Profil'}
                 />
               ) : (
                 <Box />
               )}
               <Input
-                placeholder="What is Happening?"
+                placeholder="Apa yang sedang terjadi?"
                 outline="none"
                 border="none"
                 fontSize="18px"
                 marginLeft="10px"
-                width="67%"
+                width="full"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               />
             </Flex>
           </Box>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
+          <Box display="flex" justifyContent="space-between" alignItems="center">
             <Box>
               <Input
                 type="file"
@@ -183,13 +205,7 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
               />
               <label htmlFor="file-upload">
-                <Button
-                  as="span"
-                  border="none"
-                  background="none"
-                  size="lg"
-                  p={0}
-                >
+                <Button as="span" border="none" background="none" size="lg" p={0}>
                   <FileAddIcon />
                 </Button>
               </label>

@@ -39,6 +39,7 @@ function App() {
             <Route path="/follows" element={<FollowsPage />} />
             <Route path="/image" element={<ImageGrid />} />
             <Route path="/test" element={<ProfilePagetest />} />
+            <Route path="/thread/:id" element={<CommentPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

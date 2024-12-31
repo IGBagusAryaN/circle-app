@@ -135,9 +135,9 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                     borderColor="gray.200"
                     pb="3"
                   >
-                    <Box display="flex" alignItems="center">
+                    <Box display="flex" alignItems="center" gap={3}>
                       <Image
-                        src={`${apiURL}/uploads/${user.profile?.[0]?.profileImage}`}
+                        src={user.profile?.[0]?.profileImage}
                         alt={`${user.profile?.[0]?.fullname || 'Unknown User'}'s profile`}
                         boxSize="40px"
                         borderRadius="full"
