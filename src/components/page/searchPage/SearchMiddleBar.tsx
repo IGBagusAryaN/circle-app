@@ -8,7 +8,7 @@ import {
   Center,
 } from '@chakra-ui/react';
 import { InputGroup } from 'components/ui/input-group';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LuSearch } from 'react-icons/lu';
 import Cookies from 'js-cookie';
 import { apiURL } from 'utils/baseurl';
@@ -18,34 +18,59 @@ import { UserTypes } from 'types/users.types';
 function SearchMiddleBar() {
   const [filteredUsers, setFilteredUsers] = useState<UserTypes[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+
+  // Ambil userId dari cookie saat komponen dimount
+  useEffect(() => {
+    const userId = Cookies.get('userId');
+    if (userId) {
+      setCurrentUserId(Number(userId));
+    }
+  }, []);
 
   const handleSearch = async (query: string) => {
     setSearchQuery(query);
-
+  
     if (query.trim() === '') {
       setFilteredUsers([]); // Kosongkan daftar user jika query kosong
       return;
     }
-
+  
     const token = Cookies.get('token');
     if (!token) {
       console.error('Token not found');
       return;
     }
-
+  
     try {
-      const response = await fetch(`${apiURL}users/search?query=${query}`, {
+      const response = await fetch(`${apiURL}search/search?query=${query}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+  
+      if (!response.ok) {
+        console.error('API Error:', response.status, response.statusText);
+        setFilteredUsers([]);
+        return;
+      }
+  
       const users = await response.json();
-      setFilteredUsers(users); // Perbarui hasil pencarian
+      console.log('API Response:', users); // Tambahkan log ini untuk debug
+  
+      if (Array.isArray(users)) {
+        const filtered = users.filter((user: UserTypes) => user.id !== currentUserId);
+        setFilteredUsers(filtered);
+      } else {
+        console.error('API response is not an array:', users);
+        setFilteredUsers([]);
+      }
     } catch (error) {
       console.error('Error in searchUsers:', error);
       setFilteredUsers([]);
     }
   };
+  
 
   return (
     <div>

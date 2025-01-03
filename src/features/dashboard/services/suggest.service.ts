@@ -38,3 +38,11 @@ const useSuggestedUsers = () => {
 };
 
 export default useSuggestedUsers;
+
+export const getRepliesCountByThreadApi = async (threadId: number) => {
+  const response = await axios.get(`${apiURL}/reply/count`, {
+    params: { threadId }, // Kirim threadId sebagai query parameter
+  });
+  return response.data;
+};
+

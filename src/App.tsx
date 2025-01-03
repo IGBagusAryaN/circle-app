@@ -35,7 +35,7 @@ function App() {
             <Route path="/comment/:id" element={<CommentPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/search" element={<SearchPage />} />
-            <Route path="/profile/:id" element={<ProfileUserPage />} />
+            <Route path="/profile/:userId" element={<ProfileUserPage />} />
             <Route path="/follows" element={<FollowsPage />} />
             <Route path="/image" element={<ImageGrid />} />
             <Route path="/test" element={<ProfilePagetest />} />

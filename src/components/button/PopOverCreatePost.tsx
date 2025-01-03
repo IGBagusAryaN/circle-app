@@ -83,14 +83,14 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({ transform, onNewT
         authorId: response.data.thread.authorId || 0,
         image: response.data.thread.image || '',
         profile: {
-          id: response.data.thread.profile?.[0]?.id || 0,
-          fullname: response.data.thread.profile?.[0]?.fullname || 'Pengguna Tidak Diketahui',
+          id: profile?.id || 0,
+          fullname: response.data.profile?.[0]?.fullname || 'Pengguna Tidak Diketahui',
           profileImage:
             response.data.profile?.profileImage || '/default-profile.jpg',
         },
         author: {
           id: response.data.author?.id || 0,
-          username: response.data.author?.username || 'unknown',
+          username: response.data.thread.author?.username || 'unknown',
         },
       };
 
@@ -153,7 +153,7 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({ transform, onNewT
             width={'full'}
             px={0}
           >
-            Apa yang sedang terjadi?
+            What is happening?
           </Button>
         </Box>
       </PopoverTrigger>
@@ -185,7 +185,7 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({ transform, onNewT
                 <Box />
               )}
               <Input
-                placeholder="Apa yang sedang terjadi?"
+                placeholder="What is happening?"
                 outline="none"
                 border="none"
                 fontSize="18px"

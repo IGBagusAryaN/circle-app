@@ -6,7 +6,7 @@ import useAccountStore from 'store/use.account.store';
 import { UserTypes } from 'types/users.types';
 import Cookies from 'js-cookie';
 import useSuggestedUsers from 'features/dashboard/services/suggest.service';
-import { Link } from 'react-router-dom'; // Pastikan impor Link
+import { Link } from 'react-router-dom'; // Ensure Link is properly imported
 import FollowButton from 'components/button/FollowButton';
 
 interface DisplaySideBar {
@@ -60,10 +60,11 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                     height="100px"
                     w="full"
                     borderRadius="7px"
-                    src={user.profile?.[0]?.bannerImage}
+                    src={user.profile[0]?.bannerImage || 'default-banner-url'}
+                    alt="Banner Image"
                   />
                   <Image
-                    src={user.profile?.[0]?.profileImage}
+                    src={user.profile[0]?.profileImage || 'default-profile-url'}
                     boxSize="80px"
                     borderRadius="full"
                     fit="cover"
@@ -81,13 +82,13 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
 
                 <Box mt="5">
                   <Text textAlign="left" fontSize="20px" fontWeight="bold">
-                    {user.profile?.[0]?.fullname || 'No fullname'}
+                    {user.profile[0]?.fullname || 'No fullname'}
                   </Text>
                   <Text textAlign="left" fontSize="12px" color="gray.400">
                     @{user.username}
                   </Text>
                   <Text textAlign="left" fontSize="14px" mt={2}>
-                    {user.profile?.[0]?.bio || 'No bio available'}
+                    {user.profile[0]?.bio || 'No bio available'}
                   </Text>
 
                   <Flex mt="4" gap="3">
@@ -127,7 +128,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                     key={user.id}
                     display="flex"
                     alignItems="center"
-                    justifyContent={'space-between'}
+                    justifyContent="space-between"
                     gap="3"
                     my="4"
                     borderBottom="1px solid"
@@ -136,15 +137,15 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                   >
                     <Box display="flex" alignItems="center" gap={3}>
                       <Image
-                        src={user.profile?.[0]?.profileImage}
-                        alt={`${user.profile?.[0]?.fullname || 'Unknown User'}'s profile`}
+                        src={user.profileImage || 'default-profile-url'}
+                        alt={`${user.fullname}'s profile`}
                         boxSize="40px"
                         borderRadius="full"
                       />
                       <Box>
                         <Link to={`/profile/${user.id}`}>
                           <Text fontWeight="bold">
-                            {user.profile?.[0]?.fullname || 'Unknown User'}
+                            {user.fullname || 'Unknown User'}
                           </Text>
                           <Text fontSize="14px" color="gray.500">
                             @{user.username}

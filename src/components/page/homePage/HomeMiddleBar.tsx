@@ -101,7 +101,10 @@ function HomeMiddleBar() {
         threads.map((thread) => (
           <Box key={thread.id} borderBottom="1px solid" borderColor="#FFF">
             <Box p="20px">
-              <Box display="flex" alignItems="start" gap="3">
+              <Box display="flex" alignItems="start">
+                <Link to={`/profile/${thread.author?.id}`}>
+                
+                </Link>
                 <Image
                   src={
                     thread.profile?.profileImage
@@ -112,10 +115,11 @@ function HomeMiddleBar() {
                   borderRadius="full"
                   fit="cover"
                   alt="Profile Image"
+                  mr={3}
                 />
                 <Box display="flex" flexDirection="column">
                   <Box display="flex" gap="2">
-                    <Link to="/" className="font-semibold">
+                    <Link to={`/profile/${thread.author?.id}`}className="font-semibold">
                       {thread.profile?.fullname || 'Unknown User'}
                     </Link>
                     <Text color="gray.400">

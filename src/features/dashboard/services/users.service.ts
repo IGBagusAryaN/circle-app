@@ -19,3 +19,23 @@ export const getAllUsers = async (token: string) => {
     throw error;
   }
 };
+
+// Fungsi untuk mendapatkan pengguna berdasarkan ID
+export const getUserById = async (token: string, id: number) => {
+  try {
+    const res: AxiosResponse = await axios.get(`${apiURL}users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res.data; // Mengembalikan data pengguna
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Axios Error:', error.response?.data || error.message);
+      throw new Error(error.response?.data?.message || 'Something went wrong');
+    }
+    console.error('Unexpected Error:', error);
+    throw error;
+  }
+};
