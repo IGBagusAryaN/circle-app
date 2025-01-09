@@ -35,7 +35,6 @@ const Login = () => {
         console.log(res);
         const data = res.data;
         if (res.status === 200) {
-          Cookies.set('token', data.token);
           const { id, username, email, token } = res.data;
 
           if (!id) {
@@ -44,6 +43,7 @@ const Login = () => {
       
           Cookies.set('token', token);
           useAuthStore.getState().setUser({ id, username, email });
+          Cookies.remove('userId');
           Swal.fire({
             title: 'Success!',
             text: data.message,
