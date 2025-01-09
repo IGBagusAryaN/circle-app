@@ -1,14 +1,36 @@
-import { Box, Flex, Image, Tabs, Text } from '@chakra-ui/react';
-import PopoverEditProfile from 'components/button/PopOverEditProfile';
+import { Box, Flex, Grid, Image, Tabs, Text } from '@chakra-ui/react';
 import { getUserThread } from 'features/dashboard/services/thread.service';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { UserTypes } from 'types/users.types';
 import { ThreadTypes } from 'types/threads.types';
 import Cookies from 'js-cookie';
-import LikeButton from 'components/button/LikeButton';
+import LikeButton from 'components/button/LikeAndReplyButton';
 import { getUserById } from 'features/dashboard/services/users.service';
 import FollowButton from 'components/button/FollowButton';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
+dayjs.locale('en', {
+  relativeTime: {
+    future: 'in %s',
+    past: '%s ago',
+    s: 'A few seconds',
+    m: 'A minute',
+    mm: '%d minutes',
+    h: 'An hour',
+    hh: '%d hours',
+    d: '1 day',
+    dd: '%d days',
+    M: 'A month',
+    MM: '%d months',
+    y: 'A year',
+    yy: '%d years',
+  },
+});
+
 
 function ProfileMiddleBar() {
   const { userId } = useParams(); // Ambil userId dari URL
@@ -19,7 +41,7 @@ function ProfileMiddleBar() {
 
   useEffect(() => {
     retrieveUserProfile();
-  }, [userId]); // Tambahkan userId sebagai dependency
+  }, [userId]); 
 
   const retrieveUserProfile = async () => {
     const token = Cookies.get('token');
@@ -29,7 +51,6 @@ function ProfileMiddleBar() {
     }
 
     try {
-      // Ambil pengguna berdasarkan userId
       const fetchedUser = await getUserById(token, Number(userId));
       setUser(fetchedUser);
 
@@ -191,7 +212,7 @@ function ProfileMiddleBar() {
                         </Text>
                         <Text color="gray.400">
                           @{thread.author?.username || 'username'}{' '}
-                          <span> • 17d</span>
+                          <span> • {dayjs(thread.createdAt).fromNow()}</span>
                         </Text>
                       </Box>
                       <Link to={`/comment/${thread.id}`}>
@@ -215,12 +236,31 @@ function ProfileMiddleBar() {
               </Box>
             ))
           ) : (
-            <Text>No threads found.</Text>
+            <Text  px={1}>No threads found.</Text>
           )}
         </Tabs.Content>
-
         <Tabs.Content value="second" py="1">
-          <Text>Media Content Coming Soon</Text>
+          {isLoadingThreads ? (
+            <Text  px={1}>Loading media...</Text>
+          ) : threads && threads.length > 0 ? (
+            <Grid templateColumns="repeat(3, 1fr)" gap="1" px={1}>
+              {threads
+                .filter((thread) => thread.image)
+                .map((thread) => (
+                  <Link to={`/image/${thread.id}`} key={thread.id} >
+                    <Image
+                      src={thread.image}
+                      alt="Thread Media"
+                      width="100%"
+                      height="150px"
+                      borderRadius="lg"
+                    />
+                  </Link>
+                ))}
+            </Grid>
+          ) : (
+            <Text>No media found.</Text>
+          )}
         </Tabs.Content>
       </Tabs.Root>
     </div>

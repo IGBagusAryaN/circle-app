@@ -1,13 +1,36 @@
-import { Box, Flex, Image, Input, Text, Button } from "@chakra-ui/react";
-import FileAddIcon from "components/icons/FileAddIcon";
+import { Box, Flex, Image, Input, Text, Button, MenuRoot, MenuTrigger, MenuContent, MenuItem} from "@chakra-ui/react";
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useProfileStore } from "store/use.profile.store";
-import LikeButton from "components/button/LikeButton";
-import { createReply, getReplies } from "features/dashboard/services/reply.services";
+import LikeButton from "components/button/LikeAndReplyButton";
+import { createReply, deleteReply, getReplies } from "features/dashboard/services/reply.services";
 import { getThreadById } from "features/dashboard/services/thread.service";
 import Swal from "sweetalert2";
+import toast from 'react-hot-toast';
+import PopoverCreateReply from "components/button/PopOverCreateReply";
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
+dayjs.locale('en', {
+  relativeTime: {
+    future: 'in %s',
+    past: '%s ago',
+    s: 'A few seconds',
+    m: 'A minute',
+    mm: '%d minutes',
+    h: 'An hour',
+    hh: '%d hours',
+    d: '1 day',
+    dd: '%d days',
+    M: 'A month',
+    MM: '%d months',
+    y: 'A year',
+    yy: '%d years',
+  },
+});
 
 export interface Author {
   username: string;
@@ -25,6 +48,7 @@ export interface Reply {
   content: string;
   createdAt: string;
   author: Author;
+  image: string;
 }
 
 function CommentMiddleBar() {
@@ -34,8 +58,9 @@ function CommentMiddleBar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [replies, setReplies] = useState<{ [threadId: number]: Reply[] }>({});
   const [newReply, setNewReply] = useState<string>("");
+  const [, setRepliesCount] = useState<number>(0);
 
-  // Fetch thread by ID
+  const token = Cookies.get('token');
   useEffect(() => {
     const fetchThread = async () => {
       try {
@@ -67,7 +92,6 @@ function CommentMiddleBar() {
     if (id) fetchThread();
   }, [id]);
 
-  // Fetch replies for the specific thread
   useEffect(() => {
     const fetchReplies = async () => {
       try {
@@ -95,49 +119,50 @@ function CommentMiddleBar() {
     if (id) fetchReplies();
   }, [id]);
 
-  const handleReplySubmit = async () => {
+  const handleDeleteReply = async (replyId:number) => {
     try {
-      if (!thread?.id) {
-        throw new Error("Thread ID tidak ditemukan.");
-      }
-
-      if (!newReply.trim()) {
-        Swal.fire({
-          icon: "warning",
-          title: "Peringatan!",
-          text: "Konten reply tidak boleh kosong.",
-        });
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("content", newReply);
-
-      const reply = await createReply(thread.id, formData);
-      console.log("Reply successfully created:", reply);
-
-      setReplies((prevReplies) => ({
-        ...prevReplies,
-        [thread.id]: [reply, ...(prevReplies[thread.id] || [])],
-      }));
-
-      setNewReply(""); // Reset input form
-      Swal.fire({
-        icon: "success",
-        title: "Berhasil!",
-        text: "Reply berhasil diposting.",
-        timer: 2000,
-        showConfirmButton: false,
+      if (!token) throw new Error("Token tidak tersedia. User mungkin belum login.");
+      await deleteReply(replyId); //api
+      setReplies((prevReplies) => {
+        const updatedReplies = { ...prevReplies };
+        updatedReplies[thread.id] = updatedReplies[thread.id].filter(
+          (reply) => reply.id !== replyId
+        );
+        return updatedReplies;
       });
-    } catch (error: any) {
-      console.error("Error creating reply:", error.message);
-      Swal.fire({
-        icon: "error",
-        title: "Gagal!",
-        text: "Terjadi kesalahan saat memposting reply!",
-      });
+
+      toast.success("Reply successfully deleted!");
+    } catch (error) {
+      console.error("Error deleting reply:", error);
+      toast.error("Failed to delete reply.");
     }
   };
+
+  const handleReplySubmit = useCallback(async () => {
+    try {
+        if (!thread?.id) throw new Error("Thread ID tidak ditemukan.");
+        if (!newReply.trim()) {
+            toast.error('Reply cannot be empty!');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("content", newReply);
+
+        const reply = await createReply(thread.id, formData); //api
+        setReplies((prevReplies) => ({
+            ...prevReplies,
+            [thread.id]: [reply, ...(prevReplies[thread.id] || [])],
+        }));
+        setNewReply("");
+        toast.success('Reply successfully created!');
+        setRepliesCount((prevCount) => prevCount + 1);
+    } catch (error: any) {
+        console.error("Error creating reply:", error.message);
+        toast.error('Reply failed to create!');
+    }
+}, [thread?.id, newReply]);
+
 
   useEffect(() => {
     if (!profile) retrieveUserProfile();
@@ -148,6 +173,7 @@ function CommentMiddleBar() {
 
   return (
     <div>
+      {/* thread view */}
       <Box borderBottom="1px solid" borderColor="gray.400">
         <Box px="20px">
           <Flex gap="3" align="center">
@@ -167,20 +193,26 @@ function CommentMiddleBar() {
               alt={thread.author?.username || "User"}
             />
             <Box ml="2">
-              <Text textAlign="left" fontSize="14px" fontWeight="semibold">{thread.profile?.fullname || "Anonymous"}</Text>
+              <Text fontSize="14px" fontWeight="semibold">{thread.author.profile?.[0]?.fullname || "Anonymous"}
+                  <span className='font-normal text-gray-400'> • {dayjs(thread.createdAt).fromNow()}</span>
+              </Text>
               <Text textAlign="left" fontSize="12px" color="gray.400">@{thread.author?.username || "unknown"}</Text>
+              <Link to={`/image/${thread.id}`}>
               <Box>
                 <Text fontSize="14px" marginTop="2">{thread.content}</Text>
                 {thread.image && <img src={thread.image} alt="Thread" className="rounded-lg w-6/12 my-2" />}
-                <Text fontSize="12px" marginTop="2" color="gray.400">{new Date(thread.createdAt).toLocaleString()}</Text>
               </Box>
+              </Link>
               <Box marginTop="2" display="flex" alignItems="center" gap="3">
-                <LikeButton threadId={thread.id} />
+                <LikeButton threadId={thread.id} onRepliesCountChange={(count) => setRepliesCount(count)} />
               </Box>
             </Box>
           </Flex>
         </Box>
       </Box>
+      {/* thread view */}
+
+      {/* input reply */}
       <Box p="20px" display="flex" alignItems="center" borderBottom="1px solid" borderColor="gray.400">
         <Image
           src={profile?.profile?.[0]?.profileImage || "https://via.placeholder.com/40"}
@@ -195,20 +227,29 @@ function CommentMiddleBar() {
           border="none"
           fontSize="18px"
           marginLeft="10px"
-          width="67%"
+          width="61%"
           p="0"
           value={newReply}
           onChange={(e) => setNewReply(e.target.value)}
         />
         <Box display="flex" alignItems="center" gap="2">
           <Box>
-            <FileAddIcon />
+            <PopoverCreateReply
+              transform="translate(-50%, -50%)"
+              parentThreadId={thread.id}
+              onNewReply={(newReply) => {
+              setReplies((prevReplies) => ({
+                    ...prevReplies,
+                    [thread.id]: [newReply, ...(prevReplies[thread.id] || [])],
+                    }));
+                }}
+            />
           </Box>
-          <Button colorScheme="blue" onClick={handleReplySubmit}>
-            Reply
-          </Button>
+          <Button type="submit" rounded="50px" backgroundColor="#04A51E" width='full' color="#FFFF" _hover={{backgroundColor: "#006811"}} onClick={handleReplySubmit}>Reply</Button>
         </Box>
       </Box>
+      {/* input reply */}
+      
       <Box>
         {(replies[thread?.id] || []).map((reply) => (
           <Box key={reply.id} p="20px" borderBottom="1px solid" borderColor="gray.400">
@@ -220,15 +261,52 @@ function CommentMiddleBar() {
                 fit="cover"
                 alt={reply.author.username || "User"}
               />
-              <Box>
-                <Text fontSize="14px" fontWeight="semibold">
-                  {reply.author.profile?.[0]?.fullname || "Anonymous"}
-                </Text>
-                <Text fontSize="12px" color="gray.400">@{reply.author?.username || "unknown"}</Text>
+              <Box width={'100vw'}>
+                <Box display={"flex"} justifyContent={"space-between"} width={'full'}>
+                  <Box >
+                    <Text fontSize="14px" fontWeight="semibold">{reply.author.profile?.[0]?.fullname || "Anonymous"}
+                      <span className='font-normal text-gray-400'> • {dayjs(reply.createdAt).fromNow()}</span>
+                    </Text>
+                    <Text fontSize="12px" color="gray.400">@{reply.author?.username || "unknown"}</Text>
+                  </Box>
+
+                  {/* menu delete */}
+                  {reply.author.username === profile?.username && (
+                    <Box style={{ position: 'relative' }}>
+                      <MenuRoot>
+                        <MenuTrigger asChild>
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 cursor-pointer">
+                            <path fillRule="evenodd" d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" clipRule="evenodd" />
+                          </svg>
+                        </MenuTrigger>
+                        <MenuContent style={{ position: 'absolute', top: '75%', left: '-114px', backgroundColor:'#1d1d1d' }}>
+                          <MenuItem
+                            cursor={'pointer'}
+                            colorScheme="red"
+                              onClick={() => handleDeleteReply(reply.id)}
+                              value="delete"
+                              color="fg.error"
+                              _hover={{ bg: "bg.error", color: "fg.error" }}
+                            >
+                              Delete...
+                          </MenuItem>
+                        </MenuContent>
+                      </MenuRoot>
+                    </Box>
+                  )}
+                  {/* menu delete */}
+                </Box>
+                
+                {/* content reply */}
                 <Text fontSize="14px" mt="2">{reply.content}</Text>
-                <Text fontSize="12px" mt="2" color="gray.400">
-                  {new Date(reply.createdAt).toLocaleString()}
-                </Text>
+                {reply.image && (
+                    <Image
+                      src={reply.image}
+                      alt="Thread Image"
+                      className="rounded-lg w-6/12 my-2"
+                    />
+                )}
+                {/* content reply */}
               </Box>
             </Flex>
           </Box>

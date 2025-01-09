@@ -10,6 +10,8 @@ import HeartIcon from 'components/icons/HeartIcon';
 import UserIcon from 'components/icons/UserIcon';
 import PopoverCreateBtn from 'components/button/PopOverCreateBtn';
 
+
+
 interface logOutProps {
   onClick: () => void;
 }
@@ -72,7 +74,7 @@ const SideBarLeft: React.FC<logOutProps> = ({ onClick }) => {
               </Link>
             </li>
           </ul>
-          <PopoverCreateBtn transform="translate(49%, -95%)"/>
+          <PopoverCreateBtn transform="translate(49%, -95%)" />
         </Box>
         <LogoutButton onClick={onClick} />
       </Box>

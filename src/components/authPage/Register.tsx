@@ -31,8 +31,8 @@ const Register = () => {
   });
 
   const onSubmit = (data: RegisterFormInputs) => {
-    console.log(data);
-    fetchRegister(data)
+    // console.log(data);
+    fetchRegister(data) //api
       .then((res) => {
         console.log(res);
         const data = res.data;

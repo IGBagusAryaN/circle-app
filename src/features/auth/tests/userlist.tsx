@@ -5,6 +5,7 @@ import { UserTypes } from 'types/users.types';
 
 import Cookies from 'js-cookie';
 import { getAllUsers } from 'features/dashboard/services/users.service';
+import { Link } from 'react-router-dom';
 
 type UserListProps = {
   users: UserTypes[];
@@ -48,6 +49,7 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
           );
           return (
             <Flex key={user.id} mt="3" mb="5" justify="space-between" px="5">
+              <Link to="/profile/:userId">
               <Flex>
                 <Image
                   src={userProfile?.profile?.[0]?.profileImage || ''}
@@ -64,7 +66,9 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
                     @{user.username}
                   </Text>
                 </Box>
-              </Flex>
+              </Flex>  
+              </Link>
+            
               <FollowButton userId={user.id} />
             </Flex>
           );

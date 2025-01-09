@@ -5,11 +5,8 @@ import Cookies from "js-cookie";
 export const createReply = async (threadId: number, data: FormData) => {
   const token = Cookies.get("token");
   if (!token) {
-    console.error("Authentication token is missing. User may not be authenticated.");
     throw new Error("User is not authenticated.");
   }
-
-  console.log("Sending request with token:", token);
 
   try {
     const response = await axios.post(`${apiURL}reply/${threadId}`, data, {
@@ -19,9 +16,6 @@ export const createReply = async (threadId: number, data: FormData) => {
       },
     });
 
-    // Logging response for debugging
-    console.log("Reply creation response:", response.data);
-
     if (response.data && response.data.reply) {
       return response.data.reply;
     } else {
@@ -30,18 +24,12 @@ export const createReply = async (threadId: number, data: FormData) => {
     }
   } catch (error: any) {
     if (error.response) {
-      // Server responded with a status code out of the range of 2xx
-      console.error("Server error response:", error.response.data);
       throw new Error(
         `Failed to create reply. Server responded with status: ${error.response.status} - ${error.response.data.message || "Unknown error"}`
       );
     } else if (error.request) {
-      // Request was made but no response received
-      console.error("No response received:", error.request);
       throw new Error("Failed to create reply. No response from the server.");
     } else {
-      // Something else happened
-      console.error("Error creating reply:", error.message);
       throw new Error(`Failed to create reply. Error: ${error.message}`);
     }
   }
@@ -72,13 +60,34 @@ export const getReplies = async (threadId: number) => {
     return response.data;
 
   } catch (error: any) {
-    console.error("Error fetching replies:", error?.response?.data || error.message);
     throw new Error(error?.response?.data?.message || "Failed to fetch replies");
   }
 };
 
+export const updateReply = async (replyId: number, formData: FormData) => {
+  const token = Cookies.get("token");
+  if (!token) throw new Error("User belum login.");
 
-export const getReplyCountApi = async (threadId: number) => {
-  const response = await axios.get(`${apiURL}reply/count/${threadId}`);
+  const response = await axios.put(`${apiURL}reply/${replyId}`, formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
   return response.data;
 };
+
+export const deleteReply = async (replyId: number) => {
+  const token = Cookies.get("token");
+  if (!token) throw new Error("User belum login.");
+
+  const response = await axios.delete(`${apiURL}reply/${replyId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+

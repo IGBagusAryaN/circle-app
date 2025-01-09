@@ -1,4 +1,4 @@
-import { Box, Button, Image, Input, Text } from '@chakra-ui/react';
+import { Box, Button, Image, Input, Text, Spinner } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -7,7 +7,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Swal from 'sweetalert2';
 import { fetchProfile } from 'features/auth/services/auth-service';
 import Logo from 'components/logo/Logo';
-import ButtonPrimary from 'components/button/Button';
 import Cookies from 'js-cookie';
 
 const profileSchema = z.object({
@@ -23,6 +22,7 @@ const SetProfile = () => {
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -49,8 +49,8 @@ const SetProfile = () => {
   };
 
   const onSubmit = async (data: ProfileFormInputs) => {
+    setIsLoading(true);
     const userId = Cookies.get('userId');
-
     if (!userId) {
       Swal.fire({
         title: 'Error',
@@ -58,6 +58,7 @@ const SetProfile = () => {
         icon: 'error',
         confirmButtonColor: '#E53E3E',
       });
+      setIsLoading(false);
       return;
     }
 
@@ -69,7 +70,7 @@ const SetProfile = () => {
     };
 
     try {
-      const res = await fetchProfile(updatedData); // Kirim objek JSON
+      const res = await fetchProfile(updatedData); //api
       if (res.status === 201) {
         Swal.fire({
           title: 'Success',
@@ -93,6 +94,8 @@ const SetProfile = () => {
         color: '#fff',
         allowOutsideClick: false,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -198,8 +201,18 @@ const SetProfile = () => {
           )}
 
           {/* Submit Button */}
-          <Box marginTop={3}>
-            <ButtonPrimary text="Save Profile" />
+          <Box marginTop={3} display="flex" justifyContent="center" alignItems="center">
+               <Button
+              rounded="50px"
+              backgroundColor="#04A51E"
+              color="#FFFF"
+              _hover={{ backgroundColor: '#006811' }}
+              disabled={isLoading}
+              type='submit'
+              width={'full'}
+            >
+              {isLoading ? <Spinner size="sm" /> : 'Post'}
+            </Button>
           </Box>
         </form>
       </Box>

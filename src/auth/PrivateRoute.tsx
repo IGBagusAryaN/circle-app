@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import PrivateLayout from 'components/layout/PrivateLayout';
 
 type UserTypes = {
+  id:number
   username: string;
   email: string;
 } | null;

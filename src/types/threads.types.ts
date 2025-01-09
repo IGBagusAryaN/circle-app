@@ -1,4 +1,4 @@
-export type ThreadTypes = {
+export interface ThreadTypes {
   authorId: number;
   content: string;
   createdAt: Date;

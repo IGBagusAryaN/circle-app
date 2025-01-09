@@ -9,9 +9,8 @@ const HeartIcon: React.FC<IconProps> = ({ size = 24, ...props }) => {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      fill="currentColor"
+      fill='currentColor'
       className="cursor-pointer"
-      color="white"
       width={size}
       height={size}
       {...props}

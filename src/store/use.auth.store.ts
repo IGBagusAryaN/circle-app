@@ -19,11 +19,29 @@ export const useAuthStore = create(
   persist<AuthState>(
     (set) => ({
       user: null,
-      setUser: (userData) => set({ user: userData }),
-      clearAuth: () => set({ user: null }),
+
+      setUser: (userData) => {
+        console.log('setUser called with:', userData);
+
+        if (!userData || !userData.id) {
+          console.error('Invalid user data: ID is missing', userData);
+          return;
+        }
+
+        set({ user: userData });
+        console.log('User data set in store:', userData);
+      },
+
+      clearAuth: () => {
+        console.log('Clearing user data');
+        set({ user: null });
+      },
+
       logout: () => {
+        console.log('Logging out user');
         Cookies.remove('token');
         set({ user: null });
+
         if (typeof window !== 'undefined') {
           window.location.href = '/login';
         }

@@ -39,3 +39,32 @@ export const getUserById = async (token: string, id: number) => {
     throw error;
   }
 };
+
+
+import Cookies from 'js-cookie';
+
+
+export const searchUsers = async (query:string) => {
+  const token = Cookies.get('token');
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  const response = await fetch(`${apiURL}search/search?query=${query}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+  }
+
+  const users = await response.json();
+
+  if (!Array.isArray(users)) {
+    throw new Error('API response is not an array');
+  }
+
+  return users;
+};

@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 import { Box, Text, Tabs,  } from "@chakra-ui/react";
 import { UserTypes } from "types/users.types";
 
-// Define API response types
 interface FollowerData {
   follower: UserTypes;
 }

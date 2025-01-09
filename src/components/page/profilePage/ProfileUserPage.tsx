@@ -3,12 +3,12 @@ import SideBarLeft from "../../sidebar/SideBarLeft"
 import SideBarRight from "../../sidebar/SideBarRight"
 import { useNavigate } from "react-router-dom";
 import ProfileUserMiddleBar from "./profileUserMiddleBar";
-
+import Cookies from "js-cookie";
 
 function ProfileUserPage () {
     const navigate = useNavigate();
     const onLogout = () => {
-      localStorage.removeItem("isAuthenticated");
+      Cookies.get("isAuthenticated");
       navigate("/login")
     }
 

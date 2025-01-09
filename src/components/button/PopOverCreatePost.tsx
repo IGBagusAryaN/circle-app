@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Image, Input, Spinner } from '@chakra-ui/react';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import FileAddIcon from 'components/icons/FileAddIcon';
 import {
   PopoverBody,
@@ -14,18 +14,20 @@ import { apiURL } from 'utils/baseurl';
 import { ThreadTypes } from 'types/threads.types';
 import { useProfileStore } from 'store/use.profile.store';
 import Swal from 'sweetalert2';
+import useThreadStore from 'store/use.thread.store';
 
-
-interface PopoverCreatePostProps {
-  transform: string; // Properti untuk posisi transform
-  onNewThread?: (newThread: ThreadTypes) => void; // Callback saat thread baru dibuat
+interface Transform {
+  transform: string;
+  trigger: React.ReactNode;
 }
 
-const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({ transform, onNewThread }) => {
+const PopoverCreateBtn: React.FC<Transform> = ({ transform, trigger }) => {
   const [content, setContent] = useState(''); // State untuk konten postingan
   const [file, setFile] = useState<File | null>(null); // State untuk file yang diunggah
   const [isLoading, setIsLoading] = useState(false); // State untuk indikator loading
   const { profile, retrieveUserProfile } = useProfileStore(); // Ambil data profil pengguna
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const { addThread } = useThreadStore();
 
   useEffect(() => {
     retrieveUserProfile(); // Ambil profil pengguna saat komponen dimuat
@@ -44,15 +46,15 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({ transform, onNewT
       return;
     }
 
-    setIsLoading(true); // Tampilkan loading
+    setIsLoading(true);
 
     const formData = new FormData();
-    formData.append('content', content); // Tambahkan konten ke form data
+    formData.append('content', content);
     if (file) {
-      formData.append('image', file); // Tambahkan file jika ada
+      formData.append('image', file);
     }
 
-    const token = Cookies.get('token'); // Ambil token pengguna
+    const token = Cookies.get('token');
     if (!token) {
       Swal.fire({
         title: 'Error',
@@ -74,89 +76,70 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({ transform, onNewT
         },
       });
 
+      const threadData = response.data.thread;
+
       const newThread: ThreadTypes = {
-        id: response.data.thread.id,
-        content: response.data.thread.content,
-        createdAt: new Date(response.data.thread.createdAt),
-        updateAt: new Date(response.data.thread.updatedAt),
-        userId: response.data.thread.userId || 0,
-        authorId: response.data.thread.authorId || 0,
-        image: response.data.thread.image || '',
-        profile: {
-          id: profile?.id || 0,
-          fullname: response.data.profile?.[0]?.fullname || 'Pengguna Tidak Diketahui',
-          profileImage:
-            response.data.profile?.profileImage || '/default-profile.jpg',
-        },
-        author: {
-          id: response.data.author?.id || 0,
-          username: response.data.thread.author?.username || 'unknown',
-        },
+        id: threadData.id,
+        content: threadData.content,
+        createdAt: new Date(threadData.createdAt),
+        updateAt: new Date(threadData.updatedAt),
+        userId: threadData.userId || 0,
+        authorId: threadData.authorId || 0,
+        image: threadData.image || '',
+        profile: threadData.profile, // Data langsung dari API
+        author: threadData.author, // Data langsung dari API
       };
 
-      if (onNewThread) {
-        onNewThread(newThread); // Panggil callback jika ada
+      if (!threadData.profile || typeof threadData.profile !== 'object') {
+        console.error('Data profile tidak valid:', threadData.profile);
       }
 
-      setContent(''); // Reset input
+      if (!threadData.author || typeof threadData.author !== 'object') {
+        console.error('Data author tidak valid:', threadData.author);
+      }
+
+      addThread(newThread); // Tambahkan thread baru ke state
+
+      setContent('');
       setFile(null);
 
       Swal.fire({
-        title: 'Berhasil!',
-        text: 'Thread Anda telah diposting.',
+        title: 'Success!',
+        text: 'Thread Post Successfully.',
         icon: 'success',
         confirmButtonColor: '#04A51E',
         background: '#1D1D1D',
         color: '#fff',
         allowOutsideClick: false,
       });
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.error('Gagal membuat thread:', error.response?.data?.message);
-        Swal.fire({
-          title: 'Error',
-          text: error.response?.data?.message || 'Gagal membuat thread.',
-          icon: 'error',
-          confirmButtonColor: '#E53E3E',
-          background: '#1D1D1D',
-          color: '#fff',
-        });
-      } else if (error instanceof Error) {
-        console.error('Gagal membuat thread:', error.message);
-        Swal.fire({
-          title: 'Error',
-          text: error.message || 'Gagal membuat thread.',
-          icon: 'error',
-          confirmButtonColor: '#E53E3E',
-          background: '#1D1D1D',
-          color: '#fff',
-        });
-      }
+    } catch (error) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Gagal membuat thread.',
+        icon: 'error',
+        confirmButtonColor: '#E53E3E',
+        background: '#1D1D1D',
+        color: '#fff',
+      });
     } finally {
-      setIsLoading(false); // Sembunyikan loading
+      setIsLoading(false);
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    setFile(file);
+
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+    } else {
+      setPreviewImage(null);
     }
   };
 
   return (
     <PopoverRoot>
-      <PopoverTrigger asChild>
-        <Box textAlign="left" width="64%">
-          <Button
-            textAlign="left"
-            background="none"
-            borderRadius="20px"
-            cursor="text"
-            color="gray.300"
-            fontWeight="normal"
-            fontSize="18px"
-            justifyContent="flex-start"
-            width={'full'}
-            px={0}
-          >
-            What is happening?
-          </Button>
-        </Box>
-      </PopoverTrigger>
+      <PopoverTrigger asChild>{trigger}</PopoverTrigger>
       <PopoverContent
         overflowY="auto"
         width="80vh"
@@ -172,7 +155,7 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({ transform, onNewT
       >
         <PopoverBody>
           <Box my="20px">
-            <Flex borderBottom="1px solid" borderColor="gray.300" pb="50px">
+            <Flex borderBottom="1px solid" borderColor="gray.300" pb="30px">
               {profile ? (
                 <Image
                   src={profile.profile?.[0]?.profileImage || '/default-profile.jpg'}
@@ -196,13 +179,26 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({ transform, onNewT
               />
             </Flex>
           </Box>
+          {previewImage && (
+            <Box my="13px">
+              <Image
+                src={previewImage}
+                alt="Preview"
+                boxSize="150px"
+                objectFit="cover"
+                borderRadius="10px"
+                width={400}
+                h={200}
+              />
+            </Box>
+          )}
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <Box>
               <Input
                 type="file"
                 display="none"
                 id="file-upload"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                onChange={handleFileChange}
               />
               <label htmlFor="file-upload">
                 <Button as="span" border="none" background="none" size="lg" p={0}>
@@ -228,4 +224,4 @@ const PopoverCreatePost: React.FC<PopoverCreatePostProps> = ({ transform, onNewT
   );
 };
 
-export default PopoverCreatePost;
+export default PopoverCreateBtn;

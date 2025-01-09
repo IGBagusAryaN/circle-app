@@ -1,5 +1,4 @@
-import { Box, Flex, Image, Text } from '@chakra-ui/react';
-import PopoverEditProfile from 'components/button/PopOverEditProfile';
+import { Box, Button, Flex, Image, Text } from '@chakra-ui/react';
 import { getAllUsers } from 'features/dashboard/services/users.service';
 import React, { useEffect } from 'react';
 import useAccountStore from 'store/use.account.store';
@@ -13,6 +12,7 @@ interface DisplaySideBar {
   display: string;
 }
 
+
 const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
   const { user, setUser } = useAccountStore();
   const { suggestedUsers, isLoading } = useSuggestedUsers();
@@ -20,6 +20,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
   useEffect(() => {
     retrieveUserProfile();
   }, [user]);
+
 
   const retrieveUserProfile = async () => {
     const token = Cookies.get('token');
@@ -76,7 +77,19 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                     borderColor="whiteAlpha.900"
                   />
                   <Box textAlign="right">
-                    <PopoverEditProfile transform="translate(-117%, -41%)" />
+                    {/* <PopoverEditProfile transform="translate(-117%, -41%)" /> */}
+                      <Button
+                              right="0"
+                              mt="3"
+                              border="1px solid"
+                              borderColor="#FFFF"
+                              background="none"
+                              color="#FFFF"
+                              borderRadius="20px"
+                              _hover={{ background: '#FFFF', color: 'black' }}
+                            >
+                              Edit Profile
+                            </Button>
                   </Box>
                 </Box>
 
@@ -131,13 +144,11 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                     justifyContent="space-between"
                     gap="3"
                     my="4"
-                    borderBottom="1px solid"
-                    borderColor="gray.200"
-                    pb="3"
+                    pt="2"
                   >
-                    <Box display="flex" alignItems="center" gap={3}>
+                    <Box display="flex" alignItems="center" gap={3} textAlign={'left'}>
                       <Image
-                        src={user.profileImage || 'default-profile-url'}
+                        src={(user.profileImage) || 'default-profile-url'}
                         alt={`${user.fullname}'s profile`}
                         boxSize="40px"
                         borderRadius="full"

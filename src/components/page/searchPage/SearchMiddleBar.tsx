@@ -14,13 +14,14 @@ import Cookies from 'js-cookie';
 import { apiURL } from 'utils/baseurl';
 import FollowButton from 'components/button/FollowButton';
 import { UserTypes } from 'types/users.types';
+import { Link } from 'react-router-dom';
+import { searchUsers } from 'features/dashboard/services/users.service';
 
 function SearchMiddleBar() {
   const [filteredUsers, setFilteredUsers] = useState<UserTypes[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
-  // Ambil userId dari cookie saat komponen dimount
   useEffect(() => {
     const userId = Cookies.get('userId');
     if (userId) {
@@ -28,43 +29,20 @@ function SearchMiddleBar() {
     }
   }, []);
 
+
+  
   const handleSearch = async (query: string) => {
     setSearchQuery(query);
   
     if (query.trim() === '') {
-      setFilteredUsers([]); // Kosongkan daftar user jika query kosong
-      return;
-    }
-  
-    const token = Cookies.get('token');
-    if (!token) {
-      console.error('Token not found');
+      setFilteredUsers([]);
       return;
     }
   
     try {
-      const response = await fetch(`${apiURL}search/search?query=${query}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-  
-      if (!response.ok) {
-        console.error('API Error:', response.status, response.statusText);
-        setFilteredUsers([]);
-        return;
-      }
-  
-      const users = await response.json();
-      console.log('API Response:', users); // Tambahkan log ini untuk debug
-  
-      if (Array.isArray(users)) {
-        const filtered = users.filter((user: UserTypes) => user.id !== currentUserId);
-        setFilteredUsers(filtered);
-      } else {
-        console.error('API response is not an array:', users);
-        setFilteredUsers([]);
-      }
+      const users = await searchUsers(query);
+      const filtered = users.filter((user: UserTypes) => user.id !== currentUserId);
+      setFilteredUsers(filtered);
     } catch (error) {
       console.error('Error in searchUsers:', error);
       setFilteredUsers([]);
@@ -81,7 +59,7 @@ function SearchMiddleBar() {
             background="#3F3F3F"
             borderRadius="20px"
             value={searchQuery}
-            onChange={(e) => handleSearch(e.target.value)} // Panggil handleSearch saat input berubah
+            onChange={(e) => handleSearch(e.target.value)} 
           />
         </InputGroup>
       </HStack>
@@ -109,6 +87,7 @@ function SearchMiddleBar() {
                 fit="cover"
                 alt={user.profile?.[0]?.fullname || 'User Profile'}
               />
+                <Link to={`/profile/${user.id}`}>
               <Box ml="2">
                 <Text textAlign="left" fontSize="14px" fontWeight="semibold">
                   {user.profile?.[0]?.fullname}
@@ -117,6 +96,7 @@ function SearchMiddleBar() {
                   @{user.username}
                 </Text>
               </Box>
+              </Link>
             </Flex>
             <FollowButton userId={user.id} />
           </Flex>

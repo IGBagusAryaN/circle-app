@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Tabs, Text } from '@chakra-ui/react';
+import { Box, Flex, Image, Tabs, Text, Grid } from '@chakra-ui/react';
 import PopoverEditProfile from 'components/button/PopOverEditProfile';
 import { getAllUsers } from 'features/dashboard/services/users.service';
 import { getUserThread } from 'features/dashboard/services/thread.service';
@@ -7,13 +7,37 @@ import { Link } from 'react-router-dom';
 import { UserTypes } from 'types/users.types';
 import { ThreadTypes } from 'types/threads.types';
 import Cookies from 'js-cookie';
-import LikeButton from 'components/button/LikeButton';
+import LikeButton from 'components/button/LikeAndReplyButton';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
+dayjs.locale('en', {
+  relativeTime: {
+    future: 'in %s',
+    past: '%s ago',
+    s: 'A few seconds',
+    m: 'A minute',
+    mm: '%d minutes',
+    h: 'An hour',
+    hh: '%d hours',
+    d: '1 day',
+    dd: '%d days',
+    M: 'A month',
+    MM: '%d months',
+    y: 'A year',
+    yy: '%d years',
+  },
+});
 
 function ProfileMiddleBar() {
   const [value, setValue] = useState<string | null>('first');
   const [users, setUsers] = useState<UserTypes[]>([]);
   const [threads, setThreads] = useState<ThreadTypes[]>([]);
   const [isLoadingThreads, setIsLoadingThreads] = useState(true);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [bannerImage, setBannerImage] = useState<string | null>(null);
 
   useEffect(() => {
     retrieveUserProfile();
@@ -32,9 +56,16 @@ function ProfileMiddleBar() {
       const loggedInUser = allUsers.find((u: UserTypes) => u.id === decoded.id);
       setUsers(loggedInUser ? [loggedInUser] : []);
 
+ 
       if (loggedInUser) {
+        setProfileImage(loggedInUser.profile?.[0]?.profileImage || '');
+        setBannerImage(loggedInUser.profile?.[0]?.bannerImage || '');
         fetchUserThreads(token, loggedInUser.id);
       }
+
+      console.log('Logged In User:', loggedInUser);
+console.log('Profile Data:', loggedInUser.profile);
+
     } catch (error) {
       console.error('Error in retrieveUserProfile:', error);
     }
@@ -51,10 +82,34 @@ function ProfileMiddleBar() {
       setIsLoadingThreads(false);
     }
   };
+  const handleProfileUpdate = (updatedUser: UserTypes) => {
+    console.log('Updated user:', updatedUser); // Debugging
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user.id === updatedUser.id ? updatedUser : user
+      )
+    );
+  
+    // Update images
+    const newProfileImage = updatedUser.profile?.[0]?.profileImage || null;
+    const newBannerImage = updatedUser.profile?.[0]?.bannerImage || null;
+  
+    setProfileImage(newProfileImage);
+    setBannerImage(newBannerImage);
+  
+    console.log('New profile image:', newProfileImage); // Debugging
+    console.log('New banner image:', newBannerImage); // Debugging
+  };
+  
+
+
+  console.log(users);
+console.log(threads);
+
 
   return (
     <div>
-      {users.length > 0 &&
+           {users.length > 0 &&
         users.map((user) => (
           <Box py="2" px="5" key={user.id}>
             <Flex gap="3" align="center">
@@ -75,7 +130,7 @@ function ProfileMiddleBar() {
                 </svg>
               </Link>
               <Text fontSize="18px" fontWeight="semibold">
-                {user.profile?.[0]?.fullname}
+                {user.profile?.[0]?.fullname || 'Full Name'}
               </Text>
             </Flex>
             <Box position="relative" mt="3">
@@ -84,14 +139,15 @@ function ProfileMiddleBar() {
                   height="140px"
                   w="full"
                   borderRadius="7px"
-                  src={user.profile?.[0]?.bannerImage}
+                  src={`${bannerImage || '/default-banner.jpg'}?t=${Date.now()}`}
+                  alt="Banner"
                 />
                 <Image
-                  src={user.profile?.[0]?.profileImage}
+                  src={profileImage || '/default-profile.jpg'}
                   boxSize="80px"
                   borderRadius="full"
                   fit="cover"
-                  alt=""
+                  alt="Profile"
                   position="absolute"
                   top="97px"
                   left="10px"
@@ -100,7 +156,10 @@ function ProfileMiddleBar() {
                 />
               </Box>
               <Box textAlign="right">
-                <PopoverEditProfile transform="translate(-103%, -46%)" />
+                <PopoverEditProfile
+                  transform="translate(-103%, -46%)"
+                  onProfileUpdate={handleProfileUpdate}
+                />
               </Box>
             </Box>
             <Box>
@@ -191,7 +250,7 @@ function ProfileMiddleBar() {
                         </Text>
                         <Text color="gray.400">
                           @{thread.author?.username || 'username'}{' '}
-                          <span> • 17d</span>
+                          <span> • {dayjs(thread.createdAt).fromNow()}</span>
                         </Text>
                       </Box>
                       <Link to={`/comment/${thread.id}`}>
@@ -207,7 +266,7 @@ function ProfileMiddleBar() {
                         )}
                       </Link>
                       <Box>
-                        <LikeButton threadId={thread.id}/>
+                        <LikeButton threadId={thread.id} />
                       </Box>
                     </Box>
                   </Box>
@@ -220,7 +279,27 @@ function ProfileMiddleBar() {
         </Tabs.Content>
 
         <Tabs.Content value="second" py="1">
-          <Text>Media Content Coming Soon</Text>
+          {isLoadingThreads ? (
+            <Text>Loading media...</Text>
+          ) : threads && threads.length > 0 ? (
+            <Grid templateColumns="repeat(3, 1fr)" gap="2">
+              {threads
+                .filter((thread) => thread.image)
+                .map((thread) => (
+                  <Link to={`/image/${thread.id}`} key={thread.id} >
+                    <Image
+                      src={thread.image}
+                      alt="Thread Media"
+                      width="100%"
+                      height="150px"
+                      borderRadius="lg"
+                    />
+                  </Link>
+                ))}
+            </Grid>
+          ) : (
+            <Text>No media found.</Text>
+          )}
         </Tabs.Content>
       </Tabs.Root>
     </div>

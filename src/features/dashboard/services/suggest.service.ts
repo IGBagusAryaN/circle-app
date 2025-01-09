@@ -2,10 +2,17 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { apiURL } from 'utils/baseurl';
-import { UserTypes } from 'types/users.types';
+
+interface UserTypesSuggest {
+  id: number;
+  username: string;
+  profileImage:string;
+  fullname:string;
+}
+
 
 const useSuggestedUsers = () => {
-  const [suggestedUsers, setSuggestedUsers] = useState<UserTypes[]>([]);
+  const [suggestedUsers, setSuggestedUsers] = useState<UserTypesSuggest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchSuggestedUsers = async () => {

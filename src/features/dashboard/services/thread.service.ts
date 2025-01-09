@@ -1,11 +1,13 @@
 import axios, { AxiosResponse } from 'axios';
 import { apiURL } from 'utils/baseurl';
+import Cookies from 'js-cookie';
+
 
 export const getAllThreads = async (token: string) => {
   try {
-    const res: AxiosResponse = await axios.get(apiURL + 'thread', {
+    const res: AxiosResponse = await axios.get(`${apiURL}thread?filterByFollow=true`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`, // Kirim token JWT di header
       },
     });
 
@@ -51,6 +53,61 @@ export const getThreadById = async (token: string, threadId: number) => {
       throw new Error(error.response?.data?.message || 'Something went wrong');
     }
     console.error('Unexpected Error:', error);
+    throw error;
+  }
+};
+const token = Cookies.get("token");
+export const createThread = async ( data: FormData) => {
+
+  if (!token) {
+    throw new Error("User is not authenticated.");
+  }
+
+  try {
+    const response = await axios.post(`${apiURL}thread`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    response.data.thread;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(
+        `Failed to create reply. Server responded with status: ${error.response.status} - ${error.response.data.message || "Unknown error"}`
+      );
+    } else if (error.request) {
+      throw new Error("Failed to create reply. No response from the server.");
+    } else {
+      throw new Error(`Failed to create reply. Error: ${error.message}`);
+    }
+  }
+};
+
+export const updateThread = async (threadId:number, data: FormData
+) => {
+  try {
+    const response = await axios.put(`${apiURL}thread/${threadId}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data.thread;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteThread = async (threadId:number) => {
+  try {
+    await axios.delete(`${apiURL}thread/${threadId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
     throw error;
   }
 };

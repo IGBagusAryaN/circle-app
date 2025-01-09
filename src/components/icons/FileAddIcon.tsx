@@ -8,6 +8,7 @@ const FileAddIcon: React.FC<IconProps> = ({ size = 24, ...props }) => {
   return (
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width={size}
       height={size}
+      className="hover:text-"
       {...props}>
         <path d="M9 10C10.1046 10 11 9.10457 11 8C11 6.89543 10.1046 6 9 6C7.89543 6 7 6.89543 7 8C7 9.10457 7.89543 10 9 10Z" stroke="#FFFF"/>
         <path d="M13 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22H15C20 22 22 20 22 15V10" stroke="#FFFF"/>

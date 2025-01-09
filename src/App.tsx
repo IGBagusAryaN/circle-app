@@ -16,6 +16,7 @@ import ImageGrid from 'components/page/ImagePage';
 import SetProfile from 'components/authPage/SetProfile';
 import { useAuthStore } from 'store/use.auth.store';
 import ProfilePagetest from 'features/auth/tests/testt';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const user = useAuthStore((state) => state.user);
@@ -37,11 +38,25 @@ function App() {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/profile/:userId" element={<ProfileUserPage />} />
             <Route path="/follows" element={<FollowsPage />} />
-            <Route path="/image" element={<ImageGrid />} />
+            <Route path="/image/:id" element={<ImageGrid />} />
             <Route path="/test" element={<ProfilePagetest />} />
             <Route path="/thread/:id" element={<CommentPage />} />
           </Route>
         </Routes>
+        <Toaster
+  toastOptions={{
+    className: '',
+    style: {
+      padding: '16px',
+      background: '#1D1D1D', // Background dark
+      color: '#fff', // Text color white
+      borderRadius: '8px', // Rounded corners
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)', // Soft shadow
+      // border: '2px solid #555', // Subtle border
+    },
+  }}
+/>
+
       </BrowserRouter>
     </div>
   );

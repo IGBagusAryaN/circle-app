@@ -8,8 +8,7 @@ const ButtonPrimary: React.FC<Button> = ({text}) => {
     
     return(
         <>
-         <Button type="submit" rounded="50px" backgroundColor="#04A51E" width='full' color="#FFFF" _hover={{
-    backgroundColor: "#006811"}}>{text}</Button>
+         <Button type="submit" rounded="50px" backgroundColor="#04A51E" width='full' color="#FFFF" _hover={{backgroundColor: "#006811"}}>{text}</Button>
         </>
     )
 }
