@@ -162,8 +162,8 @@ const ImageGrid: React.FC = () => {
         setNewReply("");
         toast.success('Reply successfully created!');
         setRepliesCount((prevCount) => prevCount + 1);
-    } catch (error: any) {
-        console.error("Error creating reply:", error.message);
+    } catch (error) {
+        console.error("Error creating reply:", error);
         toast.error('Reply not created!');
     }
 }, [thread?.id, newReply]);
