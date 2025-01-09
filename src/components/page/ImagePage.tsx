@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Box, Button, Flex, Grid, Image, Input, MenuContent, MenuItem, MenuRoot, MenuTrigger, Text } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
-import FileAddIcon from 'components/icons/FileAddIcon';
 import { getReplies, createReply, deleteReply } from 'features/dashboard/services/reply.services'; // Import untuk reply
 import { getThreadById } from 'features/dashboard/services/thread.service'; // Import untuk thread
 import Cookies from 'js-cookie';

@@ -11,7 +11,6 @@ import { InputGroup } from 'components/ui/input-group';
 import { useState, useEffect } from 'react';
 import { LuSearch } from 'react-icons/lu';
 import Cookies from 'js-cookie';
-import { apiURL } from 'utils/baseurl';
 import FollowButton from 'components/button/FollowButton';
 import { UserTypes } from 'types/users.types';
 import { Link } from 'react-router-dom';

@@ -14,7 +14,7 @@ function LikeAndReplyButton({ threadId, onRepliesCountChange }: LikeAndReplyButt
   const [likedUsers, setLikedUsers] = useState<UserTypes[]>([]);
   const [repliesCount, setRepliesCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isLikedByUser, setIsLikedByUser] = useState<number>(0); // Gunakan 0/1 untuk status
+  const [, setIsLikedByUser] = useState<number>(0); // Gunakan 0/1 untuk status
 
   const user = useAuthStore((state) => state.user);
 

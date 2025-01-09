@@ -18,7 +18,6 @@ const loginSchema = z.object({
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 const Login = () => {
-  const { setUser } = useAuthStore();
   const navigate = useNavigate();
 
   const {
