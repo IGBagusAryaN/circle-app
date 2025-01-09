@@ -44,7 +44,6 @@ const Login = () => {
       
           Cookies.set('token', token);
           useAuthStore.getState().setUser({ id, username, email });
-          Cookies.remove('userId');
           Swal.fire({
             title: 'Success!',
             text: data.message,
