@@ -48,10 +48,10 @@ function App() {
     className: '',
     style: {
       padding: '16px',
-      background: '#1D1D1D', // Background dark
-      color: '#fff', // Text color white
-      borderRadius: '8px', // Rounded corners
-      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)', // Soft shadow
+      background: '#1D1D1D', 
+      color: '#fff', 
+      borderRadius: '8px', 
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)', 
       // border: '2px solid #555', // Subtle border
     },
   }}
