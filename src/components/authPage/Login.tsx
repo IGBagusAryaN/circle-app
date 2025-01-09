@@ -35,6 +35,7 @@ const Login = () => {
         console.log(res);
         const data = res.data;
         if (res.status === 200) {
+          Cookies.set('token', data.token);
           const { id, username, email, token } = res.data;
 
           if (!id) {

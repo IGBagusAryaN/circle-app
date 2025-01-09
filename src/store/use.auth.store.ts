@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import Cookies from 'js-cookie';
 
 interface UserType {
@@ -14,41 +15,40 @@ interface AuthState {
   logout: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  // Inisialisasi user dari cookies
-  user: Cookies.get('user') ? JSON.parse(Cookies.get('user') as string) : null,
-  setUser: (userData) => {
-    if (userData && userData.id) {
-      console.log('Setting user in cookies:', userData);
-  
-      Cookies.set('user', JSON.stringify(userData), {
-        expires: 7,
-        path: '/', // Agar cookies bisa diakses di semua route
-        sameSite: 'Lax', // Cegah CSRF
-        secure: window.location.protocol === 'https:', // Hanya secure jika di HTTPS
-      });
-  
-      set({ user: userData });
-    } else {
-      console.error('Invalid user data:', userData);
-    }
-  },
-  
-  
-  clearAuth: () => {
-    console.log('Clearing user data');
-    Cookies.remove('user'); // Hapus data dari cookies
-    set({ user: null });
-  },
+export const useAuthStore = create(
+  persist<AuthState>(
+    (set) => ({
+      user: null,
 
-  logout: () => {
-    console.log('Logging out user');
-    Cookies.remove('token');
-    Cookies.remove('user');
-    set({ user: null });
+      setUser: (userData) => {
+        console.log('setUser called with:', userData);
 
-    if (typeof window !== 'undefined') {
-      window.location.href = '/login';
+        if (!userData || !userData.id) {
+          console.error('Invalid user data: ID is missing', userData);
+          return;
+        }
+
+        set({ user: userData });
+        console.log('User data set in store:', userData);
+      },
+
+      clearAuth: () => {
+        console.log('Clearing user data');
+        set({ user: null });
+      },
+
+      logout: () => {
+        console.log('Logging out user');
+        Cookies.remove('token');
+        set({ user: null });
+
+        if (typeof window !== 'undefined') {
+          window.location.href = '/login';
+        }
+      },
+    }),
+    {
+      name: 'auth-store',
     }
-  },
-}));
+  )
+);
