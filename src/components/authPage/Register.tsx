@@ -1,4 +1,4 @@
-import { Box, Input, Text } from '@chakra-ui/react';
+import { Box, Button, Input, Spinner, Text } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PasswordInput } from '../ui/password-input';
 import ButtonPrimary from 'components/button/Button';
@@ -10,6 +10,7 @@ import Cookies from 'js-cookie';
 
 import Swal from 'sweetalert2';
 import { fetchRegister } from 'features/auth/services/auth-service';
+import { useState } from 'react';
 
 const registerSchema = z.object({
   username: z.string().min(1, 'Full name is required'),
@@ -21,7 +22,8 @@ type RegisterFormInputs = z.infer<typeof registerSchema>;
 
 const Register = () => {
   const navigate = useNavigate();
-
+  const [isLoading, setIsLoading] = useState(false);
+  
   const {
     register,
     handleSubmit,
@@ -31,6 +33,7 @@ const Register = () => {
   });
 
   const onSubmit = (data: RegisterFormInputs) => {
+    setIsLoading(true);
     // console.log(data);
     fetchRegister(data) //api
       .then((res) => {
@@ -49,6 +52,7 @@ const Register = () => {
           }).then(() => {
             navigate('/setprofile');
           });
+          setIsLoading(false);
         }
       })
       .catch((error) => {
@@ -130,7 +134,17 @@ const Register = () => {
           )}
 
           <Box marginTop={3}>
-            <ButtonPrimary text="Create Account" />
+      <Button
+            type="submit"
+            rounded="50px"
+            backgroundColor="#04A51E"
+            width="full"
+            color="#FFFF"
+            disabled={isLoading}
+            _hover={{ backgroundColor: '#006811' }}
+          >
+              {isLoading ? <Spinner size="sm" /> : 'Register'}
+          </Button>
           </Box>
         </form>
         <Text fontSize="12px" marginTop="2">

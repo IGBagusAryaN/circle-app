@@ -134,7 +134,7 @@ const Login = () => {
             disabled={isLoading}
             _hover={{ backgroundColor: '#006811' }}
           >
-              {isLoading ? <Spinner size="sm" /> : 'Post'}
+              {isLoading ? <Spinner size="sm" /> : 'Login'}
           </Button>
         </form>
         <Text fontSize="12px" marginTop="2">
