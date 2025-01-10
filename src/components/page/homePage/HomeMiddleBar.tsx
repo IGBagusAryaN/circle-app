@@ -281,7 +281,7 @@ function HomeMiddleBar() {
               />
             )}
        
-            <Box textAlign="left" width="64%">
+            <Box textAlign="left" width="69%">
               <Input
                 placeholder="What is happening?"
                 outline="none"
@@ -346,7 +346,7 @@ function HomeMiddleBar() {
         </Box>
       ) : (
         threads.map((thread) => (
-          <Box key={thread.id} borderBottom="1px solid" borderColor="#FFF">
+          <Box key={thread.id} borderBottom="1px solid" borderColor="gray.400">
             <Box p="20px">
               <Box display="flex" alignItems="start">
                 <Image

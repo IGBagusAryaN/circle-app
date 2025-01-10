@@ -54,9 +54,9 @@ const PopoverCreateReply: React.FC<PopoverCreateReplyProps> = ({
       setFile(null);
       setPreviewImage(null);
 
-    toast.success('success')
+      toast.success('Reply successfully created!');
     } catch (error: any) {
-    toast.error('failed')
+      toast.error('Reply failed to create!');
     } finally {
       setIsLoading(false); 
     }
