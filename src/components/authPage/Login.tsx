@@ -18,6 +18,7 @@ const loginSchema = z.object({
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 const Login = () => {
+  const { setUser } = useAuthStore();
   const navigate = useNavigate();
 
   const {
@@ -30,20 +31,13 @@ const Login = () => {
 
   const onSubmit = (data: LoginFormInputs) => {
     console.log(data);
-    fetchLogin(data) //api
+    fetchLogin(data)
       .then((res) => {
         console.log(res);
         const data = res.data;
         if (res.status === 200) {
           Cookies.set('token', data.token);
-          const { id, username, email, token } = res.data;
-
-          if (!id) {
-            console.error('User ID is missing in API response');
-          }
-      
-          Cookies.set('token', token);
-          useAuthStore.getState().setUser({ id, username, email });
+          setUser(data.user);
           Cookies.remove('userId');
           Swal.fire({
             title: 'Success!',
