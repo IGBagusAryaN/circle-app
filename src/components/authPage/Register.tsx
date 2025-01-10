@@ -1,7 +1,6 @@
 import { Box, Button, Input, Spinner, Text } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PasswordInput } from '../ui/password-input';
-import ButtonPrimary from 'components/button/Button';
 import Logo from 'components/logo/Logo';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
