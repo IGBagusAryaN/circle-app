@@ -1,12 +1,13 @@
-import { Box, Button, Flex, Image, Text } from '@chakra-ui/react';
+import { Box, Flex, Image, Text } from '@chakra-ui/react';
 import { getAllUsers } from 'features/dashboard/services/users.service';
 import React, { useEffect } from 'react';
 import useAccountStore from 'store/use.account.store';
 import { UserTypes } from 'types/users.types';
 import Cookies from 'js-cookie';
 import useSuggestedUsers from 'features/dashboard/services/suggest.service';
-import { Link } from 'react-router-dom'; // Ensure Link is properly imported
+import { Link } from 'react-router-dom';
 import FollowButton from 'components/button/FollowButton';
+import PopoverEditProfile from 'components/button/PopOverEditProfileSidebar';
 
 interface DisplaySideBar {
   display: string;
@@ -77,19 +78,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                     borderColor="whiteAlpha.900"
                   />
                   <Box textAlign="right">
-                    {/* <PopoverEditProfile transform="translate(-117%, -41%)" /> */}
-                      <Button
-                              right="0"
-                              mt="3"
-                              border="1px solid"
-                              borderColor="#FFFF"
-                              background="none"
-                              color="#FFFF"
-                              borderRadius="20px"
-                              _hover={{ background: '#FFFF', color: 'black' }}
-                            >
-                              Edit Profile
-                            </Button>
+                    <PopoverEditProfile transform="translate(-117%, -41%)" />
                   </Box>
                 </Box>
 
