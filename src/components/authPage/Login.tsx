@@ -1,4 +1,4 @@
-import { Box, Button, Input, Text } from '@chakra-ui/react';
+import { Box, Button, Input, Spinner, Text } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { fetchLogin } from 'features/auth/services/auth-service';
 import Cookies from 'js-cookie';
 import { useAuthStore } from 'store/use.auth.store';
+import { useState } from 'react';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -20,6 +21,7 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 const Login = () => {
   const { setUser } = useAuthStore();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -30,6 +32,7 @@ const Login = () => {
   });
 
   const onSubmit = (data: LoginFormInputs) => {
+    setIsLoading(true);
     console.log(data);
     fetchLogin(data)
       .then((res) => {
@@ -49,7 +52,8 @@ const Login = () => {
             allowOutsideClick: false,
           }).then(() => {
             navigate('/');
-          });
+          })
+          setIsLoading(false);
         }
       })
       .catch((error) => {
@@ -127,9 +131,10 @@ const Login = () => {
             backgroundColor="#04A51E"
             width="full"
             color="#FFFF"
+            disabled={isLoading}
             _hover={{ backgroundColor: '#006811' }}
           >
-            Login
+              {isLoading ? <Spinner size="sm" /> : 'Post'}
           </Button>
         </form>
         <Text fontSize="12px" marginTop="2">
