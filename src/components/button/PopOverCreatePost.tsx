@@ -22,15 +22,15 @@ interface Transform {
 }
 
 const PopoverCreateBtn: React.FC<Transform> = ({ transform, trigger }) => {
-  const [content, setContent] = useState(''); // State untuk konten postingan
-  const [file, setFile] = useState<File | null>(null); // State untuk file yang diunggah
-  const [isLoading, setIsLoading] = useState(false); // State untuk indikator loading
-  const { profile, retrieveUserProfile } = useProfileStore(); // Ambil data profil pengguna
+  const [content, setContent] = useState(''); 
+  const [file, setFile] = useState<File | null>(null); 
+  const [isLoading, setIsLoading] = useState(false); 
+  const { profile, retrieveUserProfile } = useProfileStore(); 
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const { addThread } = useThreadStore();
 
   useEffect(() => {
-    retrieveUserProfile(); // Ambil profil pengguna saat komponen dimuat
+    retrieveUserProfile(); 
   }, [retrieveUserProfile]);
 
   const handlePost = async () => {
@@ -86,8 +86,8 @@ const PopoverCreateBtn: React.FC<Transform> = ({ transform, trigger }) => {
         userId: threadData.userId || 0,
         authorId: threadData.authorId || 0,
         image: threadData.image || '',
-        profile: threadData.profile, // Data langsung dari API
-        author: threadData.author, // Data langsung dari API
+        profile: threadData.profile, 
+        author: threadData.author, 
       };
 
       if (!threadData.profile || typeof threadData.profile !== 'object') {
@@ -187,8 +187,8 @@ const PopoverCreateBtn: React.FC<Transform> = ({ transform, trigger }) => {
                 boxSize="150px"
                 objectFit="cover"
                 borderRadius="10px"
-                width={400}
-                h={200}
+                width={200}
+                h={120}
               />
             </Box>
           )}

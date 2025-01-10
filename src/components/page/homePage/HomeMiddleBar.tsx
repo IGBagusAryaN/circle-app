@@ -1,7 +1,5 @@
 import { Box, Image, Text, Spinner, Button, Input, MenuRoot, MenuTrigger, MenuContent, MenuItem} from '@chakra-ui/react';
-import ButtonPrimary from 'components/button/Button';
 import LikeButton from 'components/button/LikeAndReplyButton';
-import PopoverCreatePost from 'components/button/PopOverCreatePost';
 import FileAddIcon from 'components/icons/FileAddIcon';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -11,7 +9,11 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Swal from 'sweetalert2';
 import { deleteThread, updateThread } from 'features/dashboard/services/thread.service';
+import { ThreadTypes } from 'types/threads.types';
+import { apiURL } from 'utils/baseurl';
+import axios from 'axios';
 
+import Cookies from 'js-cookie';
 
 dayjs.extend(relativeTime);
 
@@ -42,6 +44,12 @@ function HomeMiddleBar() {
   const [imagePreview, setImagePreview] = useState<string | null>(null); // Untuk preview gambar
   const threads = useThreadStore((state) => state.threads);
   const [loading, setLoading] = useState(false);
+  const [content, setContent] = useState(''); 
+  const [file, setFile] = useState<File | null>(null); 
+  const [isLoading, setIsLoading] = useState(false); 
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const { addThread } = useThreadStore();
+
 
 
   useEffect(() => {
@@ -149,6 +157,106 @@ function HomeMiddleBar() {
   };
   
   
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    setFile(file);
+
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+    } else {
+      setPreviewImage(null);
+    }
+  };
+
+  const handlePost = async () => {
+    if (!content.trim()) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Konten tidak boleh kosong.',
+        icon: 'error',
+        confirmButtonColor: '#E53E3E',
+        background: '#1D1D1D',
+        color: '#fff',
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    const formData = new FormData();
+    formData.append('content', content);
+    if (file) {
+      formData.append('image', file);
+    }
+
+    const token = Cookies.get('token');
+    if (!token) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Pengguna tidak terautentikasi.',
+        icon: 'error',
+        confirmButtonColor: '#E53E3E',
+        background: '#1D1D1D',
+        color: '#fff',
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${apiURL}thread`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const threadData = response.data.thread;
+
+      const newThread: ThreadTypes = {
+        id: threadData.id,
+        content: threadData.content,
+        createdAt: new Date(threadData.createdAt),
+        updateAt: new Date(threadData.updatedAt), // Tambahkan updatedAt
+        userId: threadData.userId || 0,
+        authorId: threadData.authorId || 0,
+        image: threadData.image || '',
+        profile: threadData.profile,
+        author: threadData.author,
+      };
+  
+
+      // Tambahkan thread baru ke state tanpa refresh
+      addThread(newThread);
+
+      // Reset input dan preview
+      setContent('');
+      setFile(null);
+      setPreviewImage(null);
+
+      Swal.fire({
+        title: 'Success!',
+        text: 'Thread berhasil diposting.',
+        icon: 'success',
+        confirmButtonColor: '#04A51E',
+        background: '#1D1D1D',
+        color: '#fff',
+      });
+    } catch (error) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Gagal memposting thread.',
+        icon: 'error',
+        confirmButtonColor: '#E53E3E',
+        background: '#1D1D1D',
+        color: '#fff',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div>
       <Box borderBottom="1px solid" borderColor="gray.400">
@@ -172,31 +280,62 @@ function HomeMiddleBar() {
                 alt="Default Profile"
               />
             )}
-            <PopoverCreatePost transform="translate(-42%, 0%)"  trigger={
-          <Box textAlign="left" width="64%">
-          <Button
-            textAlign="left"
-            background="none"
-            borderRadius="20px"
-            cursor="text"
-            color="gray.300"
-            fontWeight="normal"
-            fontSize="18px"
-            justifyContent="flex-start"
-            width={'full'}
-            px={0}
-          >
-            What is happening?
-          </Button>
-        </Box>
-        } />
+       
+            <Box textAlign="left" width="64%">
+              <Input
+                placeholder="What is happening?"
+                outline="none"
+                border="none"
+                fontSize="18px"
+                p={0}
+                width="full"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+            </Box>
             <Box display="flex" alignItems="center" gap="3">
-              <Box cursor="pointer">
-                <FileAddIcon />
+              <Box position="relative">
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  position="absolute"
+                  top="0"
+                  left="0"
+                  width="100%"
+                  height="100%"
+                  opacity="0"
+                  cursor="pointer"
+                />
+                <FileAddIcon cursor="pointer" />
               </Box>
-              <ButtonPrimary text="Post" />
+              <Button
+              rounded="50px"
+              backgroundColor="#04A51E"
+              color="#FFFF"
+              _hover={{ backgroundColor: '#006811' }}
+              onClick={handlePost}
+              disabled={isLoading}
+            >
+              {isLoading ? <Spinner size="sm" /> : 'Post'}
+            </Button>
             </Box>
           </Box>
+          {previewImage && (
+            <Box mt="10px" textAlign="center">
+              <Image
+                src={previewImage}
+                alt="Preview"
+                borderRadius="10px"
+                width={400}
+                height={200}
+                ml={'55px'}
+                objectFit="cover"
+                mb={10}
+              />
+            </Box>
+          )}
+      
         </Box>
       </Box>
 

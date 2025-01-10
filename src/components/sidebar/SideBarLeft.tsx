@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom'; // Import useLocation
 import React from 'react';
 import Logo from 'components/logo/Logo';
@@ -8,7 +8,7 @@ import HomeIcon from 'components/icons/HomeIcon';
 import SearchIcon from 'components/icons/SearchIcon';
 import HeartIcon from 'components/icons/HeartIcon';
 import UserIcon from 'components/icons/UserIcon';
-import PopoverCreateBtn from 'components/button/PopOverCreateBtn';
+import PopoverCreateBtn from 'components/button/PopOverCreatePost';
 
 
 
@@ -74,7 +74,22 @@ const SideBarLeft: React.FC<logOutProps> = ({ onClick }) => {
               </Link>
             </li>
           </ul>
-          <PopoverCreateBtn transform="translate(49%, -95%)" />
+               <PopoverCreateBtn transform="translate(49%, -95%)"  trigger={
+                  
+                          <Button
+                            type="submit"
+                            rounded="50px"
+                            backgroundColor="#04A51E"
+                            width="full"
+                            color="#FFFF"
+                            _hover={{
+                              backgroundColor: '#006811',
+                            }}
+                          >
+                            Created Post
+                          </Button>
+                  
+                  } />
         </Box>
         <LogoutButton onClick={onClick} />
       </Box>
