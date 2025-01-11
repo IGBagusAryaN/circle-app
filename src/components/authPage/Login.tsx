@@ -41,7 +41,7 @@ const Login = () => {
         if (res.status === 200) {
           Cookies.set('token', data.token);
           setUser(data.user);
-          Cookies.remove('userId');
+          // Cookies.remove('userId');
           Swal.fire({
             title: 'Success!',
             text: data.message,

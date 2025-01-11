@@ -281,11 +281,11 @@ const ImageGrid: React.FC = () => {
                   <Text className="font-semibold">
                     {thread.profile?.fullname || 'Unknown User'}
                   </Text>
-                  <Text color="gray.400">
-                    @{thread.author?.username || 'unknown'}{' '}
-                    <span>• {dayjs(thread.createdAt).fromNow()}</span>
-                  </Text>
+                  <span className='text-gray-400'>• {dayjs(thread.createdAt).fromNow()}</span>
                 </Box>
+                <Text color="gray.400" fontSize={'13px'}>
+                    @{thread.author?.username || 'unknown'}
+                  </Text>
               <Box>
                 <Text fontSize="14px" marginTop="2">{thread.content}</Text>
                 {/* {thread.image && <img src={thread.image} alt="Thread" className="rounded-lg w-6/12 my-2" />} */}

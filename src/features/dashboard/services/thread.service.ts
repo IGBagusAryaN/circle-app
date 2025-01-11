@@ -5,9 +5,9 @@ import Cookies from 'js-cookie';
 
 export const getAllThreads = async (token: string) => {
   try {
-    const res: AxiosResponse = await axios.get(`${apiURL}thread?filterByFollow=true`, {
+    const res: AxiosResponse = await axios.get(apiURL + 'thread', {
       headers: {
-        Authorization: `Bearer ${token}`, // Kirim token JWT di header
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -22,6 +22,7 @@ export const getAllThreads = async (token: string) => {
     throw error;
   }
 };
+
 
 export const getUserThread = async (token: string, userId: number) => {
   try {

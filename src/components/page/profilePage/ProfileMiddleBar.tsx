@@ -100,11 +100,7 @@ console.log('Profile Data:', loggedInUser.profile);
     console.log('New profile image:', newProfileImage); // Debugging
     console.log('New banner image:', newBannerImage); // Debugging
   };
-  
 
-
-  console.log(users);
-console.log(threads);
 
 
   return (
