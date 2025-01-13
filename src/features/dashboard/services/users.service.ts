@@ -21,7 +21,7 @@ export const getAllUsers = async (token: string) => {
 };
 
 // Fungsi untuk mendapatkan pengguna berdasarkan ID
-export const getUserById = async (token: string, id: number) => {
+export const getUserById = async (token: string, id?: number) => {
   try {
     const res: AxiosResponse = await axios.get(`${apiURL}users/${id}`, {
       headers: {

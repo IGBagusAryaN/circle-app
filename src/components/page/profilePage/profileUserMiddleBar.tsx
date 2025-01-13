@@ -6,7 +6,7 @@ import { UserTypes } from 'types/users.types';
 import { ThreadTypes } from 'types/threads.types';
 import Cookies from 'js-cookie';
 import LikeButton from 'components/button/LikeAndReplyButton';
-import { getUserById } from 'features/dashboard/services/users.service';
+import { getAllUsers, getUserById } from 'features/dashboard/services/users.service';
 import FollowButton from 'components/button/FollowButton';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -38,10 +38,12 @@ function ProfileMiddleBar() {
   const [user, setUser] = useState<UserTypes | null>(null);
   const [threads, setThreads] = useState<ThreadTypes[]>([]);
   const [isLoadingThreads, setIsLoadingThreads] = useState(true);
-
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null); // Tambahkan state untuk userId login
+ 
   useEffect(() => {
     retrieveUserProfile();
-  }, [userId]); 
+    fetchCurrentUser(); // Panggil fungsi untuk mendapatkan ID pengguna yang sedang login
+  }, [userId]);
 
   const retrieveUserProfile = async () => {
     const token = Cookies.get('token');
@@ -61,6 +63,30 @@ function ProfileMiddleBar() {
       console.error('Error in retrieveUserProfile:', error);
     }
   };
+  
+  const fetchCurrentUser = async () => {
+    const token = Cookies.get('token'); // Ambil token dari Cookies
+    if (!token) {
+      console.error('Token not found');
+      return;
+    }
+  
+    try {
+      // Decode token untuk mendapatkan user ID
+      const decoded: { id: number } = JSON.parse(atob(token.split('.')[1]));
+  
+      // Gunakan decoded.id untuk mendapatkan data pengguna
+      const allUsers = await getAllUsers(token); // Ambil semua pengguna
+      const loggedInUser = allUsers.find((u: UserTypes) => u.id === decoded.id);
+  
+      if (loggedInUser) {
+        setCurrentUserId(loggedInUser.id); // Set ID pengguna login ke state
+      }
+    } catch (error) {
+      console.error('Error decoding token or fetching user:', error);
+    }
+  };
+  
 
   const fetchUserThreads = async (token: string, userId: number) => {
     setIsLoadingThreads(true);
@@ -78,7 +104,7 @@ function ProfileMiddleBar() {
     <div>
       {user && (
         <Box py="2" px="5">
-          <Flex gap="3" align="center">
+          <Flex gap="3" align="center" position={'relative'}>
             <Link to="/">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -120,11 +146,11 @@ function ProfileMiddleBar() {
                 borderColor="whiteAlpha.900"
               />
             </Box>
-            <Box textAlign="right" mt={3}>
-              <FollowButton userId={user.id}/>
+            <Box textAlign="right" mt={3} position={'absolute'} right={0}>
+                {currentUserId !== user.id && <FollowButton userId={user.id} />}
             </Box>
           </Box>
-          <Box>
+          <Box mt={'60px'}>
             <Text textAlign="left" mt="2" fontSize="20px" fontWeight="bold">
               {user.profile?.[0]?.fullname || 'Your Name'}
             </Text>
