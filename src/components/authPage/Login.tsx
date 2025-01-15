@@ -79,7 +79,7 @@ const Login = () => {
       
       >
         <Logo fontsize="36px" /> {/* Responsif: ukuran font Logo */}
-        <Text fontSize={"24px"} fontWeight="semibold" mt={2}>
+        <Text fontSize={"24px"} fontWeight="semibold">
           Login to Circle
         </Text>
         <form onSubmit={handleSubmit(onSubmit)} noValidate style={{ width: "100%" }}>
