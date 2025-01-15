@@ -33,15 +33,12 @@ const Login = () => {
 
   const onSubmit = (data: LoginFormInputs) => {
     setIsLoading(true);
-    console.log(data);
     fetchLogin(data)
       .then((res) => {
-        console.log(res);
         const data = res.data;
         if (res.status === 200) {
           Cookies.set('token', data.token);
           setUser(data.user);
-          // Cookies.remove('userId');
           Swal.fire({
             title: 'Success!',
             text: data.message,
@@ -52,12 +49,11 @@ const Login = () => {
             allowOutsideClick: false,
           }).then(() => {
             navigate('/');
-          })
+          });
           setIsLoading(false);
         }
       })
       .catch((error) => {
-        console.error('Login Error:', error);
         Swal.fire({
           title: 'Error',
           text:
@@ -69,22 +65,24 @@ const Login = () => {
           color: '#fff',
           allowOutsideClick: false,
         });
+        setIsLoading(false);
       });
   };
 
   return (
-    <Box display="flex" justifyContent="center" pt="10">
+    <Box display="flex" justifyContent="center" pt="10" px={[4, 8]}>
       <Box
-        width="25%"
+        width={["100%", "75%", "50%", "25%"]} 
         display="flex"
         flexDirection="column"
         alignItems="flex-start"
+      
       >
-        <Logo fontsize="36px" />
-        <Text fontSize="24px" fontWeight="semibold">
+        <Logo fontsize="36px" /> {/* Responsif: ukuran font Logo */}
+        <Text fontSize={["20px", "24px"]} fontWeight="semibold" mt={2}>
           Login to Circle
         </Text>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate className="w-full">
+        <form onSubmit={handleSubmit(onSubmit)} noValidate style={{ width: "100%" }}>
           <Input
             {...register('email')}
             type="text"
@@ -116,7 +114,7 @@ const Login = () => {
 
           <Link to="/forgotpassword">
             <Text
-              fontSize="12px"
+              fontSize={["10px", "12px"]}
               marginTop="2"
               marginBottom="3"
               textAlign="right"
@@ -134,10 +132,10 @@ const Login = () => {
             disabled={isLoading}
             _hover={{ backgroundColor: '#006811' }}
           >
-              {isLoading ? <Spinner size="sm" /> : 'Login'}
+            {isLoading ? <Spinner size="sm" /> : 'Login'}
           </Button>
         </form>
-        <Text fontSize="12px" marginTop="2">
+        <Text fontSize={["10px", "12px"]} marginTop="2">
           Don't have an account yet?{' '}
           <Link to="/register" className="text-[#04A51E]">
             Create Account

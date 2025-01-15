@@ -74,7 +74,7 @@ const Register = () => {
   return (
     <Box display="flex" justifyContent="center" pt="10">
       <Box
-        width="25%"
+        width={["100%", "75%", "50%", "25%"]} 
         display="flex"
         flexDirection="column"
         alignItems="flex-start"
