@@ -70,7 +70,7 @@ const Login = () => {
   };
 
   return (
-    <Box display="flex" justifyContent="center" pt="10" px={[4, 8]}>
+    <Box display="flex" justifyContent="center" pt="10" px={8}>
       <Box
         width={["100%", "75%", "50%", "25%"]} 
         display="flex"
