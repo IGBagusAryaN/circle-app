@@ -211,7 +211,7 @@ const SetProfile = () => {
               type='submit'
               width={'full'}
             >
-              {isLoading ? <Spinner size="sm" /> : 'Post'}
+              {isLoading ? <Spinner size="sm" /> : 'Save Profile'}
             </Button>
           </Box>
         </form>

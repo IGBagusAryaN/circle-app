@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import { fetchLogin } from 'features/auth/services/auth-service';
 import Cookies from 'js-cookie';
 import { useAuthStore } from 'store/use.auth.store';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -22,6 +22,22 @@ const Login = () => {
   const { setUser } = useAuthStore();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const screenWidth = window.innerWidth;
+
+    if (screenWidth < 768) {
+      Swal.fire({
+        title: 'Notice',
+        text: 'For the best experience, please use a laptop to access this application.',
+        icon: 'info',
+        confirmButtonColor: '#04A51E',
+        background: '#1D1D1D',
+        color: '#fff',
+        allowOutsideClick: false,
+      });
+    }
+  }, []);
 
   const {
     register,
@@ -76,9 +92,8 @@ const Login = () => {
         display="flex"
         flexDirection="column"
         alignItems="flex-start"
-      
       >
-        <Logo fontsize="36px" /> {/* Responsif: ukuran font Logo */}
+        <Logo fontsize="36px" />
         <Text fontSize={"24px"} fontWeight="semibold">
           Login to Circle
         </Text>
