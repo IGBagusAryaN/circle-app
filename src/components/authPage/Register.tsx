@@ -68,6 +68,8 @@ const Register = () => {
           color: '#fff',
           allowOutsideClick: false,
         });
+
+        setIsLoading(false);
       });
   };
 
