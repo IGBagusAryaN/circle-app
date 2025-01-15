@@ -18,8 +18,8 @@ const ResetPassword = () =>{
 
     return (
         <div>
-            <Box display="flex" justifyContent="center" pt="10">
-             <Box width="25%" display="flex" flexDirection="column" alignItems="flex-start">
+            <Box display="flex" justifyContent="center" pt="10" px={8}>
+             <Box width={["100%", "75%", "50%", "25%"]}  display="flex" flexDirection="column" alignItems="flex-start">
                     <Logo fontsize="36px"/>
                     <Text fontSize="24px" fontWeight="semibold">Reset Password</Text>
                     <form onSubmit={handleSubmit}>

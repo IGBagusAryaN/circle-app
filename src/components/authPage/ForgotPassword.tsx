@@ -17,9 +17,9 @@ const ForgotPassword = () => {
   };
   return (
     <>
-      <Box display="flex" justifyContent="center" pt="10">
+      <Box display="flex" justifyContent="center" pt="10" px={8}>
         <Box
-          width="25%"
+         width={["100%", "75%", "50%", "25%"]} 
           display="flex"
           flexDirection="column"
           alignItems="flex-start"
