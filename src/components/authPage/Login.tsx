@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import { fetchLogin } from 'features/auth/services/auth-service';
 import Cookies from 'js-cookie';
 import { useAuthStore } from 'store/use.auth.store';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -23,22 +23,6 @@ const Login = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const screenWidth = window.innerWidth;
-
-    if (screenWidth < 768) {
-      Swal.fire({
-        title: 'Notice',
-        text: 'For the best experience, please use a laptop to access this application.',
-        icon: 'info',
-        confirmButtonColor: '#04A51E',
-        background: '#1D1D1D',
-        color: '#fff',
-        allowOutsideClick: false,
-      });
-    }
-  }, []);
-
   const {
     register,
     handleSubmit,
@@ -48,6 +32,20 @@ const Login = () => {
   });
 
   const onSubmit = (data: LoginFormInputs) => {
+    // Check the screen width
+    if (window.innerWidth < 1024) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Login is only available on laptops. Please use a laptop to login.',
+        icon: 'error',
+        confirmButtonColor: '#E53E3E',
+        background: '#1D1D1D',
+        color: '#fff',
+        allowOutsideClick: false,
+      });
+      return;
+    }
+
     setIsLoading(true);
     fetchLogin(data)
       .then((res) => {
