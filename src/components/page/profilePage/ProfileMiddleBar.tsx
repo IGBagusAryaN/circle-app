@@ -445,8 +445,7 @@ console.log('Profile Data:', loggedInUser.profile);
                       )}
                       <Button
                         mt="2"
-                        type="submit" rounded="10px" backgroundColor="#04A51E" color="#FFFF" _hover={{
-    backgroundColor: "#006811"}}
+                        type="submit" rounded="10px" backgroundColor="#04A51E" color="#FFFF" _hover={{backgroundColor: "#006811"}}
                         onClick={() => handleEdit(thread.id)}
                         disabled={loading} // Nonaktifkan tombol saat loading
                       >
@@ -483,7 +482,6 @@ console.log('Profile Data:', loggedInUser.profile);
                       </Link>
                       <Box mt={1} display="flex" alignItems="center" gap="3">
                         <LikeButton threadId={thread.id} />
-                     
                       </Box>
                     </Box>
                   )}
@@ -502,7 +500,7 @@ console.log('Profile Data:', loggedInUser.profile);
           {isLoadingThreads ? (
             <Text>Loading media...</Text>
           ) : threads && threads.length > 0 ? (
-            <Grid templateColumns="repeat(3, 1fr)" gap="2">
+            <Grid templateColumns="repeat(3, 1fr)" gap="2" px={1}>
               {threads
                 .filter((thread) => thread.image)
                 .map((thread) => (

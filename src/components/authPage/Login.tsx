@@ -32,7 +32,6 @@ const Login = () => {
   });
 
   const onSubmit = (data: LoginFormInputs) => {
-    // Check the screen width
     if (window.innerWidth < 1024) {
       Swal.fire({
         title: 'Error',
