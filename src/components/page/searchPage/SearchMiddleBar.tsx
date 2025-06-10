@@ -26,9 +26,7 @@ function SearchMiddleBar() {
     if (userId) {
       setCurrentUserId(Number(userId));
     }
-  }, []);
-
-
+  }, []); 
   
   const handleSearch = async (query: string) => {
     setSearchQuery(query);

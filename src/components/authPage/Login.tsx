@@ -46,6 +46,7 @@ const Login = () => {
     }
 
     setIsLoading(true);
+    
     fetchLogin(data)
       .then((res) => {
         const data = res.data;

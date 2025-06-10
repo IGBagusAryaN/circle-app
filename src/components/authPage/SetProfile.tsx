@@ -32,6 +32,8 @@ const SetProfile = () => {
     resolver: zodResolver(profileSchema),
   });
 
+
+  // ganti file image dan preview image
   const handleBannerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -47,6 +49,7 @@ const SetProfile = () => {
       setProfilePreview(URL.createObjectURL(file));
     }
   };
+  // ganti file image dan preview image
 
   const onSubmit = async (data: ProfileFormInputs) => {
     setIsLoading(true);

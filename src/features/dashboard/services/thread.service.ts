@@ -91,7 +91,6 @@ export const updateThread = async (threadId:number, data: FormData
   try {
     const response = await axios.put(`${apiURL}thread/${threadId}`, data, {
       headers: {
-        Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
       },
     });
