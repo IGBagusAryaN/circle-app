@@ -134,7 +134,9 @@ console.log('Profile Data:', loggedInUser.profile);
       }
   
       const updatedThread = await updateThread(threadId, formData);
-      useThreadStore.getState().updateThread(updatedThread);
+      useThreadStore.getState().updateThreadContent( updatedThread.id,
+  updatedThread.content,
+  updatedThread.image);
   
       setEditingThreadId(null);
       setNewContent('');
