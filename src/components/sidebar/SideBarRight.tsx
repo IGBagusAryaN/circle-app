@@ -140,7 +140,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                     <Box display="flex" alignItems="center" gap={3} textAlign={'left'}>
                       <Image
                         src={user.profileImage  || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
-                        alt={`${user.fullname}'s profile`}
+                        // alt={`${user.fullname}'s profile`}
                         boxSize="40px"
                         borderRadius="full"
                       />
