@@ -49,10 +49,10 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
           );
           return (
             <Flex key={user.id} mt="3" mb="5" justify="space-between" px="5">
-              <Link to="/profile/:userId">
+              <Link to={`/profile/${user.id}`}>
               <Flex>
                 <Image
-                  src={userProfile?.profile?.[0]?.profileImage || ''}
+                  src={userProfile?.profile?.[0]?.profileImage || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
                   boxSize="40px"
                   borderRadius="full"
                   fit="cover"

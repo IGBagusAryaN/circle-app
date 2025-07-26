@@ -21,7 +21,7 @@ function SearchPage () {
             <SideBarLeft onClick={onLogout}/>
         </GridItem>
 
-        <GridItem h="full" borderInline="1px solid" borderColor="gray.500" textAlign="left" position="relative" paddingTop="30px" overflowY="auto">
+        <GridItem h="full" borderInline="1px solid" borderColor="gray.700" textAlign="left" position="relative" paddingTop="30px" overflowY="auto">
             <SearchMiddleBar/>
         </GridItem>
         <GridItem h="full" overflowY="auto">

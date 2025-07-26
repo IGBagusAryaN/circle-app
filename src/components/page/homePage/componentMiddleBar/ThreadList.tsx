@@ -52,7 +52,7 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
             <Box display="flex" justifyContent="space-between">
               <Link to={`/profile/${thread.author?.id}`} className="flex gap-2">
                 <Text className="font-semibold">
-                  {thread.profile?.fullname || 'Unknown User'}
+                  {thread.profile?.fullname || 'No Name'}
                 </Text>
                 <Text color="gray.400">
                   @{thread.author?.username || 'unknown'}{' '}

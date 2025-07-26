@@ -1,7 +1,25 @@
-import { Box, Flex, Image, Tabs, Text, Grid, MenuRoot, MenuTrigger, MenuContent, MenuItem, Input, Button, Spinner } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Image,
+  Tabs,
+  Text,
+  Grid,
+  MenuRoot,
+  MenuTrigger,
+  MenuContent,
+  MenuItem,
+  Input,
+  Button,
+  Spinner,
+} from '@chakra-ui/react';
 import PopoverEditProfile from 'components/button/PopOverEditProfile';
 import { getAllUsers } from 'features/dashboard/services/users.service';
-import { deleteThread, getUserThread, updateThread } from 'features/dashboard/services/thread.service';
+import {
+  deleteThread,
+  getUserThread,
+  updateThread,
+} from 'features/dashboard/services/thread.service';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserTypes } from 'types/users.types';
@@ -49,7 +67,7 @@ function ProfileMiddleBar() {
   const [imagePreview, setImagePreview] = useState<string | null>(null); // Untuk preview gambar
   const [loading, setLoading] = useState(false);
   // const { addThread } = useThreadStore();
-    const { profile} = useProfileStore();
+  const { profile } = useProfileStore();
 
   useEffect(() => {
     retrieveUserProfile();
@@ -68,7 +86,6 @@ function ProfileMiddleBar() {
       const loggedInUser = allUsers.find((u: UserTypes) => u.id === decoded.id);
       setUsers(loggedInUser ? [loggedInUser] : []);
 
- 
       if (loggedInUser) {
         setProfileImage(loggedInUser.profile?.[0]?.profileImage || '');
         setBannerImage(loggedInUser.profile?.[0]?.bannerImage || '');
@@ -76,8 +93,7 @@ function ProfileMiddleBar() {
       }
 
       console.log('Logged In User:', loggedInUser);
-console.log('Profile Data:', loggedInUser.profile);
-
+      console.log('Profile Data:', loggedInUser.profile);
     } catch (error) {
       console.error('Error in retrieveUserProfile:', error);
     }
@@ -97,18 +113,16 @@ console.log('Profile Data:', loggedInUser.profile);
   const handleProfileUpdate = (updatedUser: UserTypes) => {
     console.log('Updated user:', updatedUser); // Debugging
     setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user.id === updatedUser.id ? updatedUser : user
-      )
+      prevUsers.map((user) => (user.id === updatedUser.id ? updatedUser : user))
     );
-  
+
     // Update images
     const newProfileImage = updatedUser.profile?.[0]?.profileImage || null;
     const newBannerImage = updatedUser.profile?.[0]?.bannerImage || null;
-  
+
     setProfileImage(newProfileImage);
     setBannerImage(newBannerImage);
-  
+
     console.log('New profile image:', newProfileImage); // Debugging
     console.log('New banner image:', newBannerImage); // Debugging
   };
@@ -122,27 +136,30 @@ console.log('Profile Data:', loggedInUser.profile);
       setImagePreview(null);
     }
   };
-  
-    
+
   const handleEdit = async (threadId: number) => {
-    setLoading(true); 
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append('content', newContent);
       if (newImage) {
         formData.append('image', newImage);
       }
-  
+
       const updatedThread = await updateThread(threadId, formData);
-      useThreadStore.getState().updateThreadContent( updatedThread.id,
-  updatedThread.content,
-  updatedThread.image);
-  
+      useThreadStore
+        .getState()
+        .updateThreadContent(
+          updatedThread.id,
+          updatedThread.content,
+          updatedThread.image
+        );
+
       setEditingThreadId(null);
       setNewContent('');
       setNewImage(null);
       setImagePreview(null);
-  
+
       Swal.fire({
         title: 'Success!',
         text: 'Thread updated successfully.',
@@ -167,7 +184,7 @@ console.log('Profile Data:', loggedInUser.profile);
       setLoading(false); // Akhiri spinner
     }
   };
-  
+
   const handleDelete = async (threadId: number) => {
     Swal.fire({
       title: 'Are you sure?',
@@ -175,7 +192,7 @@ console.log('Profile Data:', loggedInUser.profile);
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#e53e3e',
-      cancelButtonColor: '#4A5568', 
+      cancelButtonColor: '#4A5568',
       confirmButtonText: 'Yes, delete it!',
       background: '#1D1D1D',
       color: '#fff',
@@ -188,9 +205,9 @@ console.log('Profile Data:', loggedInUser.profile);
       if (result.isConfirmed) {
         try {
           await deleteThread(threadId);
-  
+
           fetchThreads();
-  
+
           Swal.fire({
             title: 'Deleted!',
             text: 'Your thread has been deleted.',
@@ -201,7 +218,7 @@ console.log('Profile Data:', loggedInUser.profile);
           });
         } catch (error) {
           console.error('Error deleting thread:', error);
-  
+
           Swal.fire({
             title: 'Error!',
             text: 'Failed to delete the thread. Please try again.',
@@ -214,13 +231,10 @@ console.log('Profile Data:', loggedInUser.profile);
       }
     });
   };
-  
-
-
 
   return (
     <div>
-           {users.length > 0 &&
+      {users.length > 0 &&
         users.map((user) => (
           <Box py="2" px="5" key={user.id}>
             <Flex gap="3" align="center">
@@ -234,11 +248,11 @@ console.log('Profile Data:', loggedInUser.profile);
                   height="140px"
                   w="full"
                   borderRadius="7px"
-                  src={`${bannerImage || '/default-banner.jpg'}?t=${Date.now()}`}
+                  src={`${bannerImage || 'https://273774.fs1.hubspotusercontent-na1.net/hub/273774/hubfs/act3/images/placeholder.jpg?width=1920&height=1080&name=placeholder.jpg'}`}
                   alt="Banner"
                 />
                 <Image
-                  src={profileImage || '/default-profile.jpg'}
+                  src={profileImage || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
                   boxSize="80px"
                   borderRadius="full"
                   fit="cover"
@@ -321,15 +335,15 @@ console.log('Profile Data:', loggedInUser.profile);
 
         <Tabs.Content value="first">
           {isLoadingThreads ? (
-            <div className='text-center mt-32'>
-            <Text>Loading threads...</Text>
+            <div className="text-center mt-32">
+              <Text>Loading threads...</Text>
             </div>
           ) : threads && threads.length > 0 ? (
             threads.map((thread) => (
               <Box
                 key={thread.id}
                 borderBottom="1px solid"
-                borderColor="gray.300"
+                borderColor="gray.700"
               >
                 <Box p="20px">
                   <Box display="flex" alignItems="start" gap="3">
@@ -341,81 +355,111 @@ console.log('Profile Data:', loggedInUser.profile);
                       alt=""
                     />
                     <Box display="flex" flexDirection="column">
-                         <Box display="flex" justifyContent="space-between">
-                                    <Link to={`/profile/${thread.author?.id}`} className='flex gap-2'>
-                                        <Text className="font-semibold">
-                                          {thread.profile?.fullname || 'Unknown User'}
-                                        </Text>
-                                        <Text color="gray.400">
-                                          @{thread.author?.username || 'unknown'}{' '}
-                                          <span>• {dayjs(thread.createdAt).fromNow()}</span>
-                                        </Text>
-                                      </Link>
-                    
-                                      {thread.author?.id === profile?.id && (
-                                        <Box style={{ position: 'relative' }}>
-                                        <MenuRoot>
-                                        <MenuTrigger asChild>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 cursor-pointer">
-                                          <path fillRule="evenodd" d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" clipRule="evenodd" />
-                                        </svg>
-                    
-                                        </MenuTrigger>
-                                        <MenuContent style={{ position: 'absolute', top: '120%', left: '-110px', backgroundColor:'#1d1d1d' }}>
-                                          <MenuItem 
-                                            value="edit"
-                                            cursor={'pointer'}
-                                            onClick={() => {
-                                              setEditingThreadId(thread.id);
-                                              setNewContent(thread.content || '');
-                                            }}>Edit</MenuItem>
-                                          <MenuItem
-                                          cursor={'pointer'}
-                                          colorScheme="red"
-                                          onClick={() => handleDelete(thread.id)}
-                                            value="delete"
-                                            color="fg.error"
-                                            _hover={{ bg: "bg.error", color: "fg.error" }}
-                                          >
-                                            Delete...
-                                          </MenuItem>
-                                        </MenuContent>
-                                      </MenuRoot>
-                                          </Box>
-                    
-                                    )}
-                    
-                    
-                                    </Box>
-                                    {editingThreadId === thread.id ? (
-                <Box mt="2" width={'95.4vh'}>
-                  <label htmlFor="content">Content</label>
-                  <Box width={'full'} display={'flex'} justifyContent={'space-between'} mt={2}>
-                    
-                  <Input
-                    value={newContent}
-                    onChange={(e) => setNewContent(e.target.value)}
-                    placeholder="Edit your thread..."
-                    id='content'
-                  />
-                  <Input
-                    type="file"
-                    display="none"
-                    id="file-upload"
-                    onChange={(e) => {
-                      const file = e.target.files ? e.target.files[0] : null;
-                      setNewImage(file);
-                      handleImagePreview(file);
-                    }}
-                  />
-              <label htmlFor="file-upload" >
-                <Button as="span" border="none" background="none" size="lg" p={0}>
-                  <FileAddIcon />
-                </Button>
-              </label>
+                      <Box display="flex" justifyContent="space-between">
+                        <Link
+                          to={`/profile/${thread.author?.id}`}
+                          className="flex gap-2"
+                        >
+                          <Text className="font-semibold">
+                            {thread.profile?.fullname || 'No Name'}
+                          </Text>
+                          <Text color="gray.400">
+                            @{thread.author?.username || 'unknown'}{' '}
+                            <span>• {dayjs(thread.createdAt).fromNow()}</span>
+                          </Text>
+                        </Link>
+
+                        {thread.author?.id === profile?.id && (
+                          <Box style={{ position: 'relative' }}>
+                            <MenuRoot>
+                              <MenuTrigger asChild>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 24 24"
+                                  fill="currentColor"
+                                  className="size-6 cursor-pointer"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </MenuTrigger>
+                              <MenuContent
+                                style={{
+                                  position: 'absolute',
+                                  top: '120%',
+                                  left: '-110px',
+                                  backgroundColor: '#1d1d1d',
+                                }}
+                              >
+                                <MenuItem
+                                  value="edit"
+                                  cursor={'pointer'}
+                                  onClick={() => {
+                                    setEditingThreadId(thread.id);
+                                    setNewContent(thread.content || '');
+                                  }}
+                                >
+                                  Edit
+                                </MenuItem>
+                                <MenuItem
+                                  cursor={'pointer'}
+                                  colorScheme="red"
+                                  onClick={() => handleDelete(thread.id)}
+                                  value="delete"
+                                  color="fg.error"
+                                  _hover={{ bg: 'bg.error', color: 'fg.error' }}
+                                >
+                                  Delete...
+                                </MenuItem>
+                              </MenuContent>
+                            </MenuRoot>
+                          </Box>
+                        )}
                       </Box>
-                      
-                      {/* <Input
+                      {editingThreadId === thread.id ? (
+                        <Box mt="2" width={'95.4vh'}>
+                          <label htmlFor="content">Content</label>
+                          <Box
+                            width={'full'}
+                            display={'flex'}
+                            justifyContent={'space-between'}
+                            mt={2}
+                          >
+                            <Input
+                              value={newContent}
+                              onChange={(e) => setNewContent(e.target.value)}
+                              placeholder="Edit your thread..."
+                              id="content"
+                            />
+                            <Input
+                              type="file"
+                              display="none"
+                              id="file-upload"
+                              onChange={(e) => {
+                                const file = e.target.files
+                                  ? e.target.files[0]
+                                  : null;
+                                setNewImage(file);
+                                handleImagePreview(file);
+                              }}
+                            />
+                            <label htmlFor="file-upload">
+                              <Button
+                                as="span"
+                                border="none"
+                                background="none"
+                                size="lg"
+                                p={0}
+                              >
+                                <FileAddIcon />
+                              </Button>
+                            </label>
+                          </Box>
+
+                          {/* <Input
                         type="file"
                         mt="2"
                         onChange={(e) => {
@@ -424,64 +468,73 @@ console.log('Profile Data:', loggedInUser.profile);
                           handleImagePreview(file);
                         }}
                       /> */}
-                      {imagePreview && (
-                        <Image
-                          src={imagePreview}
-                          alt="Preview Image"
-                          className="rounded-lg w-6/12 my-2"
-                        />
+                          {imagePreview && (
+                            <Image
+                              src={imagePreview}
+                              alt="Preview Image"
+                              className="rounded-lg w-6/12 my-2"
+                            />
+                          )}
+                          <Button
+                            mt="2"
+                            type="submit"
+                            rounded="10px"
+                            backgroundColor="#04A51E"
+                            color="#FFFF"
+                            _hover={{ backgroundColor: '#006811' }}
+                            onClick={() => handleEdit(thread.id)}
+                            disabled={loading} // Nonaktifkan tombol saat loading
+                          >
+                            {loading ? <Spinner size="xs" /> : 'Save'}
+                          </Button>
+                          <Button
+                            mt="2"
+                            ml="2"
+                            colorScheme={'gray'}
+                            type="submit"
+                            rounded="10px"
+                            onClick={() => {
+                              setEditingThreadId(null);
+                              setImagePreview(null); // Reset preview jika batal edit
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                        </Box>
+                      ) : (
+                        <Box>
+                          <Link to={`/comment/${thread.id}`}>
+                            <Text fontSize="14px" marginTop="2">
+                              {thread.content || 'No content available.'}
+                            </Text>
+                          </Link>
+                          <Link to={`/image/${thread.id}`}>
+                            {thread.image && (
+                              <Image
+                                src={thread.image}
+                                alt="Thread Image"
+                                className="rounded-lg w-6/12 my-2"
+                              />
+                            )}
+                          </Link>
+                          <Box
+                            mt={1}
+                            display="flex"
+                            alignItems="center"
+                            gap="3"
+                          >
+                            <LikeButton threadId={thread.id} />
+                          </Box>
+                        </Box>
                       )}
-                      <Button
-                        mt="2"
-                        type="submit" rounded="10px" backgroundColor="#04A51E" color="#FFFF" _hover={{backgroundColor: "#006811"}}
-                        onClick={() => handleEdit(thread.id)}
-                        disabled={loading} // Nonaktifkan tombol saat loading
-                      >
-                        {loading ? <Spinner size="xs" /> : 'Save'}
-                      </Button>
-                      <Button
-                        mt="2"
-                        ml="2"
-                        colorScheme={'gray'}
-                        type="submit" rounded="10px" 
-                        onClick={() => {
-                          setEditingThreadId(null);
-                          setImagePreview(null); // Reset preview jika batal edit
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                    </Box>
-                  ) : (
-                    <Box>
-                      <Link to={`/comment/${thread.id}`}>
-                        <Text fontSize="14px" marginTop="2">
-                          {thread.content || 'No content available.'}
-                        </Text>
-                      </Link>
-                      <Link to={`/image/${thread.id}`}>
-                        {thread.image && (
-                          <Image
-                            src={thread.image}
-                            alt="Thread Image"
-                            className="rounded-lg w-6/12 my-2"
-                          />
-                        )}
-                      </Link>
-                      <Box mt={1} display="flex" alignItems="center" gap="3">
-                        <LikeButton threadId={thread.id} />
-                      </Box>
-                    </Box>
-                  )}
                     </Box>
                   </Box>
                 </Box>
               </Box>
             ))
           ) : (
-            <Text>No threads found.</Text>
+            <Text className='text-center mt-10'>No threads found.</Text>
           )}
-          
         </Tabs.Content>
 
         <Tabs.Content value="second" py="1">
@@ -492,7 +545,7 @@ console.log('Profile Data:', loggedInUser.profile);
               {threads
                 .filter((thread) => thread.image)
                 .map((thread) => (
-                  <Link to={`/image/${thread.id}`} key={thread.id} >
+                  <Link to={`/image/${thread.id}`} key={thread.id}>
                     <Image
                       src={thread.image}
                       alt="Thread Media"

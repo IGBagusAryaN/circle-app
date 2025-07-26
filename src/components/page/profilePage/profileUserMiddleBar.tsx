@@ -43,7 +43,7 @@ function ProfileMiddleBar() {
   useEffect(() => {
     retrieveUserProfile();
     fetchCurrentUser(); // Panggil fungsi untuk mendapatkan ID pengguna yang sedang login
-  }, [userId]);
+  }, []);
 
   const retrieveUserProfile = async () => {
     const token = Cookies.get('token');
@@ -131,10 +131,10 @@ function ProfileMiddleBar() {
                 height="140px"
                 w="full"
                 borderRadius="7px"
-                src={user.profile?.[0]?.bannerImage}
+                src={user.profile?.[0]?.bannerImage || 'https://273774.fs1.hubspotusercontent-na1.net/hub/273774/hubfs/act3/images/placeholder.jpg?width=1920&height=1080&name=placeholder.jpg'}
               />
               <Image
-                src={user.profile?.[0]?.profileImage}
+                src={user.profile?.[0]?.profileImage || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
                 boxSize="80px"
                 borderRadius="full"
                 fit="cover"
@@ -152,13 +152,13 @@ function ProfileMiddleBar() {
           </Box>
           <Box mt={'60px'}>
             <Text textAlign="left" mt="2" fontSize="20px" fontWeight="bold">
-              {user.profile?.[0]?.fullname || 'Your Name'}
+              {user.profile?.[0]?.fullname || 'No Name'}
             </Text>
             <Text textAlign="left" fontSize="14px" color="gray.400">
               @{user.username || 'username'}
             </Text>
             <Text textAlign="left" fontSize="14px">
-              {user.profile?.[0]?.bio || 'Your bio here...'}
+              {user.profile?.[0]?.bio || ''}
             </Text>
             <Flex mt="2" gap="3">
               <Text className="text-[16px] font-normal text-gray-400">
@@ -214,18 +214,18 @@ function ProfileMiddleBar() {
 
         <Tabs.Content value="first">
           {isLoadingThreads ? (
-            <Text>Loading threads...</Text>
+            <Text textAlign={'center'} mt={10}>Loading threads...</Text>
           ) : threads && threads.length > 0 ? (
             threads.map((thread) => (
               <Box
                 key={thread.id}
                 borderBottom="1px solid"
-                borderColor="gray.300"
+                borderColor="gray.700"
               >
-                <Box p="20px">
+                <Box p='20px'>
                   <Box display="flex" alignItems="start" gap="3">
                     <Image
-                      src={thread.profile?.profileImage}
+                      src={thread.profile?.profileImage || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
                       boxSize="40px"
                       borderRadius="full"
                       fit="cover"
@@ -234,7 +234,7 @@ function ProfileMiddleBar() {
                     <Box display="flex" flexDirection="column">
                       <Box display="flex" gap="2">
                         <Text fontWeight="semibold">
-                          {thread.profile?.fullname || 'Your Name'}
+                          {thread.profile?.fullname || 'No Name'}
                         </Text>
                         <Text color="gray.400">
                           @{thread.author?.username || 'username'}{' '}
@@ -262,12 +262,12 @@ function ProfileMiddleBar() {
               </Box>
             ))
           ) : (
-            <Text  px={1}>No threads found.</Text>
+            <Text textAlign={'center'} mt={10}>No threads found.</Text>
           )}
         </Tabs.Content>
         <Tabs.Content value="second" py="1">
           {isLoadingThreads ? (
-            <Text  px={1}>Loading media...</Text>
+            <Text textAlign={'center'} mt={10}>Loading media...</Text>
           ) : threads && threads.length > 0 ? (
             <Grid templateColumns="repeat(3, 1fr)" gap="1" px={1}>
               {threads
@@ -285,7 +285,7 @@ function ProfileMiddleBar() {
                 ))}
             </Grid>
           ) : (
-            <Text>No media found.</Text>
+            <Text textAlign={'center'} mt={10}>No media found.</Text>
           )}
         </Tabs.Content>
       </Tabs.Root>

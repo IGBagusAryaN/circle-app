@@ -78,7 +78,7 @@ function SearchMiddleBar() {
           <Flex key={user.id} mt="3" mb="5" justify="space-between" px="5">
             <Flex>
               <Image
-                src={user.profile?.[0]?.profileImage}
+                src={user.profile?.[0]?.profileImage || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
                 boxSize="40px"
                 borderRadius="full"
                 fit="cover"
@@ -87,7 +87,7 @@ function SearchMiddleBar() {
                 <Link to={`/profile/${user.id}`}>
               <Box ml="2">
                 <Text textAlign="left" fontSize="14px" fontWeight="semibold">
-                  {user.profile?.[0]?.fullname}
+                  {user.profile?.[0]?.fullname || 'No Name'}
                 </Text>
                 <Text textAlign="left" fontSize="12px" color="gray.400">
                   @{user.username}

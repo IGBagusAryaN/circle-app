@@ -20,7 +20,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
 
   useEffect(() => {
     retrieveUserProfile();
-  }, [user]);
+  }, []);
 
 
   const retrieveUserProfile = async () => {
@@ -64,7 +64,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                     height="100px"
                     w="full"
                     borderRadius="7px"
-                    src={user.profile[0]?.bannerImage || 'default-banner-url'}
+                    src={user.profile[0]?.bannerImage || 'https://273774.fs1.hubspotusercontent-na1.net/hub/273774/hubfs/act3/images/placeholder.jpg?width=1920&height=1080&name=placeholder.jpg'}
                     alt="Banner Image"
                   />
                   <Image
@@ -139,7 +139,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                   >
                     <Box display="flex" alignItems="center" gap={3} textAlign={'left'}>
                       <Image
-                        src={user.profileImage || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
+                        src={user.profileImage  || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
                         alt={`${user.fullname}'s profile`}
                         boxSize="40px"
                         borderRadius="full"
@@ -147,7 +147,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                       <Box>
                         <Link to={`/profile/${user.id}`}>
                           <Text fontWeight="bold">
-                            {user.fullname || 'Unknown User'}
+                            {user.fullname || 'No Name'}
                           </Text>
                           <Text fontSize="14px" color="gray.500">
                             @{user.username}
@@ -159,7 +159,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                   </Box>
                 ))
               ) : (
-                <Text>No suggestions available.</Text>
+                <Text marginBlock="10">No suggestions available.</Text>
               )}
             </Box>
           </Box>
