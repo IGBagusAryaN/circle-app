@@ -1,14 +1,18 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom';
+import React, { ReactNode } from 'react';
 
+interface PrivateLayoutProps {
+  children?: ReactNode;
+}
 
-function PrivateLayout() {
+function PrivateLayout({ children }: PrivateLayoutProps) {
   return (
     <div>
       <main>
-        <Outlet/>
+        {children ?? <Outlet />}
       </main>
     </div>
-  )
+  );
 }
 
-export default PrivateLayout
+export default PrivateLayout;

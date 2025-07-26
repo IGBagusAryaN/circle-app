@@ -37,7 +37,7 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
   handleImagePreview,
 }) => {
   return (
-    <Box borderBottom="1px solid" borderColor="gray.400">
+    <Box borderBottom="1px solid" borderColor="gray.700">
       <Box p="20px">
         <Box display="flex" alignItems="start">
           <Image

@@ -57,13 +57,13 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onClick }) => {
     <Button
       background="none"
       px="0"
-      bottom="5"
+      bottom="2"
       color="#FFFF"
       _hover={{ color: '#e6434e' }}
       onClick={handleLogout}
     >
       <LogoutIcon />
-      <span>Logout</span>
+      <span className='text-[20px]'>Logout</span>
     </Button>
   );
 };

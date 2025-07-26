@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { apiURL } from 'utils/baseurl';
+import { Spinner } from '@chakra-ui/react';
 
 interface FollowButtonProps {
   userId: number;
@@ -70,7 +71,7 @@ const FollowButton = ({ userId }: FollowButtonProps) => {
       }`}
       disabled={loading}
     >
-      {loading ? 'Processing...' : isFollowing ? 'Unfollow' : 'Follow'}
+      {loading ? <Spinner/> : isFollowing ? 'Unfollow' : 'Follow'}
     </button>
   );
 };

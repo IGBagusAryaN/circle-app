@@ -16,7 +16,7 @@ function ProfilePage () {
 
     return (
         <div>
-        <Grid templateColumns="1.5fr 3.5fr 2fr" gap="1" h="100vh" w="100%">
+        <Grid templateColumns="1.5fr 3.5fr 2fr" gap="1" h="100vh" w="100vw">
             <GridItem h="full" >
                 <SideBarLeft onClick={onLogout}/>
             </GridItem>

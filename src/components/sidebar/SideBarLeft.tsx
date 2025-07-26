@@ -34,50 +34,50 @@ const SideBarLeft: React.FC<logOutProps> = ({ onClick }) => {
             <li>
               <Link
                 to="/"
-                className={`flex items-center gap-3 my-5 ${
+                className={`flex items-center gap-3 my-5 text-[20px] ${
                   isActive('/') ? 'text-[#60d774]' : 'hover:text-[#60d774]'
                 }`}
               >
-                <HomeIcon />
+                <HomeIcon size={28}/>
                 <span>Home</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/search"
-                className={`flex items-center gap-3 my-5 ${
+                className={`flex items-center gap-3 my-5 text-[20px] ${
                   isActive('/search')
                     ? 'text-[#60d774]'
                     : 'hover:text-[#60d774]'
                 }`}
               >
-                <SearchIcon />
+                <SearchIcon size={28}/>
                 <span>Search</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/follows"
-                className={`flex items-center gap-3 my-5 ${
+                className={`flex items-center gap-3 my-5 text-[20px] ${
                   isActive('/follows')
                     ? 'text-[#60d774]'
                     : 'hover:text-[#60d774]'
                 }`}
               >
-                <HeartIcon />
+                <HeartIcon size={28}/>
                 <span>Follows</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/profile"
-                className={`flex items-center gap-3 my-5 ${
+                className={`flex items-center gap-3 my-5 text-[20px] ${
                   isActive('/profile')
                     ? 'text-[#60d774]'
                     : 'hover:text-[#60d774]'
                 }`}
               >
-                <UserIcon />
+                <UserIcon size={28}/>
                 <span>Profile</span>
               </Link>
             </li>
@@ -91,6 +91,7 @@ const SideBarLeft: React.FC<logOutProps> = ({ onClick }) => {
                 backgroundColor="#04A51E"
                 width="full"
                 color="#FFFF"
+                fontSize="18px"
                 _hover={{
                   backgroundColor: '#006811',
                 }}

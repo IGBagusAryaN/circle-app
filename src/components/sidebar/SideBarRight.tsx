@@ -43,11 +43,13 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
   };
 
   if (!user || !user.profile) {
-    return <Text>Loading profile...</Text>;
+    return <div className='h-screen flex flex-col justify-center'>
+      <Text >Loading profile...</Text>
+      </div>
   }
 
   return (
-    <div>
+    <div >
       <Box>
         <Box p="20px">
           {user ? (
@@ -66,7 +68,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                     alt="Banner Image"
                   />
                   <Image
-                    src={user.profile[0]?.profileImage || 'default-profile-url'}
+                    src={user.profile[0]?.profileImage || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
                     boxSize="80px"
                     borderRadius="full"
                     fit="cover"
@@ -137,7 +139,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                   >
                     <Box display="flex" alignItems="center" gap={3} textAlign={'left'}>
                       <Image
-                        src={(user.profileImage) || 'default-profile-url'}
+                        src={user.profileImage || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
                         alt={`${user.fullname}'s profile`}
                         boxSize="40px"
                         borderRadius="full"
@@ -165,9 +167,6 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
             <Box p="5">
               <Text textAlign="left" fontSize="14px">
                 Developed By <span className="font-bold">Bagus Arya👋</span>
-              </Text>
-              <Text textAlign="left" fontSize="10px">
-                Powered by Dumbways Indonesia • #1 Coding Bootcamp
               </Text>
             </Box>
           </Box>

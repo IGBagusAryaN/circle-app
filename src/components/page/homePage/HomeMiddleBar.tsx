@@ -121,7 +121,7 @@ function HomeMiddleBar() {
 
   return (
     <div>
-      <Box borderBottom="1px solid" borderColor="gray.400">
+      <Box borderBottom="1px solid" borderColor="gray.700">
         <Box px="20px">
           <PostInputBox
             content={content}
@@ -140,9 +140,12 @@ function HomeMiddleBar() {
       </Box>
 
       {loading ? (
-        <Box textAlign="center" py="20px">
-          <Spinner size="lg" />
-          <Text mt="2">Loading threads...</Text>
+        <Box height="80vh" display="flex" flexDirection="column" justifyContent="center" textAlign="center" py="20px">
+          <Box>
+
+          <Text >Loading threads...</Text>
+          <Spinner size="lg" mt="2" />
+          </Box>
         </Box>
       ) : (
         threads.map((thread) => (

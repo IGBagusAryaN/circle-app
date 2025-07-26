@@ -1,22 +1,20 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import PrivateLayout from 'components/layout/PrivateLayout';
+import { useAuthStore } from 'store/use.auth.store';
 
-type UserTypes = {
-  id:number
-  username: string;
-  email: string;
-} | null;
+const PrivateRoute: React.FC = () => {
+  const { user, token } = useAuthStore();
 
-interface PrivateRouteProps {
-  user: UserTypes;
-}
-
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ user }) => {
-  if (!user || !user.username || !user.email) {
-    return <Navigate to="/login" />;
+  if (!user || !token) {
+    return <Navigate to="/login" replace />;
   }
-  return <PrivateLayout />;
+
+  return (
+    <PrivateLayout>
+      <Outlet />
+    </PrivateLayout>
+  );
 };
 
 export default PrivateRoute;

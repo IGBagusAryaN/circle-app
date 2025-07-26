@@ -124,7 +124,7 @@ const SetProfile = () => {
               borderRadius="7px"
               src={
                 bannerPreview ||
-                'https://new.bubt.edu.bd/assets/frontend/images/default_slider.png'
+                'https://273774.fs1.hubspotusercontent-na1.net/hub/273774/hubfs/act3/images/placeholder.jpg?width=1920&height=1080&name=placeholder.jpg'
               }
               alt="Banner Image"
             />

@@ -52,7 +52,8 @@ const Login = () => {
         const data = res.data;
         if (res.status === 200) {
           Cookies.set('token', data.token);
-          setUser(data.user);
+         setUser(data.user, data.token); // ✅ kirim user dan token
+
           Swal.fire({
             title: 'Success!',
             text: data.message,
@@ -91,16 +92,18 @@ const Login = () => {
         flexDirection="column"
         alignItems="flex-start"
       >
-        <Logo fontsize="36px" />
-        <Text fontSize={"24px"} fontWeight="semibold">
+        <Logo fontsize="40px" />
+        <Text fontSize="28px" fontWeight="semibold">
           Login to Circle
         </Text>
         <form onSubmit={handleSubmit(onSubmit)} noValidate style={{ width: "100%" }}>
+          <div className='mb-4'>
           <Input
             {...register('email')}
             type="text"
             placeholder="Email"
-            marginBlock="4"
+            marginTop="4"
+            fontSize="16px"
           />
           {errors.email && (
             <Text
@@ -108,12 +111,16 @@ const Login = () => {
               fontSize="xs"
               textAlign={'left'}
               marginTop="1.5"
+              marginBottom="4"
+
             >
               {errors.email.message}
             </Text>
           )}
 
-          <PasswordInput {...register('password')} placeholder="Password" />
+          </div>
+
+          <PasswordInput {...register('password')} placeholder="Password" fontSize="16px"/>
           {errors.password && (
             <Text
               color="red.500"
@@ -141,6 +148,7 @@ const Login = () => {
             rounded="50px"
             backgroundColor="#04A51E"
             width="full"
+            fontSize="16px"
             color="#FFFF"
             disabled={isLoading}
             _hover={{ backgroundColor: '#006811' }}
@@ -148,7 +156,7 @@ const Login = () => {
             {isLoading ? <Spinner size="sm" /> : 'Login'}
           </Button>
         </form>
-        <Text fontSize={["10px", "12px"]} marginTop="2">
+        <Text fontSize={["12px", "14px"]} marginTop="3">
           Don't have an account yet?{' '}
           <Link to="/register" className="text-[#04A51E]">
             Create Account

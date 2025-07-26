@@ -22,7 +22,7 @@ type RegisterFormInputs = z.infer<typeof registerSchema>;
 const Register = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const {
     register,
     handleSubmit,
@@ -76,79 +76,85 @@ const Register = () => {
   return (
     <Box display="flex" justifyContent="center" pt="10" px={8}>
       <Box
-        width={["100%", "75%", "50%", "25%"]} 
+        width={['100%', '75%', '50%', '25%']}
         display="flex"
         flexDirection="column"
         alignItems="flex-start"
       >
-        <Logo fontsize="36px" />
-        <Text fontSize="24px" fontWeight="semibold">
+        <Logo fontsize="40px" />
+        <Text fontSize="28px" fontWeight="semibold">
           Create Account Circle
         </Text>
         <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-          <Input
-            {...register('username')}
-            type="text"
-            placeholder="Username"
-            marginTop="4"
-            width={'full'}
-          />
-          {errors.username && (
-            <Text
-              color="red.500"
-              fontSize="xs"
-              textAlign={'left'}
-              marginTop="1.5"
-            >
-              {errors.username.message}
-            </Text>
-          )}
+          <div className="mb-4">
+            <Input
+              {...register('username')}
+              type="text"
+              placeholder="Username"
+              marginTop="4"
+              width={'full'}
+            />
+            {errors.username && (
+              <Text
+                color="red.500"
+                fontSize="xs"
+                textAlign={'left'}
+                marginTop="1.5"
+              >
+                {errors.username.message}
+              </Text>
+            )}
+          </div>
 
-          <Input
-            {...register('email')}
-            type="email"
-            placeholder="Email"
-            marginBlock="4"
-            width={'full'}
-          />
-          {errors.email && (
-            <Text
-              color="red.500"
-              fontSize="xs"
-              textAlign={'left'}
-              marginTop="1.5"
-            >
-              {errors.email.message}
-            </Text>
-          )}
+          <div className="mb-4">
+            <Input
+              {...register('email')}
+              type="email"
+              placeholder="Email"
+              width={'full'}
+            />
+            {errors.email && (
+              <Text
+                color="red.500"
+                fontSize="xs"
+                textAlign={'left'}
+                marginTop="1.5"
+              >
+                {errors.email.message}
+              </Text>
+            )}
+          </div>
 
-          <PasswordInput {...register('password')} placeholder="Password" />
-          {errors.password && (
-            <Text
-              color="red.500"
-              fontSize="xs"
-              textAlign={'left'}
-              marginTop={1.5}
-            >
-              {errors.password.message}
-            </Text>
-          )}
+          <div className='mb-4'>
+            <PasswordInput {...register('password')} placeholder="Password" />
+            {errors.password && (
+              <Text
+                color="red.500"
+                fontSize="xs"
+                textAlign={'left'}
+                marginTop={1.5}
+              >
+                {errors.password.message}
+              </Text>
+            )}
+          </div>
 
           <Box marginTop={3}>
-      <Button
-            type="submit"
-            rounded="50px"
-            backgroundColor="#04A51E"
-            width="full"
-            color="#FFFF"
-            disabled={isLoading}
-            _hover={{ backgroundColor: '#006811' }}
-          >
+            <Button
+              type="submit"
+              rounded="50px"
+              backgroundColor="#04A51E"
+              width="full"
+              color="#FFFF"
+              fontSize="16px"
+              disabled={isLoading}
+              _hover={{ backgroundColor: '#006811' }}
+            >
               {isLoading ? <Spinner size="sm" /> : 'Register'}
-          </Button>
+            </Button>
           </Box>
         </form>
-        <Text fontSize="12px" marginTop="2">
+        <Text fontSize={['12px', '14px']} marginTop="2">
           Already have account?{' '}
           <Link to="/login" className="text-[#04A51E] hover:text-[#006811]">
             Login

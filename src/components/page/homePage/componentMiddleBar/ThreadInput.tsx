@@ -28,7 +28,7 @@ const PostInputBox: React.FC<PostInputBoxProps> = ({
             {profileImage ? (
               <Image
                 src={profileImage}
-                boxSize="40px"
+                boxSize="60px"
                 borderRadius="full"
                 fit="cover"
                 alt="User Profile"
@@ -36,14 +36,14 @@ const PostInputBox: React.FC<PostInputBoxProps> = ({
             ) : (
               <Image
                 src="/default-profile.jpg"
-                boxSize="40px"
+                boxSize="60px"
                 borderRadius="full"
                 fit="cover"
                 alt="Default Profile"
               />
             )}
        
-            <Box textAlign="left" width="69%">
+            <Box textAlign="left" width="74%">
               <Input
                 placeholder="What is happening?"
                 outline="none"
@@ -75,6 +75,7 @@ const PostInputBox: React.FC<PostInputBoxProps> = ({
               rounded="50px"
               backgroundColor="#04A51E"
               color="#FFFF"
+              fontSize="14px"
               _hover={{ backgroundColor: '#006811' }}
               onClick={handlePost}
               disabled={isLoading}

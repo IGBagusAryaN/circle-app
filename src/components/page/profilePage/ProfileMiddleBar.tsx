@@ -224,22 +224,6 @@ console.log('Profile Data:', loggedInUser.profile);
         users.map((user) => (
           <Box py="2" px="5" key={user.id}>
             <Flex gap="3" align="center">
-              <Link to="/">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
-                  />
-                </svg>
-              </Link>
               <Text fontSize="18px" fontWeight="semibold">
                 {user.profile?.[0]?.fullname || 'Full Name'}
               </Text>
@@ -337,7 +321,9 @@ console.log('Profile Data:', loggedInUser.profile);
 
         <Tabs.Content value="first">
           {isLoadingThreads ? (
+            <div className='text-center mt-32'>
             <Text>Loading threads...</Text>
+            </div>
           ) : threads && threads.length > 0 ? (
             threads.map((thread) => (
               <Box
