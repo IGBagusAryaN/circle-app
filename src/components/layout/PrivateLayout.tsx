@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 interface PrivateLayoutProps {
   children?: ReactNode;
