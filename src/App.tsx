@@ -14,12 +14,10 @@ import ProfileUserPage from 'components/page/profilePage/ProfileUserPage';
 import FollowsPage from 'components/page/followsPage/FollowsPage';
 import ImageGrid from 'components/page/ImagePage';
 import SetProfile from 'components/authPage/SetProfile';
-import { useAuthStore } from 'store/use.auth.store';
 import ProfilePagetest from 'features/auth/tests/testt';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
-  const user = useAuthStore((state) => state.user);
 
   return (
     <div>
@@ -31,7 +29,7 @@ function App() {
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
 
-          <Route element={<PrivateRoute user={user} />}>
+          <Route element={<PrivateRoute />}>
             <Route path="/" element={<Home />} />
             <Route path="/comment/:id" element={<CommentPage />} />
             <Route path="/profile" element={<ProfilePage />} />
