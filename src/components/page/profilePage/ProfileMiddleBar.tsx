@@ -252,7 +252,10 @@ function ProfileMiddleBar() {
                   alt="Banner"
                 />
                 <Image
-                  src={profileImage || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
+                  src={
+                    profileImage ||
+                    'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'
+                  }
                   boxSize="80px"
                   borderRadius="full"
                   fit="cover"
@@ -264,12 +267,18 @@ function ProfileMiddleBar() {
                   borderColor="whiteAlpha.900"
                 />
               </Box>
-              <Box textAlign="right">
+              <Box textAlign="right ">
+                <PopoverEditProfile
+                  transform="translate(-83%, -46%)"
+                  onProfileUpdate={handleProfileUpdate}
+                />
+              </Box>
+              {/* <Box textAlign="right ">
                 <PopoverEditProfile
                   transform="translate(-103%, -46%)"
                   onProfileUpdate={handleProfileUpdate}
                 />
-              </Box>
+              </Box> */}
             </Box>
             <Box>
               <Text textAlign="left" mt="2" fontSize="20px" fontWeight="bold">
@@ -354,8 +363,12 @@ function ProfileMiddleBar() {
                       fit="cover"
                       alt=""
                     />
-                    <Box display="flex" flexDirection="column">
-                      <Box display="flex" justifyContent="space-between">
+                    <Box display="flex" flexDirection="column" width={'full'}>
+                      <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        width={'full'}
+                      >
                         <Link
                           to={`/profile/${thread.author?.id}`}
                           className="flex gap-2"
@@ -533,7 +546,7 @@ function ProfileMiddleBar() {
               </Box>
             ))
           ) : (
-            <Text className='text-center mt-10'>No threads found.</Text>
+            <Text className="text-center mt-10">No threads found.</Text>
           )}
         </Tabs.Content>
 
@@ -541,7 +554,11 @@ function ProfileMiddleBar() {
           {isLoadingThreads ? (
             <Text>Loading media...</Text>
           ) : threads && threads.length > 0 ? (
-            <Grid templateColumns="repeat(3, 1fr)" gap="2" px={1}>
+            <Grid
+              templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }}
+              gap="2"
+              px={1}
+            >
               {threads
                 .filter((thread) => thread.image)
                 .map((thread) => (
@@ -550,14 +567,15 @@ function ProfileMiddleBar() {
                       src={thread.image}
                       alt="Thread Media"
                       width="100%"
-                      height="150px"
+                      height={{ base: '100px', md: '150px' }}
                       borderRadius="lg"
+                      objectFit="cover"
                     />
                   </Link>
                 ))}
             </Grid>
           ) : (
-            <Text>No media found.</Text>
+            <Text className="text-center mt-10">No media found.</Text>
           )}
         </Tabs.Content>
       </Tabs.Root>

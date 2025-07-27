@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Image, Input, Text } from '@chakra-ui/react';
 import Swal from 'sweetalert2';
 import {
@@ -35,9 +35,25 @@ const PopoverEditProfile: React.FC<{
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
 
-  const { register, handleSubmit } = useForm<ProfileFormInputs>({
+  const { register, handleSubmit, reset } = useForm<ProfileFormInputs>({
     resolver: zodResolver(profileSchema),
+      defaultValues: {
+    fullname: '',
+    bio: '',
+    username: '',
+  },
   });
+
+  useEffect(() => {
+  if (user) {
+    reset({
+      fullname: user.profile?.[0]?.fullname || '',
+      bio: user.profile?.[0]?.bio || '',
+      username: user.username || '',
+    });
+  }
+}, [user]);
+
 
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -202,7 +218,7 @@ const PopoverEditProfile: React.FC<{
                     }
                   />
                   <label htmlFor="profile-upload">
-                    <Button as="span" size="sm" colorScheme="blue" fontSize={12}>
+                    <Button as="span" size="sm" colorScheme="blue" fontSize={12} ml={2}>
                       Set Profile Pict
                     </Button>
                   </label>

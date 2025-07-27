@@ -6,7 +6,10 @@ import { UserTypes } from 'types/users.types';
 import { ThreadTypes } from 'types/threads.types';
 import Cookies from 'js-cookie';
 import LikeButton from 'components/button/LikeAndReplyButton';
-import { getAllUsers, getUserById } from 'features/dashboard/services/users.service';
+import {
+  getAllUsers,
+  getUserById,
+} from 'features/dashboard/services/users.service';
 import FollowButton from 'components/button/FollowButton';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -31,7 +34,6 @@ dayjs.locale('en', {
   },
 });
 
-
 function ProfileMiddleBar() {
   const { userId } = useParams(); // Ambil userId dari URL
   const [value, setValue] = useState<string | null>('first');
@@ -39,7 +41,7 @@ function ProfileMiddleBar() {
   const [threads, setThreads] = useState<ThreadTypes[]>([]);
   const [isLoadingThreads, setIsLoadingThreads] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null); // Tambahkan state untuk userId login
- 
+
   useEffect(() => {
     retrieveUserProfile();
     fetchCurrentUser(); // Panggil fungsi untuk mendapatkan ID pengguna yang sedang login
@@ -63,22 +65,22 @@ function ProfileMiddleBar() {
       console.error('Error in retrieveUserProfile:', error);
     }
   };
-  
+
   const fetchCurrentUser = async () => {
     const token = Cookies.get('token'); // Ambil token dari Cookies
     if (!token) {
       console.error('Token not found');
       return;
     }
-  
+
     try {
       // Decode token untuk mendapatkan user ID
       const decoded: { id: number } = JSON.parse(atob(token.split('.')[1]));
-  
+
       // Gunakan decoded.id untuk mendapatkan data pengguna
       const allUsers = await getAllUsers(token); // Ambil semua pengguna
       const loggedInUser = allUsers.find((u: UserTypes) => u.id === decoded.id);
-  
+
       if (loggedInUser) {
         setCurrentUserId(loggedInUser.id); // Set ID pengguna login ke state
       }
@@ -86,7 +88,6 @@ function ProfileMiddleBar() {
       console.error('Error decoding token or fetching user:', error);
     }
   };
-  
 
   const fetchUserThreads = async (token: string, userId: number) => {
     setIsLoadingThreads(true);
@@ -131,10 +132,16 @@ function ProfileMiddleBar() {
                 height="140px"
                 w="full"
                 borderRadius="7px"
-                src={user.profile?.[0]?.bannerImage || 'https://273774.fs1.hubspotusercontent-na1.net/hub/273774/hubfs/act3/images/placeholder.jpg?width=1920&height=1080&name=placeholder.jpg'}
+                src={
+                  user.profile?.[0]?.bannerImage ||
+                  'https://273774.fs1.hubspotusercontent-na1.net/hub/273774/hubfs/act3/images/placeholder.jpg?width=1920&height=1080&name=placeholder.jpg'
+                }
               />
               <Image
-                src={user.profile?.[0]?.profileImage || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
+                src={
+                  user.profile?.[0]?.profileImage ||
+                  'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'
+                }
                 boxSize="80px"
                 borderRadius="full"
                 fit="cover"
@@ -147,7 +154,7 @@ function ProfileMiddleBar() {
               />
             </Box>
             <Box textAlign="right" mt={3} position={'absolute'} right={0}>
-                {currentUserId !== user.id && <FollowButton userId={user.id} />}
+              {currentUserId !== user.id && <FollowButton userId={user.id} />}
             </Box>
           </Box>
           <Box mt={'60px'}>
@@ -214,7 +221,9 @@ function ProfileMiddleBar() {
 
         <Tabs.Content value="first">
           {isLoadingThreads ? (
-            <Text textAlign={'center'} mt={10}>Loading threads...</Text>
+            <Text textAlign={'center'} mt={10}>
+              Loading threads...
+            </Text>
           ) : threads && threads.length > 0 ? (
             threads.map((thread) => (
               <Box
@@ -222,10 +231,13 @@ function ProfileMiddleBar() {
                 borderBottom="1px solid"
                 borderColor="gray.700"
               >
-                <Box p='20px'>
+                <Box p="20px">
                   <Box display="flex" alignItems="start" gap="3">
                     <Image
-                      src={thread.profile?.profileImage || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
+                      src={
+                        thread.profile?.profileImage ||
+                        'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'
+                      }
                       boxSize="40px"
                       borderRadius="full"
                       fit="cover"
@@ -262,30 +274,42 @@ function ProfileMiddleBar() {
               </Box>
             ))
           ) : (
-            <Text textAlign={'center'} mt={10}>No threads found.</Text>
+            <Text textAlign={'center'} mt={10}>
+              No threads found.
+            </Text>
           )}
         </Tabs.Content>
         <Tabs.Content value="second" py="1">
           {isLoadingThreads ? (
-            <Text textAlign={'center'} mt={10}>Loading media...</Text>
+            <Text textAlign={'center'} mt={10}>
+              Loading media...
+            </Text>
           ) : threads && threads.length > 0 ? (
-            <Grid templateColumns="repeat(3, 1fr)" gap="1" px={1}>
+            <Grid
+              templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }}
+              gap="2"
+              mt={2}
+              px={1}
+            >
               {threads
                 .filter((thread) => thread.image)
                 .map((thread) => (
-                  <Link to={`/image/${thread.id}`} key={thread.id} >
+                  <Link to={`/image/${thread.id}`} key={thread.id}>
                     <Image
                       src={thread.image}
                       alt="Thread Media"
                       width="100%"
-                      height="150px"
+                      height={{ base: '100px', md: '150px' }}
                       borderRadius="lg"
+                      objectFit="cover"
                     />
                   </Link>
                 ))}
             </Grid>
           ) : (
-            <Text textAlign={'center'} mt={10}>No media found.</Text>
+            <Text textAlign={'center'} mt={10}>
+              No media found.
+            </Text>
           )}
         </Tabs.Content>
       </Tabs.Root>

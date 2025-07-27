@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import PopoverCreateReply from "components/button/PopOverCreateReply";
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import BottomNavBar from "components/sidebar/Navbar";
 
 dayjs.extend(relativeTime);
 
@@ -176,7 +177,7 @@ function CommentMiddleBar() {
       {/* thread view */}
       <Box borderBottom="1px solid" borderColor="gray.400">
         <Box px="20px">
-          <Flex gap="3" align="center">
+          <Flex gap="3" align="center" mt={5}>
             <Link to="/">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
@@ -245,7 +246,7 @@ function CommentMiddleBar() {
                 }}
             />
           </Box>
-          <Button type="submit" rounded="50px" backgroundColor="#04A51E" width='full' color="#FFFF" _hover={{backgroundColor: "#006811"}} onClick={handleReplySubmit}>Reply</Button>
+          <Button type="submit" rounded="50px" backgroundColor="#04A51E" width='65%' color="#FFFF" _hover={{backgroundColor: "#006811"}} onClick={handleReplySubmit}>Reply</Button>
         </Box>
       </Box>
       {/* input reply */}
@@ -312,6 +313,7 @@ function CommentMiddleBar() {
           </Box>
         ))}
       </Box>
+      <BottomNavBar/>
     </div>
   );
 }

@@ -32,27 +32,27 @@ const Login = () => {
   });
 
   const onSubmit = (data: LoginFormInputs) => {
-    if (window.innerWidth < 1024) {
-      Swal.fire({
-        title: 'Error',
-        text: 'Login is only available on laptops. Please use a laptop to login.',
-        icon: 'error',
-        confirmButtonColor: '#E53E3E',
-        background: '#1D1D1D',
-        color: '#fff',
-        allowOutsideClick: false,
-      });
-      return;
-    }
+    // if (window.innerWidth < 1024) {
+    //   Swal.fire({
+    //     title: 'Error',
+    //     text: 'Login is only available on laptops. Please use a laptop to login.',
+    //     icon: 'error',
+    //     confirmButtonColor: '#E53E3E',
+    //     background: '#1D1D1D',
+    //     color: '#fff',
+    //     allowOutsideClick: false,
+    //   });
+    //   return;
+    // }
 
     setIsLoading(true);
-    
+
     fetchLogin(data)
       .then((res) => {
         const data = res.data;
         if (res.status === 200) {
           Cookies.set('token', data.token);
-         setUser(data.user, data.token); // ✅ kirim user dan token
+          setUser(data.user, data.token); // ✅ kirim user dan token
 
           Swal.fire({
             title: 'Success!',
@@ -87,7 +87,7 @@ const Login = () => {
   return (
     <Box display="flex" justifyContent="center" pt="10" px={8}>
       <Box
-        width={["100%", "75%", "50%", "25%"]} 
+        width={['100%', '75%', '50%', '25%']}
         display="flex"
         flexDirection="column"
         alignItems="flex-start"
@@ -96,31 +96,37 @@ const Login = () => {
         <Text fontSize="28px" fontWeight="semibold">
           Login to Circle
         </Text>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate style={{ width: "100%" }}>
-          <div className='mb-4'>
-          <Input
-            {...register('email')}
-            type="text"
-            placeholder="Email"
-            marginTop="4"
-            fontSize="16px"
-          />
-          {errors.email && (
-            <Text
-              color="red.500"
-              fontSize="xs"
-              textAlign={'left'}
-              marginTop="1.5"
-              marginBottom="4"
-
-            >
-              {errors.email.message}
-            </Text>
-          )}
-
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          style={{ width: '100%' }}
+        >
+          <div className="mb-4">
+            <Input
+              {...register('email')}
+              type="text"
+              placeholder="Email"
+              marginTop="4"
+              fontSize="16px"
+            />
+            {errors.email && (
+              <Text
+                color="red.500"
+                fontSize="xs"
+                textAlign={'left'}
+                marginTop="1.5"
+                marginBottom="4"
+              >
+                {errors.email.message}
+              </Text>
+            )}
           </div>
 
-          <PasswordInput {...register('password')} placeholder="Password" fontSize="16px"/>
+          <PasswordInput
+            {...register('password')}
+            placeholder="Password"
+            fontSize="16px"
+          />
           {errors.password && (
             <Text
               color="red.500"
@@ -134,7 +140,7 @@ const Login = () => {
 
           <Link to="/forgotpassword">
             <Text
-              fontSize={["10px", "12px"]}
+              fontSize={['10px', '12px']}
               marginTop="2"
               marginBottom="3"
               textAlign="right"
@@ -156,7 +162,7 @@ const Login = () => {
             {isLoading ? <Spinner size="sm" /> : 'Login'}
           </Button>
         </form>
-        <Text fontSize={["12px", "14px"]} marginTop="3">
+        <Text fontSize={['12px', '14px']} marginTop="3">
           Don't have an account yet?{' '}
           <Link to="/register" className="text-[#04A51E]">
             Create Account
