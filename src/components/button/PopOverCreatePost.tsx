@@ -33,7 +33,7 @@ const PopoverCreateBtn: React.FC<Transform> = ({ transform, trigger }) => {
     retrieveUserProfile(); 
   }, [retrieveUserProfile]);
 
-  const handlePost = async () => {
+ const handlePost = async () => {
     if (!content.trim()) {
       Swal.fire({
         title: 'Error',

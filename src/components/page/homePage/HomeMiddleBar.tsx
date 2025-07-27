@@ -7,6 +7,10 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import Swal from 'sweetalert2';
 import PostInputBox from './componentMiddleBar/ThreadInput';
 import ThreadItem from './componentMiddleBar/ThreadList';
+import axios from 'axios';
+import { apiURL } from 'utils/baseurl';
+import { ThreadTypes } from 'types/threads.types';
+import Cookies from 'js-cookie';
 
 dayjs.extend(relativeTime);
 
@@ -32,13 +36,13 @@ function HomeMiddleBar() {
   const {
     threads,
     fetchThreads,
-    postThread,
     updateThreadContent,
     deleteThreadById,
     loading,
   } = useThreadStore();
   const { profile, retrieveUserProfile } = useProfileStore();
 
+  const { addThread } = useThreadStore();
   const [editingThreadId, setEditingThreadId] = useState<number | null>(null);
   const [newContent, setNewContent] = useState('');
   const [newImage, setNewImage] = useState<File | null>(null);
@@ -76,15 +80,75 @@ function HomeMiddleBar() {
     }
 
     setIsLoading(true);
+
+    const formData = new FormData();
+    formData.append('content', content);
+    if (file) {
+      formData.append('image', file);
+    }
+
+    const token = Cookies.get('token');
+    if (!token) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Pengguna tidak terautentikasi.',
+        icon: 'error',
+        confirmButtonColor: '#E53E3E',
+        background: '#1D1D1D',
+        color: '#fff',
+      });
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      await postThread(content, file); 
+      const response = await axios.post(`${apiURL}thread`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const threadData = response.data.thread;
+
+      const newThread: ThreadTypes = {
+        id: threadData.id,
+        content: threadData.content,
+        createdAt: new Date(threadData.createdAt),
+        updateAt: new Date(threadData.updatedAt),
+        userId: threadData.userId || 0,
+        authorId: threadData.authorId || 0,
+        image: threadData.image || '',
+        profile: threadData.profile,
+        author: threadData.author,
+      };
+
+      if (!threadData.profile || typeof threadData.profile !== 'object') {
+        console.error('Data profile tidak valid:', threadData.profile);
+      }
+
+      if (!threadData.author || typeof threadData.author !== 'object') {
+        console.error('Data author tidak valid:', threadData.author);
+      }
+
+      addThread(newThread); // Tambahkan thread baru ke state
+
       setContent('');
       setFile(null);
-      setImagePreview(null);
+
+      Swal.fire({
+        title: 'Success!',
+        text: 'Thread Post Successfully.',
+        icon: 'success',
+        confirmButtonColor: '#04A51E',
+        background: '#1D1D1D',
+        color: '#fff',
+        allowOutsideClick: false,
+      });
     } catch (error) {
       Swal.fire({
         title: 'Error',
-        text: 'Gagal memposting thread.',
+        text: 'Gagal membuat thread.',
         icon: 'error',
         confirmButtonColor: '#E53E3E',
         background: '#1D1D1D',
@@ -140,11 +204,17 @@ function HomeMiddleBar() {
       </Box>
 
       {loading ? (
-        <Box height="80vh" display="flex" flexDirection="column" justifyContent="center" textAlign="center" py="20px">
+        <Box
+          height="80vh"
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          textAlign="center"
+          py="20px"
+        >
           <Box>
-
-          <Text >Loading threads...</Text>
-          <Spinner size="lg" mt="2" />
+            <Text>Loading threads...</Text>
+            <Spinner size="lg" mt="2" />
           </Box>
         </Box>
       ) : (
