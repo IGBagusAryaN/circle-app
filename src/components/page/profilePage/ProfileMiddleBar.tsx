@@ -552,7 +552,7 @@ function ProfileMiddleBar() {
 
         <Tabs.Content value="second" py="1">
           {isLoadingThreads ? (
-            <Text>Loading media...</Text>
+            <Text className="text-center mt-10">Loading media...</Text>
           ) : threads && threads.length > 0 ? (
             <Grid
               templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }}
