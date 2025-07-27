@@ -11,7 +11,6 @@ import toast from 'react-hot-toast';
 import PopoverCreateReply from "components/button/PopOverCreateReply";
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import BottomNavBar from "components/sidebar/Navbar";
 
 dayjs.extend(relativeTime);
 
@@ -313,7 +312,7 @@ function CommentMiddleBar() {
           </Box>
         ))}
       </Box>
-      <BottomNavBar/>
+      
     </div>
   );
 }

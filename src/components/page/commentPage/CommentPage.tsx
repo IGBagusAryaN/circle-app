@@ -3,6 +3,7 @@ import SideBarLeft from "../../sidebar/SideBarLeft";
 import SideBarRight from "../../sidebar/SideBarRight";
 import { useNavigate } from "react-router-dom";
 import CommentMiddleBar from "./CommentMiddleBar";
+import BottomNavBar from "components/sidebar/Navbar";
 
 function CommentPage() {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ function CommentPage() {
           <SideBarRight display="block"/>
         </GridItem>
       </Grid>
+      <BottomNavBar/>
     </div>
   );
 }

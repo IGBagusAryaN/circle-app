@@ -65,7 +65,7 @@ export const createThread = async ( data: FormData) => {
   }
 
   try {
-    const response = await axios.post(`${apiURL}/thread`, data, {
+    const response = await axios.post(`${apiURL}thread`, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
