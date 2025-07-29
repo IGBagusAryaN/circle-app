@@ -50,7 +50,7 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
           />
           <Box display="flex" flexDirection="column" width={'100vw'}>
             <Box display="flex" justifyContent="space-between">
-              <Link to={`/profile/${thread.author?.id}`} className="flex gap-2">
+              <Link to={`/profile/${thread.author?.id}`} className="block md:flex md:gap-2">
                 <Text className="font-semibold">
                   {thread.profile?.fullname || 'No Name'}
                 </Text>

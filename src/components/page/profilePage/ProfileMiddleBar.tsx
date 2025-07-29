@@ -371,7 +371,7 @@ function ProfileMiddleBar() {
                       >
                         <Link
                           to={`/profile/${thread.author?.id}`}
-                          className="flex gap-2"
+                          className="block md:flex gap-2"
                         >
                           <Text className="font-semibold">
                             {thread.profile?.fullname || 'No Name'}

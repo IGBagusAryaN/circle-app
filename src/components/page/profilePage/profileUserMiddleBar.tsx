@@ -244,7 +244,7 @@ function ProfileMiddleBar() {
                       alt=""
                     />
                     <Box display="flex" flexDirection="column">
-                      <Box display="flex" gap="2">
+                      <Box display={{ base:"block", md:"flex" }} gap="2">
                         <Text fontWeight="semibold">
                           {thread.profile?.fullname || 'No Name'}
                         </Text>
