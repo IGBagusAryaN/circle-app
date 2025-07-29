@@ -49,7 +49,7 @@ const FollowsMiddleBar: React.FC<{ userId?: number }> = ({ userId }) => {
   }, [userId]);
 
   return (
-    <div>
+    <div className='pb-0 md:pb-[77px]'>
       <Box py="2" px="5">
         <Text fontSize="18px" fontWeight="semibold">
           Follows

@@ -1,14 +1,30 @@
-import { Box, Flex, Image, Input, Text, Button, MenuRoot, MenuTrigger, MenuContent, MenuItem} from "@chakra-ui/react";
-import { Link, useParams } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import { useProfileStore } from "store/use.profile.store";
-import LikeButton from "components/button/LikeAndReplyButton";
-import { createReply, deleteReply, getReplies } from "features/dashboard/services/reply.services";
-import { getThreadById } from "features/dashboard/services/thread.service";
-import Swal from "sweetalert2";
+import {
+  Box,
+  Flex,
+  Image,
+  Input,
+  Text,
+  Button,
+  MenuRoot,
+  MenuTrigger,
+  MenuContent,
+  MenuItem,
+  Spinner,
+} from '@chakra-ui/react';
+import { Link, useParams } from 'react-router-dom';
+import { useCallback, useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import { useProfileStore } from 'store/use.profile.store';
+import LikeButton from 'components/button/LikeAndReplyButton';
+import {
+  createReply,
+  deleteReply,
+  getReplies,
+} from 'features/dashboard/services/reply.services';
+import { getThreadById } from 'features/dashboard/services/thread.service';
+import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
-import PopoverCreateReply from "components/button/PopOverCreateReply";
+import PopoverCreateReply from 'components/button/PopOverCreateReply';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
@@ -57,32 +73,32 @@ function CommentMiddleBar() {
   const [thread, setThread] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [replies, setReplies] = useState<{ [threadId: number]: Reply[] }>({});
-  const [newReply, setNewReply] = useState<string>("");
+  const [newReply, setNewReply] = useState<string>('');
   const [, setRepliesCount] = useState<number>(0);
 
   const token = Cookies.get('token');
   useEffect(() => {
     const fetchThread = async () => {
       try {
-        const token = Cookies.get("token");
+        const token = Cookies.get('token');
         if (!token) {
-          throw new Error("Token tidak tersedia. User mungkin belum login.");
+          throw new Error('Token tidak tersedia. User mungkin belum login.');
         }
 
         if (!id || isNaN(Number(id))) {
-          throw new Error("Invalid Thread ID");
+          throw new Error('Invalid Thread ID');
         }
 
         setIsLoading(true);
         const data = await getThreadById(token, Number(id));
-        console.log("Fetched Thread:", data);
+        console.log('Fetched Thread:', data);
         setThread(data);
       } catch (error: any) {
-        console.error("Error fetching thread:", error.message);
+        console.error('Error fetching thread:', error.message);
         Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Gagal memuat data thread.",
+          icon: 'error',
+          title: 'Error',
+          text: 'Gagal memuat data thread.',
         });
       } finally {
         setIsLoading(false);
@@ -96,22 +112,22 @@ function CommentMiddleBar() {
     const fetchReplies = async () => {
       try {
         if (!id || isNaN(Number(id))) {
-          throw new Error("Invalid Thread ID");
+          throw new Error('Invalid Thread ID');
         }
 
         const data = await getReplies(Number(id));
-        console.log("Fetched Replies:", data);
+        console.log('Fetched Replies:', data);
 
         setReplies((prevReplies) => ({
           ...prevReplies,
           [Number(id)]: data,
         }));
       } catch (error: any) {
-        console.error("Error fetching replies:", error.message);
+        console.error('Error fetching replies:', error.message);
         Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Gagal memuat data replies.",
+          icon: 'error',
+          title: 'Error',
+          text: 'Gagal memuat data replies.',
         });
       }
     };
@@ -119,9 +135,10 @@ function CommentMiddleBar() {
     if (id) fetchReplies();
   }, [id]);
 
-  const handleDeleteReply = async (replyId:number) => {
+  const handleDeleteReply = async (replyId: number) => {
     try {
-      if (!token) throw new Error("Token tidak tersedia. User mungkin belum login.");
+      if (!token)
+        throw new Error('Token tidak tersedia. User mungkin belum login.');
       await deleteReply(replyId); //api
       setReplies((prevReplies) => {
         const updatedReplies = { ...prevReplies };
@@ -131,80 +148,121 @@ function CommentMiddleBar() {
         return updatedReplies;
       });
 
-      toast.success("Reply successfully deleted!");
+      toast.success('Reply successfully deleted!');
     } catch (error) {
-      console.error("Error deleting reply:", error);
-      toast.error("Failed to delete reply.");
+      console.error('Error deleting reply:', error);
+      toast.error('Failed to delete reply.');
     }
   };
 
   const handleReplySubmit = useCallback(async () => {
     try {
-        if (!thread?.id) throw new Error("Thread ID tidak ditemukan.");
-        if (!newReply.trim()) {
-            toast.error('Reply cannot be empty!');
-            return;
-        }
+      if (!thread?.id) throw new Error('Thread ID tidak ditemukan.');
+      if (!newReply.trim()) {
+        toast.error('Reply cannot be empty!');
+        return;
+      }
 
-        const formData = new FormData();
-        formData.append("content", newReply);
+      const formData = new FormData();
+      formData.append('content', newReply);
 
-        const reply = await createReply(thread.id, formData); //api
-        setReplies((prevReplies) => ({
-            ...prevReplies,
-            [thread.id]: [reply, ...(prevReplies[thread.id] || [])],
-        }));
-        setNewReply("");
-        toast.success('Reply successfully created!');
-        setRepliesCount((prevCount) => prevCount + 1);
+      const reply = await createReply(thread.id, formData); //api
+      setReplies((prevReplies) => ({
+        ...prevReplies,
+        [thread.id]: [reply, ...(prevReplies[thread.id] || [])],
+      }));
+      setNewReply('');
+      toast.success('Reply successfully created!');
+      setRepliesCount((prevCount) => prevCount + 1);
     } catch (error: any) {
-        console.error("Error creating reply:", error.message);
-        toast.error('Reply failed to create!');
+      console.error('Error creating reply:', error.message);
+      toast.error('Reply failed to create!');
     }
-}, [thread?.id, newReply]);
-
+  }, [thread?.id, newReply]);
 
   useEffect(() => {
     if (!profile) retrieveUserProfile();
   }, [profile, retrieveUserProfile]);
 
-  if (isLoading) return <Text>Loading...</Text>;
-  if (!thread) return <Text>Thread not found</Text>;
+  if (isLoading)
+    return (
+      <div className="h-screen flex flex-col justify-center items-center">
+        <div className='flex flex-col justify-center items-center'>
+          <Text>Loading...</Text>
+          <Spinner />
+        </div>
+      </div>
+    );
+  if (!thread) return <div className="h-screen flex flex-col justify-center">
+          <Text>Thread not found</Text>;
+        </div>
 
   return (
-    <div>
+    <div className="pb-0 md:pb-[77px]">
       {/* thread view */}
       <Box borderBottom="1px solid" borderColor="gray.400">
         <Box px="20px">
           <Flex gap="3" align="center" mt={5}>
             <Link to="/">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                />
               </svg>
             </Link>
-            <Text fontSize="18px" fontWeight="semibold">Comments</Text>
+            <Text fontSize="18px" fontWeight="semibold">
+              Comments
+            </Text>
           </Flex>
           <Flex py="20px">
             <Image
-              src={thread.profile?.profileImage || "https://via.placeholder.com/40"}
+              src={
+                thread.profile?.profileImage || 'https://via.placeholder.com/40'
+              }
               boxSize="40px"
               borderRadius="full"
               fit="cover"
-              alt={thread.author?.username || "User"}
+              alt={thread.author?.username || 'User'}
             />
             <Box ml="2">
-              <Text fontSize="14px" fontWeight="semibold">{thread.author.profile?.[0]?.fullname || "Anonymous"}
-                  <span className='font-normal text-gray-400'> • {dayjs(thread.createdAt).fromNow()}</span>
+              <Text fontSize="14px" fontWeight="semibold">
+                {thread.author.profile?.[0]?.fullname || 'Anonymous'}
+                <span className="font-normal text-gray-400">
+                  {' '}
+                  • {dayjs(thread.createdAt).fromNow()}
+                </span>
               </Text>
-              <Text textAlign="left" fontSize="12px" color="gray.400">@{thread.author?.username || "unknown"}</Text>
+              <Text textAlign="left" fontSize="12px" color="gray.400">
+                @{thread.author?.username || 'unknown'}
+              </Text>
               <Link to={`/image/${thread.id}`}>
-              <Box>
-                <Text fontSize="14px" marginTop="2">{thread.content}</Text>
-                {thread.image && <img src={thread.image} alt="Thread" className="rounded-lg w-6/12 my-2" />}
-              </Box>
+                <Box>
+                  <Text fontSize="14px" marginTop="2">
+                    {thread.content}
+                  </Text>
+                  {thread.image && (
+                    <img
+                      src={thread.image}
+                      alt="Thread"
+                      className="rounded-lg w-6/12 my-2"
+                    />
+                  )}
+                </Box>
               </Link>
               <Box marginTop="2" display="flex" alignItems="center" gap="3">
-                <LikeButton threadId={thread.id} onRepliesCountChange={(count) => setRepliesCount(count)} />
+                <LikeButton
+                  threadId={thread.id}
+                  onRepliesCountChange={(count) => setRepliesCount(count)}
+                />
               </Box>
             </Box>
           </Flex>
@@ -213,9 +271,18 @@ function CommentMiddleBar() {
       {/* thread view */}
 
       {/* input reply */}
-      <Box p="20px" display="flex" alignItems="center" borderBottom="1px solid" borderColor="gray.400">
+      <Box
+        p="20px"
+        display="flex"
+        alignItems="center"
+        borderBottom="1px solid"
+        borderColor="gray.400"
+      >
         <Image
-          src={profile?.profile?.[0]?.profileImage || "https://via.placeholder.com/40"}
+          src={
+            profile?.profile?.[0]?.profileImage ||
+            'https://via.placeholder.com/40'
+          }
           boxSize="40px"
           borderRadius="full"
           fit="cover"
@@ -225,7 +292,7 @@ function CommentMiddleBar() {
           placeholder="What is happening?"
           outline="none"
           border="none"
-          fontSize="18px"
+          fontSize={{ base:'14px', md:'18px' }}
           marginLeft="10px"
           width="61%"
           p="0"
@@ -238,36 +305,64 @@ function CommentMiddleBar() {
               transform="translate(-50%, -50%)"
               parentThreadId={thread.id}
               onNewReply={(newReply) => {
-              setReplies((prevReplies) => ({
-                    ...prevReplies,
-                    [thread.id]: [newReply, ...(prevReplies[thread.id] || [])],
-                    }));
-                }}
+                setReplies((prevReplies) => ({
+                  ...prevReplies,
+                  [thread.id]: [newReply, ...(prevReplies[thread.id] || [])],
+                }));
+              }}
             />
           </Box>
-          <Button type="submit" rounded="50px" backgroundColor="#04A51E" width='65%' color="#FFFF" _hover={{backgroundColor: "#006811"}} onClick={handleReplySubmit}>Reply</Button>
+          <Button
+            type="submit"
+            rounded="50px"
+            backgroundColor="#04A51E"
+            width="65%"
+            color="#FFFF"
+            _hover={{ backgroundColor: '#006811' }}
+            onClick={handleReplySubmit}
+          >
+            Reply
+          </Button>
         </Box>
       </Box>
       {/* input reply */}
-      
+
       <Box>
         {(replies[thread?.id] || []).map((reply) => (
-          <Box key={reply.id} p="20px" borderBottom="1px solid" borderColor="gray.400">
+          <Box
+            key={reply.id}
+            p="20px"
+            borderBottom="1px solid"
+            borderColor="gray.400"
+          >
             <Flex gap="3">
               <Image
-                src={reply.author.profile?.[0]?.profileImage || "https://via.placeholder.com/40"}
+                src={
+                  reply.author.profile?.[0]?.profileImage ||
+                  'https://via.placeholder.com/40'
+                }
                 boxSize="40px"
                 borderRadius="full"
                 fit="cover"
-                alt={reply.author.username || "User"}
+                alt={reply.author.username || 'User'}
               />
               <Box width={'100vw'}>
-                <Box display={"flex"} justifyContent={"space-between"} width={'full'}>
-                  <Box >
-                    <Text fontSize="14px" fontWeight="semibold">{reply.author.profile?.[0]?.fullname || "Anonymous"}
-                      <span className='font-normal text-gray-400'> • {dayjs(reply.createdAt).fromNow()}</span>
+                <Box
+                  display={'flex'}
+                  justifyContent={'space-between'}
+                  width={'full'}
+                >
+                  <Box>
+                    <Text fontSize="14px" fontWeight="semibold">
+                      {reply.author.profile?.[0]?.fullname || 'Anonymous'}
+                      <span className="font-normal text-gray-400">
+                        {' '}
+                        • {dayjs(reply.createdAt).fromNow()}
+                      </span>
                     </Text>
-                    <Text fontSize="12px" color="gray.400">@{reply.author?.username || "unknown"}</Text>
+                    <Text fontSize="12px" color="gray.400">
+                      @{reply.author?.username || 'unknown'}
+                    </Text>
                   </Box>
 
                   {/* menu delete */}
@@ -275,20 +370,36 @@ function CommentMiddleBar() {
                     <Box style={{ position: 'relative' }}>
                       <MenuRoot>
                         <MenuTrigger asChild>
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 cursor-pointer">
-                            <path fillRule="evenodd" d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" clipRule="evenodd" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="size-6 cursor-pointer"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
+                              clipRule="evenodd"
+                            />
                           </svg>
                         </MenuTrigger>
-                        <MenuContent style={{ position: 'absolute', top: '75%', left: '-114px', backgroundColor:'#1d1d1d' }}>
+                        <MenuContent
+                          style={{
+                            position: 'absolute',
+                            top: '75%',
+                            left: '-114px',
+                            backgroundColor: '#1d1d1d',
+                          }}
+                        >
                           <MenuItem
                             cursor={'pointer'}
                             colorScheme="red"
-                              onClick={() => handleDeleteReply(reply.id)}
-                              value="delete"
-                              color="fg.error"
-                              _hover={{ bg: "bg.error", color: "fg.error" }}
-                            >
-                              Delete...
+                            onClick={() => handleDeleteReply(reply.id)}
+                            value="delete"
+                            color="fg.error"
+                            _hover={{ bg: 'bg.error', color: 'fg.error' }}
+                          >
+                            Delete...
                           </MenuItem>
                         </MenuContent>
                       </MenuRoot>
@@ -296,15 +407,17 @@ function CommentMiddleBar() {
                   )}
                   {/* menu delete */}
                 </Box>
-                
+
                 {/* content reply */}
-                <Text fontSize="14px" mt="2">{reply.content}</Text>
+                <Text fontSize="14px" mt="2">
+                  {reply.content}
+                </Text>
                 {reply.image && (
-                    <Image
-                      src={reply.image}
-                      alt="Thread Image"
-                      className="rounded-lg w-6/12 my-2"
-                    />
+                  <Image
+                    src={reply.image}
+                    alt="Thread Image"
+                    className="rounded-lg w-6/12 my-2"
+                  />
                 )}
                 {/* content reply */}
               </Box>
@@ -312,7 +425,6 @@ function CommentMiddleBar() {
           </Box>
         ))}
       </Box>
-      
     </div>
   );
 }

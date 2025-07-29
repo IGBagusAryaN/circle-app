@@ -191,8 +191,8 @@ const ImageGrid: React.FC = () => {
 
   if (isLoading)
     return (
-      <div className="h-screen flex flex-col justify-center">
-        <div>
+      <div className="h-screen flex flex-col justify-center items-center">
+        <div className='flex-col justify-center items-center'>
           <Text>Loading...</Text>
           <Spinner />
         </div>
@@ -200,13 +200,13 @@ const ImageGrid: React.FC = () => {
     );
   if (!thread)
     return (
-      <div className="h-screen flex flex-col justify-center">
+      <div className="h-screen flex flex-col justify-center items-center">
         <Text>Thread not found</Text>;
       </div>
     );
 
   return (
-    <>
+    <div className='pb-0 md:pb-[77px]'>
       <Grid
         templateColumns={{ base: '1fr', md: isOpen ? '1fr' : '2fr 1fr' }}
         gap={4}
@@ -506,7 +506,7 @@ const ImageGrid: React.FC = () => {
         )}
       </Grid>
       <BottomNavBar />
-    </>
+    </div>
   );
 };
 

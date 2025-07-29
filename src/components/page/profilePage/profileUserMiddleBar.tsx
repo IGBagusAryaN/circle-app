@@ -102,7 +102,7 @@ function ProfileMiddleBar() {
   };
 
   return (
-    <div>
+    <div className='pb-0 md:pb-[77px]'>
       {user && (
         <Box py="2" px="5">
           <Flex gap="3" align="center" position={'relative'}>

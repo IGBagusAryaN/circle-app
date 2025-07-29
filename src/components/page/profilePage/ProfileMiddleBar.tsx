@@ -233,7 +233,7 @@ function ProfileMiddleBar() {
   };
 
   return (
-    <div>
+    <div className='pb-0 md:pb-[77px]'>
       {users.length > 0 &&
         users.map((user) => (
           <Box py="2" px="5" key={user.id}>
