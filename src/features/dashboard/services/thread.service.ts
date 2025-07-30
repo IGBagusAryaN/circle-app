@@ -10,7 +10,7 @@ export const getAllThreads = async (token: string) => {
       },
     });
 
-    console.log('Response Data:', res.data);
+    // console.log('Response Data:', res.data);
     return res.data.threads;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -46,7 +46,7 @@ export const getThreadById = async (token: string, threadId: number) => {
       }
     );
 
-    console.log('Thread Detail Response:', response.data);
+    // console.log('Thread Detail Response:', response.data);
     return response.data.thread;
   } catch (error) {
     if (axios.isAxiosError(error)) {

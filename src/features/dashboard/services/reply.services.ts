@@ -38,7 +38,7 @@ export const createReply = async (threadId: number, data: FormData) => {
 
 export const getReplies = async (threadId: number) => {
   try {
-    console.log("Fetching replies for threadId:", threadId);
+    // console.log("Fetching replies for threadId:", threadId);
 
     if (!threadId || isNaN(threadId)) {
       throw new Error("Invalid thread ID provided");
@@ -49,14 +49,14 @@ export const getReplies = async (threadId: number) => {
       throw new Error("User is not authenticated. Please log in.");
     }
 
-    console.log("Token:", token);
+    // console.log("Token:", token);
     const response = await axios.get(`${apiURL}reply/${threadId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    console.log("API Response:", response.data);
+    // console.log("API Response:", response.data);
     return response.data;
 
   } catch (error: any) {

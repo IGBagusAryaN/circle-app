@@ -24,7 +24,7 @@ const useSuggestedUsers = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
   
-        console.log('Suggested Users Response:', response.data);
+        // console.log('Suggested Users Response:', response.data);
   
         if (Array.isArray(response.data)) {
           setSuggestedUsers(response.data);

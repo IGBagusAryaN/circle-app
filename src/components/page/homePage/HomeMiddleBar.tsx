@@ -148,6 +148,7 @@ function HomeMiddleBar() {
 
       setContent('');
       setFile(null);
+setPreviewImage(null);
 
       Swal.fire({
         title: 'Success!',
@@ -205,8 +206,12 @@ function HomeMiddleBar() {
             setContent={setContent}
             handlePost={handlePost}
             isLoading={isLoading}
-             handleFileChange={handleFileChange}
-          
+            handleFileChange={(e) => {
+              const file = e.target.files?.[0] || null;
+              setFile(file);
+  
+              handleFileChange(e)
+            }}
             previewImage={previewImage}
             profileImage={profile?.profile?.[0]?.profileImage || null}
           />

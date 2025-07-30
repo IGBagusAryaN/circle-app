@@ -20,13 +20,13 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
 
   useEffect(() => {
     retrieveUserProfile();
-    console.log('suggestedUsers:', suggestedUsers);
+    // console.log('suggestedUsers:', suggestedUsers);
   }, []);
 
   const retrieveUserProfile = async () => {
     const token = Cookies.get('token');
     if (!token) {
-      console.error('Token not found');
+      // console.error('Token not found');
       return;
     }
 
