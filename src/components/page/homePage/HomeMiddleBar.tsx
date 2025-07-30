@@ -1,4 +1,4 @@
-import { Box, Text, Spinner } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useProfileStore } from 'store/use.profile.store';
 import useThreadStore from 'store/use.thread.store';

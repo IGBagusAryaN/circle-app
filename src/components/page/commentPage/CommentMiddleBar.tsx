@@ -9,7 +9,6 @@ import {
   MenuTrigger,
   MenuContent,
   MenuItem,
-  Spinner,
 } from '@chakra-ui/react';
 import { Link, useParams } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
