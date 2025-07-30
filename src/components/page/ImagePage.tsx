@@ -29,6 +29,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 // import PopoverCreateReply from 'components/button/PopOverCreateReply';
 import BottomNavBar from 'components/sidebar/Navbar';
+import { LottieAnimation } from 'components/lottie';
 
 dayjs.extend(relativeTime);
 
@@ -192,10 +193,9 @@ const ImageGrid: React.FC = () => {
   if (isLoading)
     return (
       <div className="h-screen flex flex-col justify-center items-center">
-        <div className='flex-col justify-center items-center'>
-          <Text>Loading...</Text>
-          <Spinner />
-        </div>
+      <div className="flex flex-col justify-center items-center">
+               <LottieAnimation />
+             </div>
       </div>
     );
   if (!thread)
