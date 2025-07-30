@@ -2,7 +2,6 @@ import axios, { AxiosResponse } from 'axios';
 import { apiURL } from 'utils/baseurl';
 import Cookies from 'js-cookie';
 
-
 export const getAllThreads = async (token: string) => {
   try {
     const res: AxiosResponse = await axios.get(apiURL + 'thread', {
@@ -23,7 +22,6 @@ export const getAllThreads = async (token: string) => {
   }
 };
 
-
 export const getUserThread = async (token: string, userId: number) => {
   try {
     const response = await axios.get(apiURL + 'thread', {
@@ -37,14 +35,16 @@ export const getUserThread = async (token: string, userId: number) => {
   }
 };
 
-
 export const getThreadById = async (token: string, threadId: number) => {
   try {
-    const response: AxiosResponse = await axios.get(`${apiURL}thread/${threadId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response: AxiosResponse = await axios.get(
+      `${apiURL}thread/${threadId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     console.log('Thread Detail Response:', response.data);
     return response.data.thread;
@@ -57,11 +57,10 @@ export const getThreadById = async (token: string, threadId: number) => {
     throw error;
   }
 };
-const token = Cookies.get("token");
-export const createThread = async ( data: FormData) => {
-
+const token = Cookies.get('token');
+export const createThread = async (data: FormData) => {
   if (!token) {
-    throw new Error("User is not authenticated.");
+    throw new Error('User is not authenticated.');
   }
 
   try {
@@ -76,22 +75,22 @@ export const createThread = async ( data: FormData) => {
   } catch (error: any) {
     if (error.response) {
       throw new Error(
-        `Failed to create reply. Server responded with status: ${error.response.status} - ${error.response.data.message || "Unknown error"}`
+        `Failed to create reply. Server responded with status: ${error.response.status} - ${error.response.data.message || 'Unknown error'}`
       );
     } else if (error.request) {
-      throw new Error("Failed to create reply. No response from the server.");
+      throw new Error('Failed to create reply. No response from the server.');
     } else {
       throw new Error(`Failed to create reply. Error: ${error.message}`);
     }
   }
 };
 
-export const updateThread = async (threadId:number, data: FormData
-) => {
+export const updateThread = async (threadId: number, data: FormData) => {
   try {
     const response = await axios.put(`${apiURL}thread/${threadId}`, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.data.thread;
@@ -100,7 +99,7 @@ export const updateThread = async (threadId:number, data: FormData
   }
 };
 
-export const deleteThread = async (threadId:number) => {
+export const deleteThread = async (threadId: number) => {
   try {
     await axios.delete(`${apiURL}thread/${threadId}`, {
       headers: {

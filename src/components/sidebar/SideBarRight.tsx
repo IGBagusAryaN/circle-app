@@ -14,15 +14,14 @@ interface DisplaySideBar {
   display: string;
 }
 
-
 const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
   const { user, setUser } = useAccountStore();
   const { suggestedUsers, isLoading } = useSuggestedUsers();
 
   useEffect(() => {
     retrieveUserProfile();
+    console.log('suggestedUsers:', suggestedUsers);
   }, []);
-
 
   const retrieveUserProfile = async () => {
     const token = Cookies.get('token');
@@ -44,13 +43,15 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
   };
 
   if (!user || !user.profile) {
-    return    <div className="flex flex-col justify-center items-center">
-                  <LottieAnimation/>
-                </div>
+    return (
+      <div className="h-screen flex flex-col justify-center items-center">
+        <LottieAnimation />
+      </div>
+    );
   }
 
   return (
-    <div >
+    <div>
       <Box>
         <Box p="20px">
           {user ? (
@@ -65,11 +66,17 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                     height="100px"
                     w="full"
                     borderRadius="7px"
-                    src={user.profile[0]?.bannerImage || 'https://273774.fs1.hubspotusercontent-na1.net/hub/273774/hubfs/act3/images/placeholder.jpg?width=1920&height=1080&name=placeholder.jpg'}
+                    src={
+                      user.profile[0]?.bannerImage ||
+                      'https://273774.fs1.hubspotusercontent-na1.net/hub/273774/hubfs/act3/images/placeholder.jpg?width=1920&height=1080&name=placeholder.jpg'
+                    }
                     alt="Banner Image"
                   />
                   <Image
-                    src={user.profile[0]?.profileImage || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
+                    src={
+                      user.profile[0]?.profileImage ||
+                      'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'
+                    }
                     boxSize="80px"
                     borderRadius="full"
                     fit="cover"
@@ -118,8 +125,8 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
               </Box>
             </Box>
           ) : (
-               <div className="flex flex-col justify-center items-center">
-              <LottieAnimation/>
+            <div className="flex flex-col justify-center items-center">
+              <LottieAnimation />
             </div>
           )}
           <Box backgroundColor="#262626" borderRadius="5px" mt="2">
@@ -128,9 +135,9 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                 Suggested For You
               </Text>
               {isLoading ? (
-                   <div className="flex flex-col justify-center items-center">
-                              <LottieAnimation/>
-                            </div>
+                <div className="flex flex-col justify-center items-center">
+                  <LottieAnimation />
+                </div>
               ) : suggestedUsers.length > 0 ? (
                 suggestedUsers.map((user) => (
                   <Box
@@ -142,18 +149,34 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                     my="4"
                     pt="2"
                   >
-                    <Box display="flex" alignItems="center" gap={3} textAlign={'left'}>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      gap={3}
+                      textAlign={'left'}
+                    >
                       <Image
-                        src={user.profileImage  || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
-                        // alt={`${user.fullname}'s profile`}
+                        src={
+                          user.profileImage && user.profileImage.trim() !== ''
+                            ? user.profileImage
+                            : 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'
+                        }
                         boxSize="40px"
                         borderRadius="full"
+                        onError={(e) => {
+                          e.currentTarget.src =
+                            'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp';
+                        }}
                       />
+
                       <Box>
                         <Link to={`/profile/${user.id}`}>
                           <Text fontWeight="bold">
-                            {user.fullname || 'No Name'}
+                            {!user.fullname || user.fullname === 'Unknown User'
+                              ? 'No Name'
+                              : user.fullname}
                           </Text>
+
                           <Text fontSize="14px" color="gray.500">
                             @{user.username}
                           </Text>

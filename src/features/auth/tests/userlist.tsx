@@ -40,7 +40,7 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
 
   return (
     <div>
-      {!isLoading ? (
+      {isLoading ? (
         <Center mt="5">
           <LottieAnimation />
         </Center>

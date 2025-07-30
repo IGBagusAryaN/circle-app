@@ -23,8 +23,9 @@ import {
 import { getThreadById } from 'features/dashboard/services/thread.service';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
-import PopoverCreateReply from 'components/button/PopOverCreateReply';
+
 import dayjs from 'dayjs';
+// import PopoverCreateReply from 'components/button/PopOverCreateReply';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { LottieAnimation } from 'components/lottie';
 
@@ -202,7 +203,7 @@ function CommentMiddleBar() {
   return (
     <div className="pb-[77px] md:pb-0">
       {/* thread view */}
-      <Box borderBottom="1px solid" borderColor="gray.400">
+      <Box borderBottom="1px solid" borderColor="gray.700">
         <Box px="20px">
           <Flex gap="3" align="center" mt={5}>
             <Link to="/">
@@ -277,9 +278,13 @@ function CommentMiddleBar() {
         p="20px"
         display="flex"
         alignItems="center"
+        justifyContent={'space-between'}
         borderBottom="1px solid"
-        borderColor="gray.400"
+        borderColor="gray.700"
       >
+        <Box display={'flex'} gap={2}>
+
+     
         <Image
           src={
             profile?.profile?.[0]?.profileImage ||
@@ -301,8 +306,10 @@ function CommentMiddleBar() {
           value={newReply}
           onChange={(e) => setNewReply(e.target.value)}
         />
+           </Box>
+
         <Box display="flex" alignItems="center" gap="2">
-          <Box>
+          {/* <Box>
             <PopoverCreateReply
               transform="translate(-50%, -50%)"
               parentThreadId={thread.id}
@@ -313,12 +320,12 @@ function CommentMiddleBar() {
                 }));
               }}
             />
-          </Box>
+          </Box> */}
           <Button
             type="submit"
             rounded="50px"
             backgroundColor="#04A51E"
-            width="65%"
+            width="full"
             color="#FFFF"
             _hover={{ backgroundColor: '#006811' }}
             onClick={handleReplySubmit}
@@ -335,7 +342,7 @@ function CommentMiddleBar() {
             key={reply.id}
             p="20px"
             borderBottom="1px solid"
-            borderColor="gray.400"
+            borderColor="gray.700"
           >
             <Flex gap="3">
               <Image
@@ -348,7 +355,7 @@ function CommentMiddleBar() {
                 fit="cover"
                 alt={reply.author.username || 'User'}
               />
-              <Box width={'100vw'}>
+              <Box width={{base:'78vw', md:'100vw'}}>
                 <Box
                   display={'flex'}
                   justifyContent={'space-between'}
@@ -411,16 +418,16 @@ function CommentMiddleBar() {
                 </Box>
 
                 {/* content reply */}
-                <Text fontSize="14px" mt="2">
+                <Text fontSize="14px" mt="2" >
                   {reply.content}
                 </Text>
-                {reply.image && (
+                {/* {reply.image && (
                   <Image
                     src={reply.image}
                     alt="Thread Image"
                     className="rounded-lg w-6/12 my-2"
                   />
-                )}
+                )} */}
                 {/* content reply */}
               </Box>
             </Flex>

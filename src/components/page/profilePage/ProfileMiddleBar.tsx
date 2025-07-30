@@ -437,87 +437,79 @@ function ProfileMiddleBar() {
                         )}
                       </Box>
                       {editingThreadId === thread.id ? (
-                        <Box mt="2" width={'95.4vh'}>
-                          <label htmlFor="content">Content</label>
-                          <Box
-                            width={'full'}
-                            display={'flex'}
-                            justifyContent={'space-between'}
-                            mt={2}
-                          >
-                            <Input
-                              value={newContent}
-                              onChange={(e) => setNewContent(e.target.value)}
-                              placeholder="Edit your thread..."
-                              id="content"
-                            />
-                            <Input
-                              type="file"
-                              display="none"
-                              id="file-upload"
-                              onChange={(e) => {
-                                const file = e.target.files
-                                  ? e.target.files[0]
-                                  : null;
-                                setNewImage(file);
-                                handleImagePreview(file);
-                              }}
-                            />
-                            <label htmlFor="file-upload">
-                              <Button
-                                as="span"
-                                border="none"
-                                background="none"
-                                size="lg"
-                                p={0}
-                              >
-                                <FileAddIcon />
-                              </Button>
-                            </label>
-                          </Box>
+                         <Box mt="2" width={'95.4vh'}>
+    <label htmlFor="content">Content</label>
+    <Box
+      width={{ base: '300px', md: 'full' }}
+      display={'flex'}
+      justifyContent={'space-between'}
+      mt={2}
+    >
+      <Input
+        value={newContent}
+        onChange={(e) => setNewContent(e.target.value)}
+        placeholder="Edit your thread..."
+        id="content"
+      />
+      <Input
+        type="file"
+        display="none"
+        id="file-upload"
+        onChange={(e) => {
+          const file = e.target.files ? e.target.files[0] : null;
+          setNewImage(file);
+          handleImagePreview(file);
+        }}
+      />
+      <label htmlFor="file-upload">
+        <Button
+          as="span"
+          border="none"
+          background="none"
+          size="lg"
+          p={0}
+        >
+          <FileAddIcon />
+        </Button>
+      </label>
+    </Box>
 
-                          {/* <Input
-                        type="file"
-                        mt="2"
-                        onChange={(e) => {
-                          const file = e.target.files ? e.target.files[0] : null;
-                          setNewImage(file);
-                          handleImagePreview(file);
-                        }}
-                      /> */}
-                          {imagePreview && (
-                            <Image
-                              src={imagePreview}
-                              alt="Preview Image"
-                              className="rounded-lg w-6/12 my-2"
-                            />
-                          )}
-                          <Button
-                            mt="2"
-                            type="submit"
-                            rounded="10px"
-                            backgroundColor="#04A51E"
-                            color="#FFFF"
-                            _hover={{ backgroundColor: '#006811' }}
-                            onClick={() => handleEdit(thread.id)}
-                            disabled={loading} // Nonaktifkan tombol saat loading
-                          >
-                            {loading ? <Spinner size="xs" /> : 'Save'}
-                          </Button>
-                          <Button
-                            mt="2"
-                            ml="2"
-                            colorScheme={'gray'}
-                            type="submit"
-                            rounded="10px"
-                            onClick={() => {
-                              setEditingThreadId(null);
-                              setImagePreview(null); // Reset preview jika batal edit
-                            }}
-                          >
-                            Cancel
-                          </Button>
-                        </Box>
+    {(imagePreview || thread.image) && (
+      <Box mt={2}>
+        <Image
+          src={imagePreview || thread.image}
+          alt="Thread Image"
+          className="rounded-lg w-[290px] md:w-6/12 my-2"
+        />
+      </Box>
+    )}
+
+    <Button
+      mt="2"
+      type="submit"
+      rounded="10px"
+      backgroundColor="#04A51E"
+      color="#FFFF"
+      _hover={{ backgroundColor: '#006811' }}
+      onClick={() => handleEdit(thread.id)}
+      disabled={loading}
+    >
+      {loading ? <Spinner size="xs" /> : 'Save'}
+    </Button>
+    <Button
+      mt="2"
+      ml="2"
+      colorScheme={'gray'}
+      type="submit"
+      rounded="10px"
+      onClick={() => {
+        setEditingThreadId(null);
+        setImagePreview(null);
+      }}
+    >
+      Cancel
+    </Button>
+  </Box>
                       ) : (
                         <Box>
                           <Link to={`/comment/${thread.id}`}>

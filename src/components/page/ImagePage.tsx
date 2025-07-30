@@ -27,7 +27,7 @@ import { useProfileStore } from 'store/use.profile.store';
 import LikeButton from 'components/button/LikeAndReplyButton';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import PopoverCreateReply from 'components/button/PopOverCreateReply';
+// import PopoverCreateReply from 'components/button/PopOverCreateReply';
 import BottomNavBar from 'components/sidebar/Navbar';
 
 dayjs.extend(relativeTime);
@@ -351,9 +351,11 @@ const ImageGrid: React.FC = () => {
               p="20px"
               display="flex"
               alignItems="center"
+              justifyContent={'space-between'}
               borderBottom="1px solid"
               borderColor="gray.700"
             >
+              <Box display={'flex'}>
               <Image
                 src={profile?.profile?.[0]?.profileImage}
                 boxSize="40px"
@@ -365,15 +367,16 @@ const ImageGrid: React.FC = () => {
                 placeholder="What is happening?"
                 outline="none"
                 border="none"
-                fontSize="14px"
+                fontSize={{ base:'14px', md:'18px' }}
                 marginLeft="10px"
-                width="50%"
+                width={{ base:'100%', md:'50%' }}
                 p="0"
                 value={newReply}
                 onChange={(e) => setNewReply(e.target.value)}
               />
+                  </Box>
               <Box display="flex" alignItems="center" gap="2">
-                <Box>
+                {/* <Box>
                   <PopoverCreateReply
                     transform="translate(-110%, -50%)"
                     parentThreadId={thread.id}
@@ -387,12 +390,12 @@ const ImageGrid: React.FC = () => {
                       }));
                     }}
                   />
-                </Box>
+                </Box> */}
                 <Button
                   type="submit"
                   rounded="50px"
                   backgroundColor="#04A51E"
-                  width="72%"
+                  width="full"
                   color="#FFFF"
                   _hover={{
                     backgroundColor: '#006811',
@@ -489,13 +492,13 @@ const ImageGrid: React.FC = () => {
                       <Text fontSize="14px" mt="2">
                         {reply.content}
                       </Text>
-                      {reply.image && (
+                      {/* {reply.image && (
                         <Image
                           src={reply.image}
                           alt="Thread Image"
                           className="rounded-lg w-10/12 my-2"
                         />
-                      )}
+                      )} */}
                       {/* content reply */}
                     </Box>
                   </Flex>

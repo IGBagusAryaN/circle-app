@@ -53,6 +53,8 @@ function HomeMiddleBar() {
   const [content, setContent] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
 
   useEffect(() => {
     fetchThreads();
@@ -68,6 +70,14 @@ function HomeMiddleBar() {
       setImagePreview(null);
     }
   };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) {
+    setPreviewImage(URL.createObjectURL(file));
+  }
+};
+
 
   const handlePost = async () => {
     if (!content.trim()) {
@@ -195,12 +205,9 @@ function HomeMiddleBar() {
             setContent={setContent}
             handlePost={handlePost}
             isLoading={isLoading}
-            handleFileChange={(e) => {
-              const file = e.target.files?.[0] || null;
-              setFile(file);
-              handleImagePreview(file);
-            }}
-            previewImage={imagePreview}
+             handleFileChange={handleFileChange}
+          
+            previewImage={previewImage}
             profileImage={profile?.profile?.[0]?.profileImage || null}
           />
         </Box>
@@ -214,7 +221,7 @@ function HomeMiddleBar() {
           justifyContent="center"
           alignItems="center"
           textAlign="center"
-        
+          py="20px"
         >
             <LottieAnimation/>
         </Box>
