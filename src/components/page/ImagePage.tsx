@@ -10,7 +10,6 @@ import {
   MenuItem,
   MenuRoot,
   MenuTrigger,
-  Spinner,
   Text,
 } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
