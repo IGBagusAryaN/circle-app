@@ -184,7 +184,7 @@ function HomeMiddleBar() {
   };
 
   return (
-    <div className='pb-0 md:pb-[77px]'>
+    <div className='pb-[77px] md:pb-0'>
       <Box borderBottom="1px solid" borderColor="gray.700">
         <Box px="20px">
           <PostInputBox

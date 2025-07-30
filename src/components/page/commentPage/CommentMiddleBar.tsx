@@ -198,7 +198,7 @@ function CommentMiddleBar() {
         </div>
 
   return (
-    <div className="pb-0 md:pb-[77px]">
+    <div className="pb-[77px] md:pb-0">
       {/* thread view */}
       <Box borderBottom="1px solid" borderColor="gray.400">
         <Box px="20px">

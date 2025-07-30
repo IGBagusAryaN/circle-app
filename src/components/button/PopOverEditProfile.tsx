@@ -26,7 +26,7 @@ const profileSchema = z.object({
 type ProfileFormInputs = z.infer<typeof profileSchema>;
 
 const PopoverEditProfile: React.FC<{
-  transform: string;
+  transform: object;
   onProfileUpdate: (updatedUser: UserTypes) => void;
 }> = ({ transform, onProfileUpdate }) => {
   const { user, setUser } = useAccountStore();
@@ -178,20 +178,7 @@ const PopoverEditProfile: React.FC<{
                     }
                     alt="Banner Image"
                   />
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    display="none"
-                    id="banner-upload"
-                    onChange={(e) =>
-                      handleFileChange(e, setBannerFile, setBannerPreview)
-                    }
-                  />
-                  <label htmlFor="banner-upload">
-                    <Button as="span" size="sm" colorScheme="blue" fontSize={12}>
-                      Set Banner
-                    </Button>
-                  </label>
+       
                   <Image
                     src={
                       profilePreview ||
@@ -208,6 +195,24 @@ const PopoverEditProfile: React.FC<{
                     border="4px solid"
                     borderColor="whiteAlpha.900"
                   />
+                  <div className='flex justify-end mt-2'>
+                  <div className='hidden md:block'>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    display="none"
+                    id="banner-upload"
+                    onChange={(e) =>
+                      handleFileChange(e, setBannerFile, setBannerPreview)
+                    }
+                  />
+                  <label htmlFor="banner-upload">
+                    <Button as="span" size="sm" colorScheme="blue" fontSize={12}>
+                      Set Banner
+                    </Button>
+                  </label>
+                  </div>
+                  <div className='hidden md:block'>
                   <Input
                     type="file"
                     accept="image/*"
@@ -222,9 +227,44 @@ const PopoverEditProfile: React.FC<{
                       Set Profile Pict
                     </Button>
                   </label>
+                      </div>
+                      </div>
                 </Box>
               ) : null}
 
+
+                <div className='w-full mt-10 block md:hidden'>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    display="none"
+                    id="banner-upload"
+                    onChange={(e) =>
+                      handleFileChange(e, setBannerFile, setBannerPreview)
+                    }
+                  />
+                  <label htmlFor="banner-upload">
+                    <Button as="span" width={'full'} colorScheme="blue" fontSize={12}>
+                      Set Banner
+                    </Button>
+                  </label>
+                </div>
+                <div className='w-full block md:hidden'>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    display="none"
+                    id="profile-upload"
+                    onChange={(e) =>
+                      handleFileChange(e, setProfileFile, setProfilePreview)
+                    }
+                  />
+                  <label htmlFor="profile-upload">
+                    <Button as="span" width={'full'} mt={2} colorScheme="blue" fontSize={12}>
+                      Set Profile Pict
+                    </Button>
+                  </label>
+                </div>
               <Input
                 {...register('fullname')}
                 type="text"

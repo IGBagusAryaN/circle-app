@@ -206,7 +206,7 @@ const ImageGrid: React.FC = () => {
     );
 
   return (
-    <div className='pb-0 md:pb-[77px]'>
+    <div className='pb-[77px] md:pb-0'>
       <Grid
         templateColumns={{ base: '1fr', md: isOpen ? '1fr' : '2fr 1fr' }}
         gap={4}

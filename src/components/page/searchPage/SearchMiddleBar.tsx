@@ -48,7 +48,7 @@ function SearchMiddleBar() {
   
 
   return (
-    <div className='pb-0 md:pb-[77px]'>
+    <div className='pb-[77px] md:pb-0'>
       <HStack gap="10" width="full" px="5" pt="2">
         <InputGroup flex="1" startElement={<LuSearch />}>
           <Input

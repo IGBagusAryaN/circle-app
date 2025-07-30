@@ -28,7 +28,7 @@ const PostInputBox: React.FC<PostInputBoxProps> = ({
             {profileImage ? (
               <Image
                 src={profileImage}
-                boxSize="60px"
+                boxSize={{ base:"50px", md:"60px" }}
                 borderRadius="full"
                 fit="cover"
                 alt="User Profile"
@@ -48,7 +48,7 @@ const PostInputBox: React.FC<PostInputBoxProps> = ({
                 placeholder="What is happening?"
                 outline="none"
                 border="none"
-                fontSize="18px"
+                fontSize={{ base:"14px", md:"18px" }}
                 p={0}
                 width="full"
                 value={content}

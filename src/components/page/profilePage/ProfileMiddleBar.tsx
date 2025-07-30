@@ -233,7 +233,7 @@ function ProfileMiddleBar() {
   };
 
   return (
-    <div className='pb-0 md:pb-[77px]'>
+    <div className='pb-[77px] md:pb-0'>
       {users.length > 0 &&
         users.map((user) => (
           <Box py="2" px="5" key={user.id}>
@@ -269,7 +269,7 @@ function ProfileMiddleBar() {
               </Box>
               <Box textAlign="right ">
                 <PopoverEditProfile
-                  transform="translate(-83%, -46%)"
+                  transform={{ base:"translate(-83%, -46%)", md:"translate(-103%, -46%)" }}
                   onProfileUpdate={handleProfileUpdate}
                 />
               </Box>
