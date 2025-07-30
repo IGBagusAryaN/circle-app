@@ -8,6 +8,7 @@ import useSuggestedUsers from 'features/dashboard/services/suggest.service';
 import { Link } from 'react-router-dom';
 import FollowButton from 'components/button/FollowButton';
 import PopoverEditProfile from 'components/button/PopOverEditProfileSidebar';
+import { LottieAnimation } from 'components/lottie';
 
 interface DisplaySideBar {
   display: string;
@@ -43,9 +44,9 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
   };
 
   if (!user || !user.profile) {
-    return <div className='h-screen flex flex-col justify-center'>
-      <Text >Loading profile...</Text>
-      </div>
+    return    <div className="flex flex-col justify-center items-center">
+                  <LottieAnimation/>
+                </div>
   }
 
   return (
@@ -117,7 +118,9 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
               </Box>
             </Box>
           ) : (
-            <Text>Loading...</Text>
+               <div className="flex flex-col justify-center items-center">
+              <LottieAnimation/>
+            </div>
           )}
           <Box backgroundColor="#262626" borderRadius="5px" mt="2">
             <Box p="5">
@@ -125,7 +128,9 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                 Suggested For You
               </Text>
               {isLoading ? (
-                <Text>Loading...</Text>
+                   <div className="flex flex-col justify-center items-center">
+                              <LottieAnimation/>
+                            </div>
               ) : suggestedUsers.length > 0 ? (
                 suggestedUsers.map((user) => (
                   <Box

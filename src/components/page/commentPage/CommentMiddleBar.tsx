@@ -27,6 +27,7 @@ import toast from 'react-hot-toast';
 import PopoverCreateReply from 'components/button/PopOverCreateReply';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { LottieAnimation } from 'components/lottie';
 
 dayjs.extend(relativeTime);
 
@@ -187,15 +188,17 @@ function CommentMiddleBar() {
   if (isLoading)
     return (
       <div className="h-screen flex flex-col justify-center items-center">
-        <div className='flex flex-col justify-center items-center'>
-          <Text>Loading...</Text>
-          <Spinner />
+        <div className="flex flex-col justify-center items-center mt-5">
+          <LottieAnimation />
         </div>
       </div>
     );
-  if (!thread) return <div className="h-screen flex flex-col justify-center">
-          <Text>Thread not found</Text>;
-        </div>
+  if (!thread)
+    return (
+      <div className="h-screen flex flex-col justify-center">
+        <Text>Thread not found</Text>;
+      </div>
+    );
 
   return (
     <div className="pb-[77px] md:pb-0">
@@ -292,7 +295,7 @@ function CommentMiddleBar() {
           placeholder="What is happening?"
           outline="none"
           border="none"
-          fontSize={{ base:'14px', md:'18px' }}
+          fontSize={{ base: '14px', md: '18px' }}
           marginLeft="10px"
           width="61%"
           p="0"

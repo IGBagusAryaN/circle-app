@@ -32,6 +32,7 @@ import useThreadStore from 'store/use.thread.store';
 import Swal from 'sweetalert2';
 import { useProfileStore } from 'store/use.profile.store';
 import FileAddIcon from 'components/icons/FileAddIcon';
+import { LottieAnimation } from 'components/lottie';
 
 dayjs.extend(relativeTime);
 
@@ -233,7 +234,7 @@ function ProfileMiddleBar() {
   };
 
   return (
-    <div className='pb-[77px] md:pb-0'>
+    <div className="pb-[77px] md:pb-0">
       {users.length > 0 &&
         users.map((user) => (
           <Box py="2" px="5" key={user.id}>
@@ -269,7 +270,10 @@ function ProfileMiddleBar() {
               </Box>
               <Box textAlign="right ">
                 <PopoverEditProfile
-                  transform={{ base:"translate(-83%, -46%)", md:"translate(-103%, -46%)" }}
+                  transform={{
+                    base: 'translate(-83%, -46%)',
+                    md: 'translate(-103%, -46%)',
+                  }}
                   onProfileUpdate={handleProfileUpdate}
                 />
               </Box>
@@ -344,8 +348,8 @@ function ProfileMiddleBar() {
 
         <Tabs.Content value="first">
           {isLoadingThreads ? (
-            <div className="text-center mt-32">
-              <Text>Loading threads...</Text>
+            <div className="flex flex-col justify-center items-center">
+              <LottieAnimation />
             </div>
           ) : threads && threads.length > 0 ? (
             threads.map((thread) => (
@@ -552,7 +556,9 @@ function ProfileMiddleBar() {
 
         <Tabs.Content value="second" py="1">
           {isLoadingThreads ? (
-            <Text className="text-center mt-10">Loading media...</Text>
+            <div className="flex flex-col justify-center items-center">
+              <LottieAnimation />
+            </div>
           ) : threads && threads.length > 0 ? (
             <Grid
               templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }}

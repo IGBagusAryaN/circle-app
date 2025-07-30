@@ -13,6 +13,7 @@ import {
 import FollowButton from 'components/button/FollowButton';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { LottieAnimation } from 'components/lottie';
 
 dayjs.extend(relativeTime);
 
@@ -221,9 +222,9 @@ function ProfileMiddleBar() {
 
         <Tabs.Content value="first">
           {isLoadingThreads ? (
-            <Text textAlign={'center'} mt={10}>
-              Loading threads...
-            </Text>
+   <div className="flex flex-col justify-center items-center">
+              <LottieAnimation/>
+            </div>
           ) : threads && threads.length > 0 ? (
             threads.map((thread) => (
               <Box
@@ -281,9 +282,9 @@ function ProfileMiddleBar() {
         </Tabs.Content>
         <Tabs.Content value="second" py="1">
           {isLoadingThreads ? (
-            <Text textAlign={'center'} mt={10}>
-              Loading media...
-            </Text>
+     <div className="flex flex-col justify-center items-center">
+              <LottieAnimation/>
+            </div>
           ) : threads && threads.length > 0 ? (
             <Grid
               templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }}

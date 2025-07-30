@@ -11,6 +11,9 @@ import axios from 'axios';
 import { apiURL } from 'utils/baseurl';
 import { ThreadTypes } from 'types/threads.types';
 import Cookies from 'js-cookie';
+import { LottieAnimation } from 'components/lottie';
+
+
 
 dayjs.extend(relativeTime);
 
@@ -209,13 +212,11 @@ function HomeMiddleBar() {
           display="flex"
           flexDirection="column"
           justifyContent="center"
+          alignItems="center"
           textAlign="center"
           py="20px"
         >
-          <Box>
-            <Text>Loading threads...</Text>
-            <Spinner size="lg" mt="2" />
-          </Box>
+            <LottieAnimation/>
         </Box>
       ) : (
         threads.map((thread) => (
