@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UserTypes } from 'types/users.types';
 import Cookies from 'js-cookie';
+import LogoutButton from './LogoutButton';
 
 const profileSchema = z.object({
   fullname: z.string().optional(),
@@ -25,10 +26,20 @@ const profileSchema = z.object({
 
 type ProfileFormInputs = z.infer<typeof profileSchema>;
 
-const PopoverEditProfile: React.FC<{
+interface logOutProps {
+  onClick?: () => void;
+}
+
+interface PopoverEditProfileProps extends logOutProps {
   transform: object;
   onProfileUpdate: (updatedUser: UserTypes) => void;
-}> = ({ transform, onProfileUpdate }) => {
+}
+
+const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
+  transform,
+  onProfileUpdate,
+  onClick
+}) => {
   const { user, setUser } = useAccountStore();
   const [bannerFile, setBannerFile] = useState<File | null>(null);
   const [profileFile, setProfileFile] = useState<File | null>(null);
@@ -37,11 +48,11 @@ const PopoverEditProfile: React.FC<{
 
   const { register, handleSubmit, reset } = useForm<ProfileFormInputs>({
     resolver: zodResolver(profileSchema),
-      defaultValues: {
-    fullname: '',
-    bio: '',
-    username: '',
-  },
+    defaultValues: {
+      fullname: '',
+      bio: '',
+      username: '',
+    },
   });
 
   useEffect(() => {
@@ -293,6 +304,9 @@ const PopoverEditProfile: React.FC<{
               <ButtonPrimary text="Save Profile" />
             </Box>
           </form>
+          <div className='mt-5'>
+           <LogoutButton onClick={onClick} />
+          </div>
         </PopoverBody>
         <PopoverCloseTrigger />
       </PopoverContent>

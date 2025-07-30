@@ -7,7 +7,7 @@ export const LottieAnimation = () => {
       animationData={loadingAnimation}
       loop
       autoplay
-      style={{ width: 300, height: 300 }}
+      style={{ width: 300, height: 300, marginTop: "-103px" }}
     />
   );
 };

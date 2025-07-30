@@ -63,7 +63,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ onClick }) => {
       onClick={handleLogout}
     >
       <LogoutIcon />
-      <span className='text-[20px]'>Logout</span>
+      <span className='text-[14px] md:text-[20px]'>Logout</span>
     </Button>
   );
 };

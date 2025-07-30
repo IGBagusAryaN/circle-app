@@ -530,7 +530,7 @@ function ProfileMiddleBar() {
                               <Image
                                 src={thread.image}
                                 alt="Thread Image"
-                                className="rounded-lg w-6/12 my-2"
+                                className="rounded-lg md:w-6/12 my-2"
                               />
                             )}
                           </Link>

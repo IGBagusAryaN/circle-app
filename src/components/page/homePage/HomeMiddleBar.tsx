@@ -214,7 +214,7 @@ function HomeMiddleBar() {
           justifyContent="center"
           alignItems="center"
           textAlign="center"
-          py="20px"
+        
         >
             <LottieAnimation/>
         </Box>
