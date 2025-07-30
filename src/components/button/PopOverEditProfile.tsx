@@ -153,6 +153,7 @@ const PopoverEditProfile: React.FC<{
         width={{ base: '90vw', md: '70vh' }}
         maxHeight="90vh"
         position="fixed"
+        mt={10}
         top="50%"
         left="50%"
         transform={transform}
