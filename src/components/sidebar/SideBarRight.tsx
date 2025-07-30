@@ -20,13 +20,13 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
 
   useEffect(() => {
     retrieveUserProfile();
-    // console.log('suggestedUsers:', suggestedUsers);
+    console.log('suggestedUsers:', suggestedUsers);
   }, []);
 
   const retrieveUserProfile = async () => {
     const token = Cookies.get('token');
     if (!token) {
-      // console.error('Token not found');
+      console.error('Token not found');
       return;
     }
 
@@ -172,11 +172,8 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                       <Box>
                         <Link to={`/profile/${user.id}`}>
                           <Text fontWeight="bold">
-                            {!user.fullname || user.fullname === 'Unknown User'
-                              ? 'No Name'
-                              : user.fullname}
+                            {user.fullname || 'No Name'}
                           </Text>
-
                           <Text fontSize="14px" color="gray.500">
                             @{user.username}
                           </Text>
