@@ -36,6 +36,8 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
   handleDelete,
   handleImagePreview,
 }) => {
+
+  
   return (
     <Box borderBottom="1px solid" borderColor="gray.700">
       <Box p="20px">

@@ -4,9 +4,10 @@ import PrivateLayout from 'components/layout/PrivateLayout';
 import { useAuthStore } from 'store/use.auth.store';
 
 const PrivateRoute: React.FC = () => {
-  const { user, token } = useAuthStore();
+  const { user, token, logout } = useAuthStore();
 
-  if (!user || !token) {
+  if (!user || !token ) {
+    logout(); // pakai logout() yang sudah kamu buat
     return <Navigate to="/login" replace />;
   }
 

@@ -38,7 +38,7 @@ interface PopoverEditProfileProps extends logOutProps {
 const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
   transform,
   onProfileUpdate,
-  onClick
+  onClick,
 }) => {
   const { user, setUser } = useAccountStore();
   const [bannerFile, setBannerFile] = useState<File | null>(null);
@@ -56,15 +56,14 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
   });
 
   useEffect(() => {
-  if (user) {
-    reset({
-      fullname: user.profile?.[0]?.fullname || '',
-      bio: user.profile?.[0]?.bio || '',
-      username: user.username || '',
-    });
-  }
-}, [user]);
-
+    if (user) {
+      reset({
+        fullname: user.profile?.[0]?.fullname || '',
+        bio: user.profile?.[0]?.bio || '',
+        username: user.username || '',
+      });
+    }
+  }, [user]);
 
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -186,16 +185,16 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
                     src={
                       bannerPreview ||
                       user?.profile?.[0]?.bannerImage ||
-                      '/path/to/default-banner.jpg'
+                      'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'
                     }
                     alt="Banner Image"
                   />
-       
+
                   <Image
                     src={
                       profilePreview ||
                       user?.profile?.[0]?.profileImage ||
-                      '/path/to/default-profile.jpg'
+                      'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'
                     }
                     boxSize="80px"
                     borderRadius="full"
@@ -207,76 +206,98 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
                     border="4px solid"
                     borderColor="whiteAlpha.900"
                   />
-                  <div className='flex justify-end mt-2'>
-                  <div className='hidden md:block'>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    display="none"
-                    id="banner-upload"
-                    onChange={(e) =>
-                      handleFileChange(e, setBannerFile, setBannerPreview)
-                    }
-                  />
-                  <label htmlFor="banner-upload">
-                    <Button as="span" size="sm" colorScheme="blue" fontSize={12}>
-                      Set Banner
-                    </Button>
-                  </label>
+                  <div className="flex justify-end mt-2">
+                    <div className="hidden md:block">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        display="none"
+                        id="banner-upload"
+                        onChange={(e) =>
+                          handleFileChange(e, setBannerFile, setBannerPreview)
+                        }
+                      />
+                      <label htmlFor="banner-upload">
+                        <Button
+                          as="span"
+                          size="sm"
+                          colorScheme="blue"
+                          fontSize={12}
+                        >
+                          Set Banner
+                        </Button>
+                      </label>
+                    </div>
+                    <div className="hidden md:block">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        display="none"
+                        id="profile-upload"
+                        onChange={(e) =>
+                          handleFileChange(e, setProfileFile, setProfilePreview)
+                        }
+                      />
+                      <label htmlFor="profile-upload">
+                        <Button
+                          as="span"
+                          size="sm"
+                          colorScheme="blue"
+                          fontSize={12}
+                          ml={2}
+                        >
+                          Set Profile Pict
+                        </Button>
+                      </label>
+                    </div>
                   </div>
-                  <div className='hidden md:block'>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    display="none"
-                    id="profile-upload"
-                    onChange={(e) =>
-                      handleFileChange(e, setProfileFile, setProfilePreview)
-                    }
-                  />
-                  <label htmlFor="profile-upload">
-                    <Button as="span" size="sm" colorScheme="blue" fontSize={12} ml={2}>
-                      Set Profile Pict
-                    </Button>
-                  </label>
-                      </div>
-                      </div>
                 </Box>
               ) : null}
 
-
-                <div className='w-full mt-10 block md:hidden'>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    display="none"
-                    id="banner-upload"
-                    onChange={(e) =>
-                      handleFileChange(e, setBannerFile, setBannerPreview)
-                    }
-                  />
-                  <label htmlFor="banner-upload">
-                    <Button as="span" width={'full'} colorScheme="blue" fontSize={12}>
-                      Set Banner
-                    </Button>
-                  </label>
-                </div>
-                <div className='w-full block md:hidden'>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    display="none"
-                    id="profile-upload"
-                    onChange={(e) =>
-                      handleFileChange(e, setProfileFile, setProfilePreview)
-                    }
-                  />
-                  <label htmlFor="profile-upload">
-                    <Button as="span" width={'full'} mt={2} colorScheme="blue" fontSize={12}>
-                      Set Profile Pict
-                    </Button>
-                  </label>
-                </div>
+              <div className='flex items-center mt-12 gap-1'>
+              <div className="w-full block md:hidden">
+                <Input
+                  type="file"
+                  accept="image/*"
+                  display="none"
+                  id="banner-upload"
+                  onChange={(e) =>
+                    handleFileChange(e, setBannerFile, setBannerPreview)
+                  }
+                />
+                <label htmlFor="banner-upload">
+                  <Button
+                    as="span"
+                    width={'full'}
+                    colorScheme="blue"
+                    fontSize={12}
+                  >
+                    Set Banner
+                  </Button>
+                </label>
+              </div>
+              <div className="w-full block md:hidden">
+                <Input
+                  type="file"
+                  accept="image/*"
+                  display="none"
+                  id="profile-upload"
+                  onChange={(e) =>
+                    handleFileChange(e, setProfileFile, setProfilePreview)
+                  }
+                />
+                <label htmlFor="profile-upload">
+                  <Button
+                    as="span"
+                    width={'full'}
+                    colorScheme="blue"
+                    fontSize={12}
+                  >
+                    Set Profile Pict
+                  </Button>
+                </label>
+              </div>
+              </div>
               <Input
                 {...register('fullname')}
                 type="text"
@@ -304,8 +325,8 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
               <ButtonPrimary text="Save Profile" />
             </Box>
           </form>
-          <div className='mt-5'>
-           <LogoutButton onClick={onClick} />
+          <div className="mt-5 block md:hidden" >
+            <LogoutButton onClick={onClick} />
           </div>
         </PopoverBody>
         <PopoverCloseTrigger />

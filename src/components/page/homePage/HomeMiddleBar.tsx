@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useProfileStore } from 'store/use.profile.store';
 import useThreadStore from 'store/use.thread.store';
@@ -12,6 +12,7 @@ import { apiURL } from 'utils/baseurl';
 import { ThreadTypes } from 'types/threads.types';
 import Cookies from 'js-cookie';
 import { LottieAnimation } from 'components/lottie';
+import { NotfoundAnimation } from 'components/notfound';
 
 
 
@@ -196,6 +197,34 @@ setPreviewImage(null);
   const handleDelete = async (threadId: number) => {
     await deleteThreadById(threadId);
   };
+    if (threads.length === 0) {
+    return (
+      <Box>
+      <Box borderBottom="1px solid" borderColor="gray.700">
+        <Box px="20px">
+          <PostInputBox
+            content={content}
+            setContent={setContent}
+            handlePost={handlePost}
+            isLoading={isLoading}
+            handleFileChange={(e) => {
+              const file = e.target.files?.[0] || null;
+              setFile(file);
+  
+              handleFileChange(e)
+            }}
+            previewImage={previewImage}
+            profileImage={profile?.profile?.[0]?.profileImage || null}
+          />
+        </Box>
+      </Box>
+      <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'} mt={40}>
+          <NotfoundAnimation/>
+          <Text>No posts yet, follow people first!!!</Text>
+      </Box>
+      </Box>
+    );
+  }
 
   return (
     <div className='pb-[77px] md:pb-0'>

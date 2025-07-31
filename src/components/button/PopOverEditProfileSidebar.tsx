@@ -176,7 +176,7 @@ const PopoverEditProfile: React.FC<{ transform: string }> = ({ transform }) => {
                     src={
                       bannerPreview ||
                       user?.profile?.[0]?.bannerImage ||
-                      '/path/to/default-banner.jpg'
+                      'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'
                     }
                     alt="Banner Image"
                   />
@@ -201,7 +201,7 @@ const PopoverEditProfile: React.FC<{ transform: string }> = ({ transform }) => {
                     src={
                       profilePreview ||
                       user?.profile?.[0]?.profileImage ||
-                      '/path/to/default-banner.jpg'
+                      'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'
                     }
                     boxSize="80px"
                     borderRadius="full"
