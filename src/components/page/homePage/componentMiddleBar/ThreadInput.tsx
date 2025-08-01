@@ -1,5 +1,7 @@
 import { Box, Button, Input, Image, Text, Spinner } from '@chakra-ui/react';
 import FileAddIcon from 'components/icons/FileAddIcon';
+import NotificationBell from 'notification/notification-bell';
+
 
 interface PostInputBoxProps {
   content: string;
@@ -20,9 +22,18 @@ const PostInputBox: React.FC<PostInputBoxProps> = ({
   previewImage,
   profileImage,
 }) => {
+// const notifications = useNotificationStore((state) => state.notifications);
+// console.log('🔔 Current notifications state:', notifications);
+
   return (
     <Box>
+      <Box className='flex justify-between items-center'>
       <Text fontSize="18px" fontWeight="semibold">Home</Text>
+      {/* <NotificationListener /> */}
+      <Box display="flex" justifyContent="flex-end">
+        <NotificationBell />
+      </Box>
+      </Box>
 
       <Box py="20px" display="flex" alignItems="center" gap="4">
         {/* Profile image */}

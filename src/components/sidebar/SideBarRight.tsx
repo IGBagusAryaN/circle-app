@@ -20,7 +20,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
 
   useEffect(() => {
     retrieveUserProfile();
-    console.log('suggestedUsers:', suggestedUsers);
+    // console.log('suggestedUsers:', suggestedUsers);
   }, []);
 
   const retrieveUserProfile = async () => {
