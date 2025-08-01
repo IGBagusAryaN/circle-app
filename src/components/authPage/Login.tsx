@@ -53,6 +53,7 @@ const Login = () => {
         if (res.status === 200) {
           Cookies.set('token', data.token);
           setUser(data.user, data.token); // ✅ kirim user dan token
+          console.log('user', data.user)
 
           Swal.fire({
             title: 'Success!',
