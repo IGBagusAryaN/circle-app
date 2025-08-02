@@ -1,6 +1,7 @@
 import { Box, Button, Input, Image, Text, Spinner } from '@chakra-ui/react';
 import FileAddIcon from 'components/icons/FileAddIcon';
-import NotificationBell from 'notification/notification-bell';
+// import NotificationBell from 'notification/notification-bell'; .
+
 
 
 interface PostInputBoxProps {
@@ -31,7 +32,7 @@ const PostInputBox: React.FC<PostInputBoxProps> = ({
       <Text fontSize="18px" fontWeight="semibold">Home</Text>
       {/* <NotificationListener /> */}
       <Box display="flex" justifyContent="flex-end">
-        <NotificationBell />
+        {/* <NotificationBell /> */}
       </Box>
       </Box>
 
