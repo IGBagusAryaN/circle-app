@@ -17,10 +17,10 @@ import SetProfile from 'components/authPage/SetProfile';
 import ProfilePagetest from 'features/auth/tests/testt';
 import { Toaster } from 'react-hot-toast';
 import { useAuthStore } from 'store/use.auth.store';
-import { useEffect } from 'react';
-import { socket } from 'socket';
-import NotificationListener from 'notification/notif-listener';
-import SocketJoiner from 'socket-joiner';
+// import { useEffect } from 'react';
+// import { socket } from 'socket';
+// import NotificationListener from 'notification/notif-listener';
+// import SocketJoiner from 'socket-joiner';
 
 function App() {
   const user = useAuthStore((state) => state.user);

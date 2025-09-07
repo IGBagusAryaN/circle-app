@@ -1,7 +1,7 @@
 import {
   getFollowers,
   getFollowing,
-} from 'features/dashboard/services/follow.services';
+} from 'features/dashboard/services/follow.service';
 import { create } from 'zustand';
 
 interface FollowState {

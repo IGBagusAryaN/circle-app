@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import Cookies from 'js-cookie';
-import { getReplies } from 'features/dashboard/services/reply.services';
+import { getReplies } from 'features/dashboard/services/reply.service';
 import { replyTypes } from 'types/reply.types';
 
 interface ReplyStore {

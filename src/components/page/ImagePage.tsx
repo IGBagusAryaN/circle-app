@@ -17,7 +17,7 @@ import {
   getReplies,
   createReply,
   deleteReply,
-} from 'features/dashboard/services/reply.services'; // Import untuk reply
+} from 'features/dashboard/services/reply.service'; // Import untuk reply
 import { getThreadById } from 'features/dashboard/services/thread.service'; // Import untuk thread
 import Cookies from 'js-cookie';
 import Swal from 'sweetalert2';

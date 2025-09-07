@@ -7,7 +7,7 @@ import {
   PopoverRoot,
   PopoverTrigger,
 } from "components/ui/popover";
-import { createReply } from "features/dashboard/services/reply.services";
+import { createReply } from "features/dashboard/services/reply.service";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useProfileStore } from "store/use.profile.store";

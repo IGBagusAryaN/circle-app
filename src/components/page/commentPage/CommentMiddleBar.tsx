@@ -19,7 +19,7 @@ import {
   createReply,
   deleteReply,
   getReplies,
-} from 'features/dashboard/services/reply.services';
+} from 'features/dashboard/services/reply.service';
 import { getThreadById } from 'features/dashboard/services/thread.service';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';

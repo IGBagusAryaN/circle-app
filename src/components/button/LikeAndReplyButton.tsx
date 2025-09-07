@@ -3,11 +3,11 @@ import { Box, Button, Spinner } from '@chakra-ui/react';
 import HeartIcon from 'components/icons/HeartIcon';
 import { LikeAndReplyButtonProps } from 'types/like.types';
 import { UserTypes } from 'types/users.types';
-import { getLikes, toggleLikeApi } from 'features/dashboard/services/like.services';
+import { getLikes, toggleLikeApi } from 'features/dashboard/services/like.service';
 import { useAuthStore } from 'store/use.auth.store';
 import { Link } from 'react-router-dom';
 import CommentIcon from 'components/icons/CommentIcon';
-import { getReplies } from 'features/dashboard/services/reply.services';
+import { getReplies } from 'features/dashboard/services/reply.service';
 
 function LikeAndReplyButton({ threadId, onRepliesCountChange }: LikeAndReplyButtonProps) {
   const [likes, setLikes] = useState<number>(0);
