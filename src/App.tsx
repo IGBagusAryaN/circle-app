@@ -24,34 +24,34 @@ import SocketJoiner from 'socket-joiner';
 
 function App() {
   const user = useAuthStore((state) => state.user);
-useEffect(() => {
-  const userId = user?.id;
-  if (!userId) return;
+// useEffect(() => {
+//   const userId = user?.id;
+//   if (!userId) return;
 
-  const handleConnect = () => {
-    const room = `user-${userId}`;
-    console.log('📡 Emit joinRoom dari App:', room);
-    socket.emit('joinRoom', room);
-  };
+//   const handleConnect = () => {
+//     const room = `user-${userId}`;
+//     console.log('📡 Emit joinRoom dari App:', room);
+//     socket.emit('joinRoom', room);
+//   };
 
-  socket.on('connect', handleConnect);
+//   socket.on('connect', handleConnect);
 
-  // 🔁 Kalau socket udah connect sebelum effect jalan (sangat mungkin), trigger manual
-  if (socket.connected) {
-    handleConnect();
-  }
+//   // 🔁 Kalau socket udah connect sebelum effect jalan (sangat mungkin), trigger manual
+//   if (socket.connected) {
+//     handleConnect();
+//   }
 
-  return () => {
-    socket.off('connect', handleConnect);
-  };
-}, [user]);
+//   return () => {
+//     socket.off('connect', handleConnect);
+//   };
+// }, [user]);
 
 
   return (
     <div>
       <BrowserRouter>
-       <NotificationListener/>
-       <SocketJoiner/>
+       {/* <NotificationListener/> */}
+       {/* <SocketJoiner/> */}
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
