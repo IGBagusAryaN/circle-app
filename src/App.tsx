@@ -16,7 +16,7 @@ import ImageGrid from 'components/page/ImagePage';
 import SetProfile from 'components/authPage/SetProfile';
 import ProfilePagetest from 'features/auth/tests/testt';
 import { Toaster } from 'react-hot-toast';
-import { useAuthStore } from 'store/use.auth.store';
+// import { useAuthStore } from 'store/use.auth.store';
 // import { useEffect } from 'react';
 // import { socket } from 'socket';
 // import NotificationListener from 'notification/notif-listener';
