@@ -1,49 +1,49 @@
-import { useEffect } from 'react';
-import { socket } from '../socket';
-import { useNotificationStore } from './notif-store';
+// import { useEffect } from 'react';
+// import { socket } from '../socket';
+// import { useNotificationStore } from './notif-store';
 
 
-interface IncomingNotification {
-  id: number;
-  type: 'like' | 'comment';
-  message: string;
-  threadId?: number;
-  username: string;
-  avatarUrl?: string;
-  createdAt: number; // ini otomatis
-}
+// interface IncomingNotification {
+//   id: number;
+//   type: 'like' | 'comment';
+//   message: string;
+//   threadId?: number;
+//   username: string;
+//   avatarUrl?: string;
+//   createdAt: number; // ini otomatis
+// }
 
 
-const NotificationListener = () => {
-  const addNotification = useNotificationStore((state) => state.addNotification);
+// const NotificationListener = () => {
+//   const addNotification = useNotificationStore((state) => state.addNotification);
 
-  useEffect(() => {
-    // console.log('📡 NotificationListener mounted');
+//   useEffect(() => {
+//     // console.log('📡 NotificationListener mounted');
 
-    const handleNotification = (data: IncomingNotification) => {
-      console.log('🔥 Notification received:', data);
-      if (!data.message || !data.type) return;
+//     const handleNotification = (data: IncomingNotification) => {
+//       console.log('🔥 Notification received:', data);
+//       if (!data.message || !data.type) return;
 
 
-  useNotificationStore.getState().addNotification({
-    id: data.id,
-    type: data.type,
-    message: data.message,
-    threadId: data.threadId,
-    username: data.username,
-    avatarUrl: data.avatarUrl ?? '', // optional
-  });
-    };
+//   useNotificationStore.getState().addNotification({
+//     id: data.id,
+//     type: data.type,
+//     message: data.message,
+//     threadId: data.threadId,
+//     username: data.username,
+//     avatarUrl: data.avatarUrl ?? '', // optional
+//   });
+//     };
 
-    socket.on('newNotification', handleNotification);
+//     socket.on('newNotification', handleNotification);
 
-    return () => {
-      socket.off('newNotification', handleNotification);
-    };
-  }, [addNotification]);
+//     return () => {
+//       socket.off('newNotification', handleNotification);
+//     };
+//   }, [addNotification]);
 
   
-  return null;
-};
+//   return null;
+// };
 
-export default NotificationListener;
+// export default NotificationListener;

@@ -23,7 +23,7 @@ import { useAuthStore } from 'store/use.auth.store';
 // import SocketJoiner from 'socket-joiner';
 
 function App() {
-  const user = useAuthStore((state) => state.user);
+  // const user = useAuthStore((state) => state.user);
 // useEffect(() => {
 //   const userId = user?.id;
 //   if (!userId) return;
