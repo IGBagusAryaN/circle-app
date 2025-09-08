@@ -14,7 +14,6 @@ import {
   Spinner,
 } from '@chakra-ui/react';
 
-import { getAllUsers } from 'features/dashboard/services/users.service';
 import {
   deleteThread,
   getUserThread,
@@ -101,22 +100,22 @@ function ProfileMiddleBar() {
       setIsLoadingThreads(false);
     }
   };
-  const handleProfileUpdate = (updatedUser: UserTypes) => {
-    // console.log('Updated user:', updatedUser); 
-    setUsers((prevUsers) =>
-      prevUsers.map((user) => (user.id === updatedUser.id ? updatedUser : user))
-    );
+  // const handleProfileUpdate = (updatedUser: UserTypes) => {
+  //   // console.log('Updated user:', updatedUser); 
+  //   setUsers((prevUsers) =>
+  //     prevUsers.map((user) => (user.id === updatedUser.id ? updatedUser : user))
+  //   );
 
-    // Update images
-    const newProfileImage = updatedUser.profile?.[0]?.profileImage || null;
-    const newBannerImage = updatedUser.profile?.[0]?.bannerImage || null;
+  //   // Update images
+  //   const newProfileImage = updatedUser.profile?.[0]?.profileImage || null;
+  //   const newBannerImage = updatedUser.profile?.[0]?.bannerImage || null;
 
-    setProfileImage(newProfileImage);
-    setBannerImage(newBannerImage);
+  //   setProfileImage(newProfileImage);
+  //   setBannerImage(newBannerImage);
 
-    // console.log('New profile image:', newProfileImage); 
-    // console.log('New banner image:', newBannerImage);
-  };
+  //   // console.log('New profile image:', newProfileImage); 
+  //   // console.log('New banner image:', newBannerImage);
+  // };
 
   const handleImagePreview = (file: File | null) => {
     if (file) {
