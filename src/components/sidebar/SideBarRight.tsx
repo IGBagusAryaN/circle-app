@@ -18,11 +18,6 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
   const { user, setUser } = useAccountStore();
   const { suggestedUsers, isLoading } = useSuggestedUsers();
 
-  useEffect(() => {
-    retrieveUserProfile();
-    // console.log('suggestedUsers:', suggestedUsers);
-  }, [user]);
-
   const retrieveUserProfile = async () => {
     const token = Cookies.get('token');
     if (!token) {
@@ -34,6 +29,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
       const decoded: { id: number } = JSON.parse(atob(token.split('.')[1]));
       const allUsers = await getAllUsers(token);
       const loggedInUser = allUsers.find((u: UserTypes) => u.id === decoded.id);
+
       if (loggedInUser) {
         setUser(loggedInUser);
       }
@@ -41,6 +37,13 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
       console.error('Error in retrieveUserProfile:', error);
     }
   };
+
+  // 🔹 Panggil hanya sekali saat mount
+  useEffect(() => {
+    if (!user) {
+      retrieveUserProfile();
+    }
+  }, [user]);
 
   if (!user || !user.profile) {
     return (

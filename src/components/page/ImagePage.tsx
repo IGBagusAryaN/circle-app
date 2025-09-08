@@ -182,10 +182,13 @@ const ImageGrid: React.FC = () => {
     }
   }, [thread?.id, newReply]);
 
+  // 🔹 Ambil profile hanya sekali (ga looping)
   useEffect(() => {
-    if (!profile) retrieveUserProfile();
-  }, [profile, retrieveUserProfile]);
-
+    if (!profile && token) {
+      retrieveUserProfile();
+    }
+  }, [profile, token, retrieveUserProfile]);
+  
   if (isLoading)
     return (
       <div className="h-screen flex flex-col justify-center items-center">
