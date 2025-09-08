@@ -82,72 +82,61 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
   };
 
   const onSubmit = async (data: ProfileFormInputs) => {
-    const token = Cookies.get('token');
-    if (!token) {
+  const token = Cookies.get("token");
+  if (!token) {
+    Swal.fire({
+      title: "Unauthorized",
+      text: "User not logged in. Please login to continue.",
+      icon: "error",
+      confirmButtonColor: "#E53E3E",
+    });
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("fullname", data.fullname || "");
+  formData.append("bio", data.bio || "");
+  formData.append("username", data.username || "");
+  if (bannerFile) formData.append("bannerImage", bannerFile);
+  if (profileFile) formData.append("profileImage", profileFile);
+
+  try {
+    setIsLoading(true);
+    const res = await updateProfile(formData);
+
+    if (res.status === 200) {
+      // 🔥 langsung ambil user baru dari API response
+      const updatedUser: UserTypes = res.data.user;
+
+      // update Zustand
+      setUser(updatedUser);
+
       Swal.fire({
-        title: 'Unauthorized',
-        text: 'User not logged in. Please login to continue.',
-        icon: 'error',
-        confirmButtonColor: '#E53E3E',
-      });
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('fullname', data.fullname || '');
-    formData.append('bio', data.bio || '');
-    formData.append('username', data.username || '');
-    if (bannerFile) formData.append('bannerImage', bannerFile);
-    if (profileFile) formData.append('profileImage', profileFile);
-
-    try {
-      setIsLoading(true);
-      const res = await updateProfile(formData);
-      if (res.status === 200) {
-        const updatedUser: UserTypes = {
-          id: user?.id || 0,
-          username: data.username || user?.username || '',
-          profile: [
-            {
-              fullname: data.fullname || user?.profile?.[0]?.fullname,
-              bio: data.bio || user?.profile?.[0]?.bio,
-              username: data.username || user?.profile?.[0]?.username,
-              bannerImage: bannerFile
-                ? res.data.bannerImage
-                : user?.profile?.[0]?.bannerImage,
-              profileImage: profileFile
-                ? res.data.profileImage
-                : user?.profile?.[0]?.profileImage,
-            },
-          ],
-        };
-        setUser(updatedUser);
-
-        Swal.fire({
-          title: 'Success!',
-          text: res.data.message || 'Profile updated successfully.',
-          icon: 'success',
-          confirmButtonColor: '#04A51E',
-          background: '#1D1D1D',
-          color: '#fff',
-          allowOutsideClick: false,
-        });
-      }
-    } catch (error) {
-      console.error('Error during profile update:', error);
-      Swal.fire({
-        title: 'Error',
-        text: 'Failed to save profile. Please try again later.',
-        icon: 'error',
-        confirmButtonColor: '#E53E3E',
-        background: '#1D1D1D',
-        color: '#fff',
+        title: "Success!",
+        text: res.data.message || "Profile updated successfully.",
+        icon: "success",
+        confirmButtonColor: "#04A51E",
+        background: "#1D1D1D",
+        color: "#fff",
         allowOutsideClick: false,
       });
-    } finally {
-      setIsLoading(false);
     }
-  };
+  } catch (error) {
+    console.error("Error during profile update:", error);
+    Swal.fire({
+      title: "Error",
+      text: "Failed to save profile. Please try again later.",
+      icon: "error",
+      confirmButtonColor: "#E53E3E",
+      background: "#1D1D1D",
+      color: "#fff",
+      allowOutsideClick: false,
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   return (
     <PopoverRoot>
