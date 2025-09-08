@@ -14,8 +14,6 @@ import Cookies from 'js-cookie';
 import { LottieAnimation } from 'components/lottie';
 import { NotfoundAnimation } from 'components/notfound';
 
-
-
 dayjs.extend(relativeTime);
 
 dayjs.locale('en', {
@@ -56,11 +54,10 @@ function HomeMiddleBar() {
   const [isLoading, setIsLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-
   useEffect(() => {
     fetchThreads();
     retrieveUserProfile();
-  }, [fetchThreads, retrieveUserProfile]);
+  }, []);
 
   const handleImagePreview = (file: File | null) => {
     if (file) {
@@ -73,12 +70,11 @@ function HomeMiddleBar() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (file) {
-    setPreviewImage(URL.createObjectURL(file));
-  }
-};
-
+    const file = e.target.files?.[0];
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
 
   const handlePost = async () => {
     if (!content.trim()) {
@@ -149,7 +145,7 @@ function HomeMiddleBar() {
 
       setContent('');
       setFile(null);
-setPreviewImage(null);
+      setPreviewImage(null);
 
       Swal.fire({
         title: 'Success!',
@@ -187,47 +183,61 @@ setPreviewImage(null);
       return;
     }
 
-    await updateThreadContent(threadId, newContent, newImage);
-    setEditingThreadId(null);
-    setNewContent('');
-    setNewImage(null);
-    setImagePreview(null);
+    try {
+      setIsLoading(true);
+      await updateThreadContent(threadId, newContent, newImage);
+
+      setEditingThreadId(null);
+      setNewContent('');
+      setNewImage(null);
+      setImagePreview(null);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDelete = async (threadId: number) => {
     await deleteThreadById(threadId);
   };
-    if (threads.length === 0) {
+  if (threads.length === 0) {
     return (
       <Box>
-      <Box borderBottom="1px solid" borderColor="gray.700">
-        <Box px="20px">
-          <PostInputBox
-            content={content}
-            setContent={setContent}
-            handlePost={handlePost}
-            isLoading={isLoading}
-            handleFileChange={(e) => {
-              const file = e.target.files?.[0] || null;
-              setFile(file);
-  
-              handleFileChange(e)
-            }}
-            previewImage={previewImage}
-            profileImage={profile?.profile?.[0]?.profileImage || null}
-          />
+        <Box borderBottom="1px solid" borderColor="gray.700">
+          <Box px="20px">
+            <PostInputBox
+              content={content}
+              setContent={setContent}
+              handlePost={handlePost}
+              isLoading={isLoading}
+              handleFileChange={(e) => {
+                const file = e.target.files?.[0] || null;
+                setFile(file);
+
+                handleFileChange(e);
+              }}
+              previewImage={previewImage}
+              profileImage={profile?.profile?.[0]?.profileImage || null}
+            />
+          </Box>
         </Box>
-      </Box>
-      <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'} mt={40}>
-          <NotfoundAnimation/>
+        <Box
+          display={'flex'}
+          flexDirection={'column'}
+          justifyContent={'center'}
+          alignItems={'center'}
+          mt={40}
+        >
+          <NotfoundAnimation />
           <Text>No posts yet, follow people first!!!</Text>
-      </Box>
+        </Box>
       </Box>
     );
   }
 
   return (
-    <div className='pb-[77px] md:pb-0'>
+    <div className="pb-[77px] md:pb-0">
       <Box borderBottom="1px solid" borderColor="gray.700">
         <Box px="20px">
           <PostInputBox
@@ -238,8 +248,8 @@ setPreviewImage(null);
             handleFileChange={(e) => {
               const file = e.target.files?.[0] || null;
               setFile(file);
-  
-              handleFileChange(e)
+
+              handleFileChange(e);
             }}
             previewImage={previewImage}
             profileImage={profile?.profile?.[0]?.profileImage || null}
@@ -257,7 +267,7 @@ setPreviewImage(null);
           textAlign="center"
           py="20px"
         >
-            <LottieAnimation/>
+          <LottieAnimation />
         </Box>
       ) : (
         threads.map((thread) => (

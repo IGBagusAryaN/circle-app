@@ -13,7 +13,7 @@ import {
   Button,
   Spinner,
 } from '@chakra-ui/react';
-import PopoverEditProfile from 'components/button/PopOverEditProfile';
+
 import { getAllUsers } from 'features/dashboard/services/users.service';
 import {
   deleteThread,
@@ -33,6 +33,8 @@ import Swal from 'sweetalert2';
 import { useProfileStore } from 'store/use.profile.store';
 import FileAddIcon from 'components/icons/FileAddIcon';
 import { LottieAnimation } from 'components/lottie';
+import PopoverEditProfile from 'components/button/PopOverEditProfile';
+import useAccountStore from 'store/use.account.store';
 
 dayjs.extend(relativeTime);
 
@@ -69,36 +71,24 @@ function ProfileMiddleBar() {
   const [loading, setLoading] = useState(false);
   // const { addThread } = useThreadStore();
   const { profile } = useProfileStore();
+  const { user } = useAccountStore();
 
+  // Ambil profile dari store sekali saja
   useEffect(() => {
-    retrieveUserProfile();
-  }, []);
+    if (user) {
+      setUsers([user]); // langsung dari store
+      setProfileImage(user.profile?.[0]?.profileImage || null);
+      setBannerImage(user.profile?.[0]?.bannerImage || null);
+    }
+  }, [user]);
 
-  const retrieveUserProfile = async () => {
+  // Fetch thread hanya ketika user.id ada
+  useEffect(() => {
     const token = Cookies.get('token');
-    if (!token) {
-      console.error('Token not found');
-      return;
+    if (token && user?.id) {
+      fetchUserThreads(token, user.id);
     }
-
-    try {
-      const decoded: { id: number } = JSON.parse(atob(token.split('.')[1]));
-      const allUsers = await getAllUsers(token);
-      const loggedInUser = allUsers.find((u: UserTypes) => u.id === decoded.id);
-      setUsers(loggedInUser ? [loggedInUser] : []);
-
-      if (loggedInUser) {
-        setProfileImage(loggedInUser.profile?.[0]?.profileImage || '');
-        setBannerImage(loggedInUser.profile?.[0]?.bannerImage || '');
-        fetchUserThreads(token, loggedInUser.id);
-      }
-
-      // console.log('Logged In User:', loggedInUser);
-      // console.log('Profile Data:', loggedInUser.profile);
-    } catch (error) {
-      console.error('Error in retrieveUserProfile:', error);
-    }
-  };
+  }, [user?.id]);
 
   const fetchUserThreads = async (token: string, userId: number) => {
     setIsLoadingThreads(true);
@@ -274,7 +264,7 @@ function ProfileMiddleBar() {
                     base: 'translate(-83%, -46%)',
                     md: 'translate(-103%, -46%)',
                   }}
-                  onProfileUpdate={handleProfileUpdate}
+           
                 />
               </Box>
               {/* <Box textAlign="right ">

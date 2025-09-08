@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Image, Input, Text } from '@chakra-ui/react';
+import { Box, Button, Image, Input, Spinner, Text } from '@chakra-ui/react';
 import Swal from 'sweetalert2';
 import {
   PopoverBody,
@@ -10,7 +10,6 @@ import {
 } from 'components/ui/popover';
 import useAccountStore from 'store/use.account.store';
 import { updateProfile } from 'features/dashboard/services/profile.service';
-import ButtonPrimary from './Button';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -32,12 +31,10 @@ interface logOutProps {
 
 interface PopoverEditProfileProps extends logOutProps {
   transform: object;
-  onProfileUpdate: (updatedUser: UserTypes) => void;
 }
 
 const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
   transform,
-  onProfileUpdate,
   onClick,
 }) => {
   const { user, setUser } = useAccountStore();
@@ -45,6 +42,7 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
+  const [loading, setIsLoading] = useState<boolean>(false);
 
   const { register, handleSubmit, reset } = useForm<ProfileFormInputs>({
     resolver: zodResolver(profileSchema),
@@ -63,17 +61,23 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
         username: user.username || '',
       });
     }
-  }, [user]);
+  }, [user, reset]);
 
-  const handleFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    setFile: React.Dispatch<React.SetStateAction<File | null>>,
-    setPreview: React.Dispatch<React.SetStateAction<string | null>>
-  ) => {
+  const handleBannerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setFile(file);
-      setPreview(URL.createObjectURL(file));
+      console.log('Banner selected:', file);
+      setBannerFile(file);
+      setBannerPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleProfileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      console.log('Profile selected:', file);
+      setProfileFile(file);
+      setProfilePreview(URL.createObjectURL(file));
     }
   };
 
@@ -97,6 +101,7 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
     if (profileFile) formData.append('profileImage', profileFile);
 
     try {
+      setIsLoading(true);
       const res = await updateProfile(formData);
       if (res.status === 200) {
         const updatedUser: UserTypes = {
@@ -117,7 +122,6 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
           ],
         };
         setUser(updatedUser);
-        onProfileUpdate(updatedUser);
 
         Swal.fire({
           title: 'Success!',
@@ -140,6 +144,8 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
         color: '#fff',
         allowOutsideClick: false,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -178,6 +184,7 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
             <Box my="20px">
               {user ? (
                 <Box position="relative" textAlign="end" my={2}>
+                  {/* Banner Image */}
                   <Image
                     height="120px"
                     w="full"
@@ -190,6 +197,7 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
                     alt="Banner Image"
                   />
 
+                  {/* Profile Image */}
                   <Image
                     src={
                       profilePreview ||
@@ -206,18 +214,18 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
                     border="4px solid"
                     borderColor="whiteAlpha.900"
                   />
+
+                  {/* Desktop File Upload */}
                   <div className="flex justify-end mt-2">
                     <div className="hidden md:block">
                       <Input
                         type="file"
                         accept="image/*"
                         display="none"
-                        id="banner-upload"
-                        onChange={(e) =>
-                          handleFileChange(e, setBannerFile, setBannerPreview)
-                        }
+                        id="banner-upload-desktop"
+                        onChange={handleBannerChange}
                       />
-                      <label htmlFor="banner-upload">
+                      <label htmlFor="banner-upload-desktop">
                         <Button
                           as="span"
                           size="sm"
@@ -233,12 +241,10 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
                         type="file"
                         accept="image/*"
                         display="none"
-                        id="profile-upload"
-                        onChange={(e) =>
-                          handleFileChange(e, setProfileFile, setProfilePreview)
-                        }
+                        id="profile-upload-desktop"
+                        onChange={handleProfileChange}
                       />
-                      <label htmlFor="profile-upload">
+                      <label htmlFor="profile-upload-desktop">
                         <Button
                           as="span"
                           size="sm"
@@ -254,50 +260,49 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
                 </Box>
               ) : null}
 
-              <div className='flex items-center mt-12 gap-1'>
-              <div className="w-full block md:hidden">
-                <Input
-                  type="file"
-                  accept="image/*"
-                  display="none"
-                  id="banner-upload"
-                  onChange={(e) =>
-                    handleFileChange(e, setBannerFile, setBannerPreview)
-                  }
-                />
-                <label htmlFor="banner-upload">
-                  <Button
-                    as="span"
-                    width={'full'}
-                    colorScheme="blue"
-                    fontSize={12}
-                  >
-                    Set Banner
-                  </Button>
-                </label>
+              {/* Mobile File Upload */}
+              <div className="flex items-center mt-12 gap-1">
+                <div className="w-full block md:hidden">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    display="none"
+                    id="banner-upload-mobile"
+                    onChange={handleBannerChange}
+                  />
+                  <label htmlFor="banner-upload-mobile">
+                    <Button
+                      as="span"
+                      width={'full'}
+                      colorScheme="blue"
+                      fontSize={12}
+                    >
+                      Set Banner
+                    </Button>
+                  </label>
+                </div>
+                <div className="w-full block md:hidden">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    display="none"
+                    id="profile-upload-mobile"
+                    onChange={handleProfileChange}
+                  />
+                  <label htmlFor="profile-upload-mobile">
+                    <Button
+                      as="span"
+                      width={'full'}
+                      colorScheme="blue"
+                      fontSize={12}
+                    >
+                      Set Profile Pict
+                    </Button>
+                  </label>
+                </div>
               </div>
-              <div className="w-full block md:hidden">
-                <Input
-                  type="file"
-                  accept="image/*"
-                  display="none"
-                  id="profile-upload"
-                  onChange={(e) =>
-                    handleFileChange(e, setProfileFile, setProfilePreview)
-                  }
-                />
-                <label htmlFor="profile-upload">
-                  <Button
-                    as="span"
-                    width={'full'}
-                    colorScheme="blue"
-                    fontSize={12}
-                  >
-                    Set Profile Pict
-                  </Button>
-                </label>
-              </div>
-              </div>
+
+              {/* Form Inputs */}
               <Input
                 {...register('fullname')}
                 type="text"
@@ -321,11 +326,22 @@ const PopoverEditProfile: React.FC<PopoverEditProfileProps> = ({
               />
             </Box>
 
-            <Box marginTop={3}>
-              <ButtonPrimary text="Save Profile" />
-            </Box>
+            <Button
+              mt="2"
+              type="submit"
+              rounded="10px"
+              backgroundColor="#04A51E"
+              color="#FFFF"
+              _hover={{ backgroundColor: '#006811' }}
+              disabled={loading}
+              width={'full'}
+            >
+              {loading ? <Spinner size="xs" /> : 'Save'}
+            </Button>
           </form>
-          <div className="mt-5 block md:hidden" >
+
+          {/* Mobile Logout */}
+          <div className="mt-5 block md:hidden">
             <LogoutButton onClick={onClick} />
           </div>
         </PopoverBody>

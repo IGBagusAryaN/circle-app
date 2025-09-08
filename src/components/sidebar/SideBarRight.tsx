@@ -21,7 +21,7 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
   useEffect(() => {
     retrieveUserProfile();
     // console.log('suggestedUsers:', suggestedUsers);
-  }, []);
+  }, [user]);
 
   const retrieveUserProfile = async () => {
     const token = Cookies.get('token');
@@ -62,16 +62,19 @@ const SideBarRight: React.FC<DisplaySideBar> = ({ display }) => {
                 </Text>
 
                 <Box position="relative" mt="3">
-                  <Image
-                    height="100px"
-                    w="full"
-                    borderRadius="7px"
-                    src={
-                      user.profile[0]?.bannerImage ||
-                      'https://273774.fs1.hubspotusercontent-na1.net/hub/273774/hubfs/act3/images/placeholder.jpg?width=1920&height=1080&name=placeholder.jpg'
-                    }
-                    alt="Banner Image"
-                  />
+      <Image
+  key={user.profile[0]?.bannerImage} // 👈 ini penting
+  h="100px"
+  w="full"
+  borderRadius="7px"
+  objectFit="cover"
+  src={
+    user.profile[0]?.bannerImage?.trim()
+      ? user.profile[0]?.bannerImage
+      : "https://via.placeholder.com/1920x1080"
+  }
+  alt="Banner Image"
+/>
                   <Image
                     src={
                       user.profile[0]?.profileImage ||

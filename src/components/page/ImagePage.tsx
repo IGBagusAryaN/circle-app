@@ -13,12 +13,8 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  getReplies,
-  createReply,
-  deleteReply,
-} from 'features/dashboard/services/reply.service'; // Import untuk reply
-import { getThreadById } from 'features/dashboard/services/thread.service'; // Import untuk thread
+
+import { getThreadById } from 'features/dashboard/services/thread.service'; 
 import Cookies from 'js-cookie';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
@@ -29,6 +25,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 // import PopoverCreateReply from 'components/button/PopOverCreateReply';
 import BottomNavBar from 'components/sidebar/Navbar';
 import { LottieAnimation } from 'components/lottie';
+import { createReply, deleteReply, getReplies } from 'features/dashboard/services/reply.service';
 
 dayjs.extend(relativeTime);
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Image, Input, Text } from '@chakra-ui/react';
+import { Box, Button, Image, Input, Spinner, Text } from '@chakra-ui/react';
 import Swal from 'sweetalert2';
 import {
   PopoverBody,
@@ -10,7 +10,6 @@ import {
 } from 'components/ui/popover';
 import useAccountStore from 'store/use.account.store';
 import { updateProfile } from 'features/dashboard/services/profile.service';
-import ButtonPrimary from './Button';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -31,26 +30,26 @@ const PopoverEditProfile: React.FC<{ transform: string }> = ({ transform }) => {
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
+  const [loading, setIsLoading] = useState<boolean>(false);
 
-  const { register, handleSubmit , reset} = useForm<ProfileFormInputs>({
+  const { register, handleSubmit, reset } = useForm<ProfileFormInputs>({
     resolver: zodResolver(profileSchema),
-      defaultValues: {
-    fullname: '',
-    bio: '',
-    username: '',
-  },
+    defaultValues: {
+      fullname: '',
+      bio: '',
+      username: '',
+    },
   });
 
   useEffect(() => {
-  if (user) {
-    reset({
-      fullname: user.profile?.[0]?.fullname || '',
-      bio: user.profile?.[0]?.bio || '',
-      username: user.username || '',
-    });
-  }
-}, [user]);
-
+    if (user) {
+      reset({
+        fullname: user.profile?.[0]?.fullname || '',
+        bio: user.profile?.[0]?.bio || '',
+        username: user.username || '',
+      });
+    }
+  }, [user]);
 
   const handleBannerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -88,6 +87,7 @@ const PopoverEditProfile: React.FC<{ transform: string }> = ({ transform }) => {
     if (profileFile) formData.append('profileImage', profileFile);
 
     try {
+      setIsLoading(true);
       const res = await updateProfile(formData);
       if (res.status === 200) {
         const updatedUser: UserTypes = {
@@ -130,6 +130,8 @@ const PopoverEditProfile: React.FC<{ transform: string }> = ({ transform }) => {
         color: '#fff',
         allowOutsideClick: false,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -260,7 +262,18 @@ const PopoverEditProfile: React.FC<{ transform: string }> = ({ transform }) => {
             </Box>
 
             <Box marginTop={3}>
-              <ButtonPrimary text="Save Profile" />
+              <Button
+                mt="2"
+                type="submit"
+                rounded="10px"
+                backgroundColor="#04A51E"
+                color="#FFFF"
+                _hover={{ backgroundColor: '#006811' }}
+                disabled={loading}
+                width={'full'}
+              >
+                {loading ? <Spinner size="xs" /> : 'Save'}
+              </Button>
             </Box>
           </form>
         </PopoverBody>

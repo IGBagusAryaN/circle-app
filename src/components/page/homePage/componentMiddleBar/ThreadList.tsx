@@ -1,5 +1,16 @@
 import React from 'react';
-import { Box, Button, Image, Input, MenuContent, MenuItem, MenuRoot, MenuTrigger, Spinner, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Image,
+  Input,
+  MenuContent,
+  MenuItem,
+  MenuRoot,
+  MenuTrigger,
+  Spinner,
+  Text,
+} from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import FileAddIcon from 'components/icons/FileAddIcon';
@@ -36,14 +47,15 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
   handleDelete,
   handleImagePreview,
 }) => {
-
-  
   return (
     <Box borderBottom="1px solid" borderColor="gray.700">
       <Box p="20px">
         <Box display="flex" alignItems="start">
           <Image
-            src={thread.profile?.profileImage || 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'}
+            src={
+              thread.profile?.profileImage ||
+              'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.webp'
+            }
             boxSize="40px"
             borderRadius="full"
             fit="cover"
@@ -52,7 +64,10 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
           />
           <Box display="flex" flexDirection="column" width={'100vw'}>
             <Box display="flex" justifyContent="space-between">
-              <Link to={`/profile/${thread.author?.id}`} className="block md:flex md:gap-2">
+              <Link
+                to={`/profile/${thread.author?.id}`}
+                className="block md:flex md:gap-2"
+              >
                 <Text className="font-semibold">
                   {thread.profile?.fullname || 'No Name'}
                 </Text>
@@ -114,79 +129,79 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
             </Box>
 
             {editingThreadId === thread.id ? (
-         <Box mt="2" width={'95.4vh'}>
-    <label htmlFor="content">Content</label>
-    <Box
-      width={{ base: '300px', md: 'full' }}
-      display={'flex'}
-      justifyContent={'space-between'}
-      mt={2}
-    >
-      <Input
-        value={newContent}
-        onChange={(e) => setNewContent(e.target.value)}
-        placeholder="Edit your thread..."
-        id="content"
-      />
-      <Input
-        type="file"
-        display="none"
-        id="file-upload"
-        onChange={(e) => {
-          const file = e.target.files ? e.target.files[0] : null;
-          setNewImage(file);
-          handleImagePreview(file);
-        }}
-      />
-      <label htmlFor="file-upload">
-        <Button
-          as="span"
-          border="none"
-          background="none"
-          size="lg"
-          p={0}
-        >
-          <FileAddIcon />
-        </Button>
-      </label>
-    </Box>
+              <Box mt="2" width={'95.4vh'}>
+                <label htmlFor="content">Content</label>
+                <Box
+                  width={{ base: '300px', md: 'full' }}
+                  display={'flex'}
+                  justifyContent={'space-between'}
+                  mt={2}
+                >
+                  <Input
+                    value={newContent}
+                    onChange={(e) => setNewContent(e.target.value)}
+                    placeholder="Edit your thread..."
+                    id="content"
+                  />
+                  <Input
+                    type="file"
+                    display="none"
+                    id="file-upload"
+                    onChange={(e) => {
+                      const file = e.target.files ? e.target.files[0] : null;
+                      setNewImage(file);
+                      handleImagePreview(file);
+                    }}
+                  />
+                  <label htmlFor="file-upload">
+                    <Button
+                      as="span"
+                      border="none"
+                      background="none"
+                      size="lg"
+                      p={0}
+                    >
+                      <FileAddIcon />
+                    </Button>
+                  </label>
+                </Box>
 
-    {(imagePreview || thread.image) && (
-      <Box mt={2}>
-        <Image
-          src={imagePreview || thread.image}
-          alt="Thread Image"
-          className="rounded-lg w-[290px] md:w-6/12 my-2"
-        />
-      </Box>
-    )}
+                {(imagePreview || thread.image) && (
+                  <Box mt={2}>
+                    <Image
+                      src={imagePreview || thread.image}
+                      alt="Thread Image"
+                      className="rounded-lg w-[290px] md:w-6/12 my-2"
+                    />
+                  </Box>
+                )}
 
-    <Button
-      mt="2"
-      type="submit"
-      rounded="10px"
-      backgroundColor="#04A51E"
-      color="#FFFF"
-      _hover={{ backgroundColor: '#006811' }}
-      onClick={() => handleEdit(thread.id)}
-      disabled={loading}
-    >
-      {loading ? <Spinner size="xs" /> : 'Save'}
-    </Button>
-    <Button
-      mt="2"
-      ml="2"
-      colorScheme={'gray'}
-      type="submit"
-      rounded="10px"
-      onClick={() => {
-        setEditingThreadId(null);
-        setImagePreview(null);
-      }}
-    >
-      Cancel
-    </Button>
-  </Box>
+                <Button
+                  mt="2"
+                  type="submit"
+                  rounded="10px"
+                  backgroundColor="#04A51E"
+                  color="#FFFF"
+                  _hover={{ backgroundColor: '#006811' }}
+                  onClick={() => handleEdit(thread.id)}
+                  disabled={loading}
+                >
+                  {loading ? <Spinner size="xs" /> : 'Save'}
+                </Button>
+                <Button
+                  mt="2"
+                  ml="2"
+                  colorScheme={'gray'}
+                  type="submit"
+                  rounded="10px"
+                  onClick={() => {
+                    setEditingThreadId(null);
+                    setImagePreview(null);
+                  }}
+                >
+                  Cancel
+                </Button>
+              </Box>
             ) : (
               <Box>
                 <Link to={`/comment/${thread.id}`}>

@@ -15,11 +15,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { useProfileStore } from 'store/use.profile.store';
 import LikeButton from 'components/button/LikeAndReplyButton';
-import {
-  createReply,
-  deleteReply,
-  getReplies,
-} from 'features/dashboard/services/reply.service';
+
 import { getThreadById } from 'features/dashboard/services/thread.service';
 import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
@@ -28,6 +24,7 @@ import dayjs from 'dayjs';
 // import PopoverCreateReply from 'components/button/PopOverCreateReply';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { LottieAnimation } from 'components/lottie';
+import { createReply, deleteReply, getReplies } from 'features/dashboard/services/reply.service';
 
 dayjs.extend(relativeTime);
 
@@ -238,7 +235,7 @@ function CommentMiddleBar() {
             />
             <Box ml="2">
               <Text fontSize="14px" fontWeight="semibold">
-                {thread.author.profile?.[0]?.fullname || 'Anonymous'}
+                {thread.profile?.fullname || 'Anonymous'}
                 <span className="font-normal text-gray-400">
                   {' '}
                   • {dayjs(thread.createdAt).fromNow()}
@@ -301,7 +298,7 @@ function CommentMiddleBar() {
           border="none"
           fontSize={{ base: '14px', md: '18px' }}
           marginLeft="10px"
-          width="61%"
+          width="full"
           p="0"
           value={newReply}
           onChange={(e) => setNewReply(e.target.value)}
