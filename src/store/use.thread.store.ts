@@ -132,7 +132,7 @@ const useThreadStore = create<ThreadStore>((set) => ({
             icon: 'success',
             background: '#1D1D1D',
             color: '#fff',
-            confirmButtonColor: '#4A5568',
+            confirmButtonColor: '#04A51E',
           });
         } catch (error) {
           console.error('Error deleting thread:', error);
